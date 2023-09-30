@@ -1,0 +1,327 @@
+{% extends "layout/base.html" %}
+{% load static %}
+
+{% block extra_css %}
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background-image: url('{% static "assets/img/bg_image_2.jpg" %}');
+    /* Replace with the actual path to your background image */
+    background-size: cover;
+    /* This will cover the entire viewport */
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    /* This will keep the background fixed while scrolling */
+  }
+
+  header {
+    background-color: #fff;
+    /* Set the background color to white */
+  }
+
+  /* CSS for the form container */
+  .form-container {
+    max-width: 600px;
+    /* Adjust the width as needed */
+    margin: 0 auto;
+    /* Center the container horizontally */
+    padding: 20px;
+    /* Add padding to the container */
+    border: 1px solid #ccc;
+    /* Add a border around the container */
+    border-radius: 5px;
+    /* Add rounded corners to the container */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    /* Add a subtle box shadow */
+    background-color: #f9f9f9;
+    /* Set the background color */
+  }
+
+  /* Apply styles to form elements within the container */
+  .form-container input[type="text"],
+  .form-container input[type="button"],
+  .form-container select,
+  .form-container textarea,
+  .form-container label {
+    width: 100%;
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    font-size: 16px;
+  }
+
+  /* Style checkboxes and radio buttons */
+  .form-container input[type="checkbox"],
+  .form-container input[type="radio"] {
+    margin-right: 5px;
+  }
+
+  /* Style the submit button */
+  .form-container input[type="submit"] {
+    background-color: #007BFF;
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 18px;
+    transition: background-color 0.3s;
+  }
+
+  .form-container input[type="submit"]:hover {
+    background-color: #0056b3;
+  }
+
+  .additional-test-container {
+    display: none;
+    margin-top: 10px;
+  }
+
+  .additional-test-container label {
+    display: block;
+  }
+
+  .additional-test-container select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    font-size: 16px;
+  }
+
+  .radio-box {
+    display: flex;
+    align-items: center;
+  }
+
+  .radio-label {
+    margin-right: 10px;
+  }
+
+  .new-address-fields.visible {
+    display: block;
+  }
+
+  .new-address-fields .form-group {
+    margin-right: 20px;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="form-container">
+  <!-- Your form content goes here -->
+  <div class="frminput">
+
+
+    <h3>
+      <center><b><span style="color: rgb(146, 197, 236);">Book Now!</span></b></center>
+    </h3> <br><br>
+    <input type="text" id="testname" name="testname" placeholder="Test name" required>
+    <p>Preferred Date: <input type="date" id="preferred-date" value="2023-09-29"></p>
+    <p>Preferred Time:
+      <select id="preferred-time">
+        <option value="09:00 AM">09:00 AM</option>
+        <option value="10:00 AM">10:00 AM</option>
+        <option value="11:00 AM">11:00 AM</option>
+        <!-- Add more time options as needed -->
+      </select>
+    </p>
+
+    <select id="persons" name="persons" onchange="showBeneficiaryFields(this.value); calculateTotalAmount();" required>
+      <option value="1">Number of Persons</option>
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+      <!-- Add more options for the number of persons -->
+    </select>
+
+
+
+    <div id="beneficiaryFields">
+      <!-- Beneficiary input fields will be added here dynamically based on the number of persons -->
+    </div>
+
+
+    <input type="text" id="email" name="email" placeholder="Email" required>
+    <input type="text" id="phone" name="phone" placeholder="Mobile " required>
+
+    <div class="radio-box">
+      <label class="radio-label">
+        <input type="radio" id="current-address-choice" name="address-choice" value="current-address" checked>
+        Use Current Address
+      </label>
+      <label class="radio-label">
+        <input type="radio" id="new-address-choice" name="address-choice" value="new-address">
+        Enter New Address
+      </label>
+    </div>
+
+    <div id="new-address-fields" class="new-address-fields" style="display: none;">
+      <input type="text" id="new-home-address" name="new-home-address" placeholder="New Home Address">
+      <input type="text" id="new-city" name="new-city" placeholder="New City">
+      <input type="text" id="new-pincode" name="new-pincode" placeholder="New Pincode">
+    </div>
+
+    <!-- Additional tests checkboxes -->
+
+    <label class="agreecheck">
+      <input type="checkbox" id="additionalTestsCheckbox" name="additional_tests" value="1"
+        onclick="toggleAdditionalTestDropdown();">
+      <span>Add Additional Tests</span>
+    </label>
+
+    <!-- Additional test dropdown container -->
+    <div class="additional-test-container" id="additionalTestContainer">
+
+      <select id="additionalTestsSelect" name="additional_tests_select">
+        <option value="">Select Test</option>
+        <option value="Test1">Test 1</option>
+        <option value="Test2">Test 2</option>
+        <!-- Add more test options here -->
+      </select>
+    </div>
+    <br>
+
+    <span>Choose mode of sample collection :</span><br><br>
+    <label style="display: inline;">
+      <input type="radio" id="homeAppointment" name="appointmentType" value="Home" checked> Home
+    </label>
+    <label style="display: inline;">
+      <input type="radio" id="labAppointment" name="appointmentType" value="Lab"> Lab
+    </label>
+  </div>
+
+
+
+  <br>
+
+  <!-- Total amount calculation -->
+
+  <label style="padding-bottom: 8px; display:block;">
+    <span id="totalamnt"><strong>Test price: <span id="tprice"> Rs. 300 </span></strong></span>
+  </label>
+
+  <div id="coupondiscount" style="margin-bottom: 10px; display:none;"></div>
+
+  <label id="hccrglbl">
+    <span id="totalamnt"><strong>Home Collection Charge: <span id="hcprice">Rs. 0</span></strong></span>
+  </label>
+
+  <label>
+    <span id="totalamnt"><strong>Total Amount: <span id="totalprice"> Rs. 300 </span></strong></span>
+  </label>
+
+  <br>
+  <input type="hidden" id="coupontextbox" name="coupontextbox" value="">
+  <input type="hidden" id="product_id" name="product_id" value="77">
+  <input type="hidden" id="price" name="price" value="300">
+  <input type="hidden" name="currenturl" value="https://www.diagnosticcentres.in/health-checkup-packages/cbc-hemogram">
+  <input id="frmsubbtn" type="submit" class="frmsub" value="Book Now">
+  <input type="hidden" name="sunday" id="sunday" value="">
+</div>
+</div>
+{% endblock %}
+{% block extra_js %}
+<script>
+  function showBeneficiaryFields(numPersons) {
+    const beneficiaryFields = document.getElementById("beneficiaryFields");
+    beneficiaryFields.innerHTML = ""; // Clear previous fields
+
+    for (let i = 1; i <= numPersons; i++) {
+      const beneficiaryDiv = document.createElement("div");
+      beneficiaryDiv.style.float = "left";
+      beneficiaryDiv.style.width = "100%";
+
+      const nameInput = document.createElement("input");
+      nameInput.type = "text";
+      nameInput.id = "name" + i;
+      nameInput.name = "name" + i;
+      nameInput.placeholder = " Name " + i;
+      beneficiaryDiv.appendChild(nameInput);
+
+      const ageDiv = document.createElement("div");
+      ageDiv.style.float = "left";
+      ageDiv.style.width = "49%";
+
+      const ageInput = document.createElement("input");
+      ageInput.type = "text";
+      ageInput.id = "age" + i;
+      ageInput.name = "age" + i;
+      ageInput.placeholder = "Age";
+      ageDiv.appendChild(ageInput);
+      beneficiaryDiv.appendChild(ageDiv);
+
+      const genderDiv = document.createElement("div");
+      genderDiv.style.float = "right";
+      genderDiv.style.width = "49%";
+
+      const genderSelect = document.createElement("select");
+      genderSelect.id = "gender" + i;
+      genderSelect.name = "gender" + i;
+      genderSelect.onchange = calculateTotalAmount;
+
+      const genderOptionDefault = document.createElement("option");
+      genderOptionDefault.value = "";
+      genderOptionDefault.text = "Select Gender";
+      genderSelect.appendChild(genderOptionDefault);
+
+      const genderOptionMale = document.createElement("option");
+      genderOptionMale.value = "Male";
+      genderOptionMale.text = "Male";
+      genderSelect.appendChild(genderOptionMale);
+
+      const genderOptionFemale = document.createElement("option");
+      genderOptionFemale.value = "Female";
+      genderOptionFemale.text = "Female";
+      genderSelect.appendChild(genderOptionFemale);
+
+      genderDiv.appendChild(genderSelect);
+      beneficiaryDiv.appendChild(genderDiv);
+
+      beneficiaryFields.appendChild(beneficiaryDiv);
+    }
+  }
+
+  function calculateTotalAmount() {
+    // Your calculation logic for the total amount goes here
+    // You can access beneficiary names, ages, and genders using their respective IDs
+    // Update the total amount fields accordingly
+  }
+  function toggleAdditionalTestDropdown() {
+    const additionalTestsCheckbox = document.getElementById("additionalTestsCheckbox");
+    const additionalTestContainer = document.getElementById("additionalTestContainer");
+
+    if (additionalTestsCheckbox.checked) {
+      additionalTestContainer.style.display = "block";
+    } else {
+      additionalTestContainer.style.display = "none";
+    }
+  }
+  function toggleNewAddressFields() {
+    const newAddressChoice = document.getElementById("new-address-choice");
+    const newAddressFields = document.getElementById("new-address-fields");
+    const newPincodeContainer = document.getElementById("new-pincode-container");
+
+    if (newAddressChoice.checked) {
+      newAddressFields.style.display = "block";
+      newPincodeContainer.style.display = "block";
+    } else {
+      newAddressFields.style.display = "none";
+      newPincodeContainer.style.display = "none";
+    }
+  }
+
+  // Add an event listener to the radio buttons to detect changes
+  const newAddressChoice = document.getElementById("new-address-choice");
+  const currentAddressChoice = document.getElementById("current-address-choice");
+
+  newAddressChoice.addEventListener("change", toggleNewAddressFields);
+  currentAddressChoice.addEventListener("change", toggleNewAddressFields);
+
+  // Initial check to hide/show based on the default selection
+  toggleNewAddressFields();
+</script>
+{% endblock %}

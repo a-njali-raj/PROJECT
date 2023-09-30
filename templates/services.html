@@ -1,0 +1,211 @@
+{% extends "layout/base.html" %}
+{% load static %}
+
+{% block extra_css %}
+<style>
+  body {
+    font-family: Arial, sans-serif;
+  }
+
+  .container {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .test-listing {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin: 10px 0;
+  }
+
+  .test-title {
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+
+  .lab-name {
+    color: #666;
+  }
+
+  .test-price {
+    color: green;
+  }
+
+  .book-button {
+    background-color: #007BFF;
+    color: #fff;
+    padding: 5px 10px;
+    border: none;
+    cursor: pointer;
+  }
+
+  .book-button:hover {
+    background-color: #0056b3;
+  }
+
+  /* Form Styles */
+  .form-container {
+    margin-top: 20px;
+    border: 1px solid #ccc;
+    padding: 20px;
+  }
+
+  .form-input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+  }
+
+  .form-label {
+    font-weight: bold;
+  }
+
+  .error-message {
+    color: red;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<div class="page-banner overlay-dark bg-image" style="background-image: url('{% static "assets/img/bg_image_2.jpg" %}');">
+  <div class="banner-section">
+    <div class="container text-center wow fadeInUp">
+      <nav aria-label="Breadcrumb">
+        <ol class="breadcrumb breadcrumb-dark bg-transparent justify-content-center py-0 mb-2">
+          <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+          <li class="breadcrumb-item active" aria-current="page">Services</li>
+        </ol>
+      </nav>
+      <h1 class="font-weight-normal">Our Services</h1>
+    </div> <!-- .container -->
+  </div> <!-- .banner-section -->
+</div> <!-- .page-banner -->
+
+
+<div class="container">
+
+  <div class="form-container">
+    <form name="searchform" method="get" action="/health-tests/">
+      <label class="form-label" for="search">Search for Tests (CBC, Lipid,diabetes etc)</label>
+      <input type="text" id="search" name="search" value="" placeholder="Search for Blood Tests (CBC, Lipid, etc)"
+        autocomplete="off" class="form-input">
+
+      <div class="suggboxhm" id="suggestion-box"></div>
+      <input type="submit" value="Search" class="book-button">
+    </form>
+  </div>
+  <div class="test-listing">
+    <p class="test-title"><a href="#">Total RBC Test</a></p>
+    <p class="test-price">Rs. 150</p>
+    <a href="appoinment.html" class="book-button">Book Now</a>
+  </div>
+  <div class="test-listing">
+    <p class="test-title"><a href="#">Total Leucocytes Count test Test</a></p>
+    <p class="test-price">Rs. 150</p>
+    <a href="appoinment.html" class="book-button">Book Now</a>
+  </div>
+  <div class="test-listing">
+    <p class="test-title"><a href="#">Hemoglobin</a></p>
+
+    <p class="test-price">Rs. 150</p>
+    <a href="appoinment.html" class="book-button">Book Now</a>
+  </div>
+  <div class="test-listing">
+    <p class="test-title"><a href="#">Platelet count Test</a></p>
+
+    <p class="test-price">Rs. 150</p>
+    <a href="appoinment.html" class="book-button">Book Now</a>
+  </div>
+  <div class="test-listing">
+    <p class="test-title"><a href="#">serum Globulin Test</a></p>
+
+    <p class="test-price">Rs. 150</p>
+    <a href="appoinment.html" class="book-button">Book Now</a>
+  </div>
+  <div class="test-listing">
+    <p class="test-title"><a href="#">Prolactin</a></p>
+
+    <p class="test-price">Rs. 300</p>
+    <a href="appoinment.html" class="book-button">Book Now</a>
+  </div>
+  <div class="test-listing">
+    <p class="test-title"><a href="#">metabolism</a></p>
+
+    <p class="test-price">Rs. 400</p>
+    <a href="appoinment.html" class="book-button">Book Now</a>
+  </div>
+  <div class="test-listing">
+    <p class="test-title"><a href="#">Total Bile acid Test</a></p>
+
+    <p class="test-price">Rs. 250</p>
+    <a href="appoinment.html" class="book-button">Book Now</a>
+  </div>
+  <div class="test-listing">
+    <p class="test-title"><a href="#">Thyroid</a></p>
+
+    <p class="test-price">Rs. 900</p>
+    <a href="appoinment.html" class="book-button">Book Now</a>
+  </div>
+  <div class="test-listing">
+    <p class="test-title"><a href="#">iron Deficiency Profile Test</a></p>
+
+    <p class="test-price">Rs. 500</p>
+    <a href="appoinment.html" class="book-button">Book Now</a>
+  </div>
+  <div class="test-listing">
+    <p class="test-title"><a href="#">Insulin-fasting Test</a></p>
+
+    <p class="test-price">Rs. 500</p>
+    <a href="appoinment.html" class="book-button">Book Now</a>
+  </div>
+  <div class="test-listing">
+    <p class="test-title"><a href="#">kidney Profile</a></p>
+
+    <p class="test-price">Rs. 585</p>
+    <a href="appoinment.html" class="book-button">Book Now</a>
+  </div>
+  <div class="test-listing">
+    <p class="test-title"><a href="#">Mumps antibody-IGM test</a></p>
+
+    <p class="test-price">Rs. 600</p>
+    <a href="appoinment.html" class="book-button">Book Now</a>
+  </div>
+  <!-- Add more test listings here -->
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  $(document).ready(function () {
+    // Function to perform search
+    function performSearch() {
+      // Get the search query from the input field
+      var searchQuery = $('#search').val().toLowerCase();
+
+      // Loop through each test listing and check if it contains the search query
+      $('.test-listing').each(function () {
+        var testTitle = $(this).find('.test-title a').text().toLowerCase();
+
+        // Show or hide the test listing based on the search result
+        if (testTitle.includes(searchQuery)) {
+          $(this).show();
+        } else {
+          $(this).hide();
+        }
+      });
+    }
+
+    // Handle form submission
+    $('form[name="searchform"]').submit(function (e) {
+      e.preventDefault();
+      performSearch();
+    });
+
+    // Handle input changes
+    $('#search').on('input', function () {
+      performSearch();
+    });
+  });
+</script>
+{% endblock %}

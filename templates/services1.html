@@ -1,0 +1,71 @@
+{% extends "layout/base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="page-section">
+  <div class="container">
+    <h1 class="text-center mb-5 wow fadeInUp">Our services</h1>
+
+    <div class="owl-carousel wow fadeInUp" id="doctorSlideshow">
+      <div class="item">
+        <div class="card-doctor">
+          <div class="header">
+            <img src="{% static '/assets/img/diabetes.avif' %}" alt="">
+          </div>
+          <div class="body">
+            <p class="text-xl mb-0">
+              <center><b>Diabetes</b></center>
+            </p>
+
+          </div>
+        </div>
+      </div>
+      <div class="item">
+        <div class="card-doctor">
+          <div class="header">
+            <img src="{% static '/assets/img/arithritis.webp' %}" alt="">
+          </div>
+          <div class="body">
+            <p class="text-xl mb-0">
+              <center><b>Arithritis</b></center>
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="item">
+        <div class="card-doctor">
+          <div class="header">
+            <img src="{% static '/assets/img/vitamin.avif' %}" alt="">
+          </div>
+          <div class="body">
+            <p class="text-xl mb-0">Vitamin</p>
+          </div>
+        </div>
+      </div>
+      <div class="item">
+        <div class="card-doctor">
+          <div class="header">
+            <img src="{% static '/assets/img/Thyroid.webp' %}" alt="">
+          </div>
+          <div class="body">
+            <p class="text-xl mb-0">Thyroid</p>
+
+          </div>
+        </div>
+      </div>
+      <div class="item">
+        <div class="card-doctor">
+          <div class="header">
+            <img src="{% static '/assets/img/metabolism.webp' %}" alt="">
+
+          </div>
+          <div class="body">
+            <p class="text-xl mb-0">Metabolism</p>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

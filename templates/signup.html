@@ -1,0 +1,423 @@
+{% extends "layout/base.html" %}
+{% load static %}
+
+{% block extra_css %}
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #e8f6f4;
+  }
+
+  header {
+    background-color: white;
+  }
+
+  /* Styles for the registration form container */
+  .registration-form-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #dbfcf7;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Form Styles (retain the existing form styles) */
+  /* ... (form styles from your previous code) ... */
+
+  /* Styles for the registration form container */
+  .registration-form-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Form Styles (retain the existing form styles) */
+  /* ... (form styles from your previous code) ... */
+
+  /* Styles for the registration form container */
+  .registration-form-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Form Styles (retain the existing form styles) */
+  /* ... (form styles from your previous code) ... */
+
+  /* Styles for the registration form container */
+  .registration-form-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Form Styles (retain the existing form styles) */
+  /* ... (form styles from your previous code) ... */
+
+  /* Styles for the registration form container */
+  .registration-form-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Form Styles (retain the existing form styles) */
+  /* ... (form styles from your previous code) ... */
+
+  /* Styles for the registration form container */
+  .registration-form-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Form Styles (retain the existing form styles) */
+  /* ... (form styles from your previous code) ... */
+
+  /* Styles for the registration form container */
+  .registration-form-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Form Styles (retain the existing form styles) */
+  /* ... (form styles from your previous code) ... */
+
+
+  h1 {
+    text-align: center;
+  }
+
+  /* Form Styles */
+  form {
+    margin-top: 20px;
+  }
+
+  label {
+    display: block;
+    margin-bottom: 5px;
+  }
+
+  input[type="text"],
+  input[type="password"],
+  input[type="email"],
+  input[type="tel"],
+  input[type="date"],
+  textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+
+  input[type="radio"],
+  input[type="checkbox"] {
+    margin-right: 5px;
+  }
+
+  /* Form Layout */
+  .form-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .form-row label {
+    flex: 1;
+  }
+
+  .form-row input,
+  .form-row textarea {
+    flex: 2;
+  }
+
+  .form-row input[type="radio"],
+  .form-row input[type="checkbox"] {
+    flex: unset;
+  }
+
+  /* Consent Checkbox */
+  #consent {
+    margin-top: 10px;
+  }
+
+  /* Submit Button */
+  input[type="submit"] {
+    background-color: #007BFF;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<br><br>
+<div class="container">
+  <h2>
+    <center>Register here</center>
+  </h2>
+  <form action="" method="post" id="registration-form">
+    {% csrf_token %}
+    <!-- Personal Information -->
+    <div class="form-row">
+      <label for="first-name">Full Name:</label>
+      <input type="text" id="first-name" name="first-name" required>
+      <span id="full-name-error" class="error"></span>
+
+    </div>
+
+
+
+    <div class="form-row">
+      <label for="dob">Date of Birth:</label>
+      <input type="date" id="dob" name="dob" required>
+      <span id="dob-error" class="error"></span>
+    </div>
+    <div class="form-row">
+      <label for="email">Email Address:</label>
+      <input type="email" id="email" name="email" required>
+      <span id="email-error" class="error"></span>
+    </div>
+    <div class="form-row">
+      <label for="phone">Phone Number:</label>
+      <input type="tel" id="phone" name="phone" required>
+      <span id="phone-error" class="error"></span>
+    </div>
+    <div class="form-row">
+      <label>Address:</label>
+    </div>
+    <div class="form-row">
+      <input type="text" id="home" name="home" placeholder="home Address" required>
+      <span id="home-address-error" class="error"></span>
+    </div>
+    <div class="form-row">
+      <input type="text" id="city" name="city" placeholder="City" required>
+      <span id="city-error" class="error"></span>
+    </div>
+
+    <div class="form-row">
+      <input type="text" id="zip" name="zip" placeholder="Postal Code" required>
+      <span id="zip-error" class="error"></span>
+    </div>
+
+    <!-- User Account -->
+    <div class="form-row">
+      <label for="username">Username:</label>
+      <input type="text" id="username" name="username" required>
+      <span id="username-error" class="error"></span>
+    </div>
+    <div class="form-row">
+      <label for="password">Password:</label>
+      <input type="password" id="password" name="password" required>
+      <span id="password-error" class="error"></span>
+
+    </div>
+    <div class="form-row">
+      <label for="confirm-password">Confirm Password:</label>
+      <input type="password" id="confirm-password" name="confirm-password" required>
+      <span id="confirm-password-error" class="error"></span>
+    </div>
+    <!-- Consent -->
+    <div class="form-row">
+      <input type="checkbox" id="consent" name="consent" required>
+      <label for="consent">I have read and agree to the terms and conditions.</label>
+    </div>
+    <!-- Submit Button -->
+    <div class="form-row">
+      <input type="submit" value="Submit">
+    </div>
+  </form>
+</div>
+<br><br>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const fullNameInput = document.getElementById("first-name");
+    const genderInputs = document.querySelectorAll('input[name="gender"]');
+    const genderError = document.getElementById("gender-error");
+    const dobInput = document.getElementById("dob");
+    const emailInput = document.getElementById("email");
+    const phoneInput = document.getElementById("phone");
+    const homeAddressInput = document.getElementById("home");
+    const cityInput = document.getElementById("city");
+    const zipInput = document.getElementById("zip");
+    const usernameInput = document.getElementById("username");
+    const passwordInput = document.getElementById("password");
+    const confirmPasswordInput = document.getElementById("confirm-password");
+
+    const errorMessages = {
+      fullName: "Full Name is required and only letters",
+      gender: "Please select a gender",
+      dob: "Invalid date of birth format",
+      email: "Invalid email format",
+      phone: "Invalid phone number format",
+      homeAddress: "Home Address is required",
+      city: "City is required",
+      zip: "Invalid ZIP code format",
+      username: "Username must be at least 3 characters long and only alphabets",
+      password: "Password must be at least 6 characters long",
+      confirmPassword: "Passwords do not match",
+    };
+    function validateFullName() {
+      const fullName = fullNameInput.value.trim();
+      const fullNamePattern = /^[A-Za-z\s]{3,}$/; // Alphabets and spaces, minimum 3 characters
+      const errorElement = document.getElementById("full-name-error");
+
+      if (!fullNamePattern.test(fullName)) {
+        errorElement.textContent = "Full Name must be at least 3 characters long and contain only letters and spaces";
+      } else {
+        errorElement.textContent = "";
+      }
+    }
+
+
+    function validateDOB() {
+      const dob = dobInput.value.trim();
+      const dobError = document.getElementById("dob-error");
+      // You can add your own validation logic for the date of birth here.
+      // For simplicity, this example assumes that DOB is valid if it's not empty.
+      if (dob === "") {
+        dobError.textContent = errorMessages.dob;
+      } else {
+        dobError.textContent = "";
+      }
+    }
+
+    function validateEmail() {
+      const email = emailInput.value.trim();
+      const emailPattern = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/;
+      const errorElement = document.getElementById("email-error");
+
+      if (!emailPattern.test(email)) {
+        errorElement.textContent = "Invalid email format. Please enter a valid email address.";
+      } else if (email.length > 320) {
+        errorElement.textContent = "Email address is too long. Please use a shorter email address.";
+      } else {
+        errorElement.textContent = "";
+      }
+    }
+
+
+    function validatePhone() {
+      const phone = phoneInput.value.trim();
+      const phonePattern = /^\d{10}$/; // Assumes a 10-digit phone number
+      const errorElement = document.getElementById("phone-error");
+      if (!phonePattern.test(phone)) {
+        errorElement.textContent = errorMessages.phone;
+      } else {
+        errorElement.textContent = "";
+      }
+    }
+
+    function validateHomeAddress() {
+      const homeAddress = homeAddressInput.value.trim();
+      const errorElement = document.getElementById("home-address-error");
+      const minLength = 3; // Minimum length
+
+      if (homeAddress.length < minLength || /^\d/.test(homeAddress)) {
+        errorElement.textContent = "Home Address must start with a letter and be at least 3 characters long.";
+      } else {
+        errorElement.textContent = "";
+      }
+    }
+
+
+    function validateCity() {
+      const city = cityInput.value.trim();
+      const errorElement = document.getElementById("city-error");
+      const minLength = 3; // Minimum length
+
+      if (!/^[a-zA-Z]+$/.test(city) || city.length < minLength) {
+        errorElement.textContent = "City must contain only letters and be at least 3 characters long.";
+      } else {
+        errorElement.textContent = "";
+      }
+    }
+
+    function validateZIP() {
+      const zip = zipInput.value.trim();
+      const zipPattern = /^\d{6}$/; // Assumes a 6-digit ZIP code
+      const errorElement = document.getElementById("zip-error");
+
+      if (!zipPattern.test(zip)) {
+        errorElement.textContent = "ZIP code must contain exactly 6 digits and no letters.";
+      } else {
+        errorElement.textContent = "";
+      }
+    }
+
+    function validatePassword() {
+      const password = passwordInput.value;
+      const confirmPassword = confirmPasswordInput.value;
+      const passwordError = document.getElementById("password-error");
+      const confirmPasswordError = document.getElementById(
+        "confirm-password-error"
+      );
+
+      const uppercasePattern = /[A-Z]/; // At least one uppercase letter
+      const specialCharPattern = /[!@#$%^&*()_+{}\[\]:;<>,.?~\\-]/; // At least one special character
+
+      if (password.length < 6) {
+        passwordError.textContent = errorMessages.password;
+      } else if (!uppercasePattern.test(password)) {
+        passwordError.textContent = "Password must contain at least one uppercase letter";
+      } else if (!specialCharPattern.test(password)) {
+        passwordError.textContent = "Password must contain at least one special character";
+      } else {
+        passwordError.textContent = "";
+      }
+
+      if (password !== confirmPassword) {
+        confirmPasswordError.textContent = errorMessages.confirmPassword;
+      } else {
+        confirmPasswordError.textContent = "";
+      }
+    }
+
+    function validateUsername() {
+      const username = usernameInput.value.trim();
+      const usernamePattern = /^[A-Za-z]+$/; // Alphabets only
+      const errorElement = document.getElementById("username-error");
+      if (username.length < 3 || !usernamePattern.test(username)) {
+        errorElement.textContent = errorMessages.username;
+      } else {
+        errorElement.textContent = "";
+      }
+    }
+
+
+    fullNameInput.addEventListener("input", validateFullName);
+    genderInputs.forEach((input) =>
+      input.addEventListener("change", validateGender)
+    );
+    dobInput.addEventListener("input", validateDOB);
+    emailInput.addEventListener("input", validateEmail);
+    phoneInput.addEventListener("input", validatePhone);
+    homeAddressInput.addEventListener("input", validateHomeAddress);
+    cityInput.addEventListener("input", validateCity);
+    zipInput.addEventListener("input", validateZIP);
+    usernameInput.addEventListener("input", validateUsername);
+    passwordInput.addEventListener("input", validatePassword);
+    confirmPasswordInput.addEventListener("input", validatePassword);
+  });
+</script>
+{% endblock %}
