@@ -90,13 +90,6 @@
   <h2>Login</h2>
   <form action="" method="post" id="login-form">
     {% csrf_token %}
-    {% if messages %}
-    <div class="error-box">
-      {% for message in messages %}
-      {{ message }}
-      {% endfor %}
-    </div>
-    {% endif %}
     <label for="username">Username:</label>
     <input type="text" id="username" name="username" required><br>
     <div id="username-error" class="error-message"></div> <!-- Display username error here -->
