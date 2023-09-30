@@ -95,82 +95,13 @@
       <input type="submit" value="Search" class="book-button">
     </form>
   </div>
+  {% for test in tests %}
   <div class="test-listing">
-    <p class="test-title"><a href="#">Total RBC Test</a></p>
-    <p class="test-price">Rs. 150</p>
-    <a href="appoinment.html" class="book-button">Book Now</a>
+    <p class="test-title"><a href="#">{{ test.name }}</a></p>
+    <p class="test-price">Rs. {{ test.price }}</p>
+    <a href="appoinment.html?test={{ test.name }}" class="book-button">Book Now</a>
   </div>
-  <div class="test-listing">
-    <p class="test-title"><a href="#">Total Leucocytes Count test Test</a></p>
-    <p class="test-price">Rs. 150</p>
-    <a href="appoinment.html" class="book-button">Book Now</a>
-  </div>
-  <div class="test-listing">
-    <p class="test-title"><a href="#">Hemoglobin</a></p>
-
-    <p class="test-price">Rs. 150</p>
-    <a href="appoinment.html" class="book-button">Book Now</a>
-  </div>
-  <div class="test-listing">
-    <p class="test-title"><a href="#">Platelet count Test</a></p>
-
-    <p class="test-price">Rs. 150</p>
-    <a href="appoinment.html" class="book-button">Book Now</a>
-  </div>
-  <div class="test-listing">
-    <p class="test-title"><a href="#">serum Globulin Test</a></p>
-
-    <p class="test-price">Rs. 150</p>
-    <a href="appoinment.html" class="book-button">Book Now</a>
-  </div>
-  <div class="test-listing">
-    <p class="test-title"><a href="#">Prolactin</a></p>
-
-    <p class="test-price">Rs. 300</p>
-    <a href="appoinment.html" class="book-button">Book Now</a>
-  </div>
-  <div class="test-listing">
-    <p class="test-title"><a href="#">metabolism</a></p>
-
-    <p class="test-price">Rs. 400</p>
-    <a href="appoinment.html" class="book-button">Book Now</a>
-  </div>
-  <div class="test-listing">
-    <p class="test-title"><a href="#">Total Bile acid Test</a></p>
-
-    <p class="test-price">Rs. 250</p>
-    <a href="appoinment.html" class="book-button">Book Now</a>
-  </div>
-  <div class="test-listing">
-    <p class="test-title"><a href="#">Thyroid</a></p>
-
-    <p class="test-price">Rs. 900</p>
-    <a href="appoinment.html" class="book-button">Book Now</a>
-  </div>
-  <div class="test-listing">
-    <p class="test-title"><a href="#">iron Deficiency Profile Test</a></p>
-
-    <p class="test-price">Rs. 500</p>
-    <a href="appoinment.html" class="book-button">Book Now</a>
-  </div>
-  <div class="test-listing">
-    <p class="test-title"><a href="#">Insulin-fasting Test</a></p>
-
-    <p class="test-price">Rs. 500</p>
-    <a href="appoinment.html" class="book-button">Book Now</a>
-  </div>
-  <div class="test-listing">
-    <p class="test-title"><a href="#">kidney Profile</a></p>
-
-    <p class="test-price">Rs. 585</p>
-    <a href="appoinment.html" class="book-button">Book Now</a>
-  </div>
-  <div class="test-listing">
-    <p class="test-title"><a href="#">Mumps antibody-IGM test</a></p>
-
-    <p class="test-price">Rs. 600</p>
-    <a href="appoinment.html" class="book-button">Book Now</a>
-  </div>
+  {% endfor %}
   <!-- Add more test listings here -->
 </div>
 {% endblock %}
