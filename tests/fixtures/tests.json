@@ -1,0 +1,119 @@
+[
+    {
+        "model": "tests.test",
+        "pk": 1,
+        "fields": {
+            "name": "Total RBC Test",
+            "price": 150,
+            "is_available": true
+        }
+    },
+    {
+        "model": "tests.test",
+        "pk": 2,
+        "fields": {
+            "name": "Total Leucocytes Count test Test",
+            "price": 150,
+            "is_available": true
+        }
+    },
+    {
+        "model": "tests.test",
+        "pk": 3,
+        "fields": {
+            "name": "Hemoglobin",
+            "price": 150,
+            "is_available": true
+        }
+    },
+    {
+        "model": "tests.test",
+        "pk": 4,
+        "fields": {
+            "name": "Platelet count Test",
+            "price": 150,
+            "is_available": true
+        }
+    },
+    {
+        "model": "tests.test",
+        "pk": 5,
+        "fields": {
+            "name": "Serum Globulin Test",
+            "price": 150,
+            "is_available": true
+        }
+    },
+    {
+        "model": "tests.test",
+        "pk": 6,
+        "fields": {
+            "name": "Prolactin",
+            "price": 300,
+            "is_available": true
+        }
+    },
+    {
+        "model": "tests.test",
+        "pk": 7,
+        "fields": {
+            "name": "Metabolism",
+            "price": 400,
+            "is_available": true
+        }
+    },
+    {
+        "model": "tests.test",
+        "pk": 8,
+        "fields": {
+            "name": "Total Bile Acid Test",
+            "price": 250,
+            "is_available": true
+        }
+    },
+    {
+        "model": "tests.test",
+        "pk": 9,
+        "fields": {
+            "name": "Thyroid",
+            "price": 900,
+            "is_available": true
+        }
+    },
+    {
+        "model": "tests.test",
+        "pk": 10,
+        "fields": {
+            "name": "Iron Deficiency Profile Test",
+            "price": 500,
+            "is_available": true
+        }
+    },
+    {
+        "model": "tests.test",
+        "pk": 11,
+        "fields": {
+            "name": "Insulin-fasting Test",
+            "price": 500,
+            "is_available": true
+        }
+    },
+    {
+        "model": "tests.test",
+        "pk": 12,
+        "fields": {
+            "name": "Kidney Profile",
+            "price": 585,
+            "is_available": true
+        }
+    },
+    {
+        "model": "tests.test",
+        "pk": 13,
+        "fields": {
+            "name": "Mumps antibody-IGM test",
+            "price": 600,
+            "is_available": true
+        }
+    }
+]
