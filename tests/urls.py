@@ -14,6 +14,7 @@ urlpatterns = [
     path('signup.html',views.signup,name="signup"),
     path('appoinment.html',views.appoinment,name="appoinment"),
     path('user.html',views.user,name="user"),
-    path('logout',views.logout,name="logout"),
+    path('logout/',views.logout,name="logout"),
     path('services1.html',views.services1,name="services1"),
+    path('check_username/', views.check_username, name='check_username'),
 ]

@@ -1,0 +1,80 @@
+{% extends "layout/base.html" %}
+
+{% block content %}
+<div class="container">
+    <div class="mt-4"></div> 
+    <h3>Welcome to the Admin Dashboard</h3><br><br>
+
+    <!-- Diagnostic Lab Statistics -->
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Total Patients</h5>
+                    <p class="card-text">There are {{ total_patients }} registered patients.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Total Tests</h5>
+                    <p class="card-text">There are {{ total_tests }} available tests.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Total Bookings</h5>
+                    <p class="card-text">There are {{ total_bookings }} pending bookings.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Activity -->
+    <div class="mt-4">
+        <h3>Recent Diagnostic Lab Activity</h3>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>User</th>
+                    <th>Activity</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for activity in recent_activity %}
+                <tr>
+                    <td>{{ activity.user }}</td>
+                    <td>{{ activity.action }}</td>
+                    <td>{{ activity.date }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="3">No recent activity.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<style>
+    /* Apply styles only to elements within the .container */
+    .container h3 {
+        text-align: center;
+    }
+
+    .container .card {
+        margin-bottom: 20px;
+    }
+
+    .container .mt-4 {
+        margin-top: 30px;
+    }
+</style>
+{% endblock %}

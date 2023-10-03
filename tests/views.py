@@ -4,6 +4,8 @@ from django.contrib.auth import get_user_model
 from django.contrib import messages
 from django.contrib import auth
 from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
+from django.contrib.auth.models import User
 
 from tests.models import (
     Address,
@@ -41,6 +43,11 @@ def loginn(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
+            if user.is_superuser:
+                return redirect("admin_dashboard")
+            elif user.is_staff:
+                return redirect("staff_dashboard")
+            messages.success(request, "Login successful.")
             return redirect("user")
         else:
             messages.error(
@@ -58,7 +65,6 @@ def signup(request):
         password = request.POST["password"]
         first_name = request.POST["first-name"]
         phone_number = request.POST["phone"]
-        date_of_birth = request.POST["dob"]
         street_address = request.POST["home"]
         city = request.POST["city"]
         pincode = request.POST["zip"]
@@ -73,13 +79,24 @@ def signup(request):
             password,
             first_name=first_name,
             phone_number=phone_number,
-            date_of_birth=date_of_birth,
             address=address,
         )
+        messages.success(request, "registration successful.")
         return redirect("login")
     return render(request, "signup.html")
 
+def check_username(request):
+    if request.method == 'GET':
+        username = request.GET.get('username', None)
 
+        if username is not None:
+            # Check if the username already exists
+            user_exists = User.objects.filter(username=username).exists()
+            data = {'exists': user_exists}
+            return JsonResponse(data)
+
+    # Handle invalid or empty request
+    return JsonResponse({'exists': False})
 @login_required
 def appoinment(request):
     context = {

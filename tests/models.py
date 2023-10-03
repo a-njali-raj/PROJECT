@@ -10,7 +10,6 @@ class User(AbstractUser):
         blank=True,
     )
     phone_number = models.CharField(max_length=10, null=True, blank=True)
-    date_of_birth = models.DateField(null=True, blank=True)
 
 
 class Test(models.Model):
@@ -63,3 +62,5 @@ class Appoinment(models.Model):
         null=True,
         blank=True,
     )
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)

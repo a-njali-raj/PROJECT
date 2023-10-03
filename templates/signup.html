@@ -303,30 +303,37 @@
     }
 
     function validateEmail() {
-      const email = emailInput.value.trim();
-      const emailPattern = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/;
-      const errorElement = document.getElementById("email-error");
+  const email = emailInput.value.trim();
+  const emailPattern = /^[a-z][a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/; // Updated pattern (no capital letters)
+  const errorElement = document.getElementById("email-error");
 
-      if (!emailPattern.test(email)) {
-        errorElement.textContent = "Invalid email format. Please enter a valid email address.";
-      } else if (email.length > 320) {
-        errorElement.textContent = "Email address is too long. Please use a shorter email address.";
-      } else {
-        errorElement.textContent = "";
-      }
-    }
+  if (!emailPattern.test(email)) {
+    errorElement.textContent = "Invalid email format ";
+  } else if (!/@(gmail|mca|ajce|yahoo)\.[a-z.]{2,}$/i.test(email)) { // Updated domain check
+    errorElement.textContent = "Unsupported domain. Please use an email address with one of the supported domains (gmail, mca, ajce, yahoo).";
+  } else if (email.length > 320) {
+    errorElement.textContent = "Email address is too long. Please use a shorter email address.";
+  } else {
+    errorElement.textContent = "";
+  }
+}
 
 
-    function validatePhone() {
-      const phone = phoneInput.value.trim();
-      const phonePattern = /^\d{10}$/; // Assumes a 10-digit phone number
-      const errorElement = document.getElementById("phone-error");
-      if (!phonePattern.test(phone)) {
-        errorElement.textContent = errorMessages.phone;
-      } else {
-        errorElement.textContent = "";
-      }
-    }
+
+
+function validatePhone() {
+  const phone = phoneInput.value.trim();
+  const phonePattern = /^[6789]\d{9}$/; // Starts with 6, 7, 8, or 9 and has 10 digits
+  const errorElement = document.getElementById("phone-error");
+
+  if (!phonePattern.test(phone)) {
+    errorElement.textContent = "Invalid phone number format";
+  } else if (/^0{10}$/.test(phone)) {
+    errorElement.textContent = "Phone number cannot contain all zeros";
+  } else {
+    errorElement.textContent = "";
+  }
+}
 
     function validateHomeAddress() {
       const homeAddress = homeAddressInput.value.trim();
@@ -354,17 +361,16 @@
     }
 
     function validateZIP() {
-      const zip = zipInput.value.trim();
-      const zipPattern = /^\d{6}$/; // Assumes a 6-digit ZIP code
-      const errorElement = document.getElementById("zip-error");
+    const zip = zipInput.value.trim();
+    const zipPattern = /^[1-9]\d{5}$/; // Six digits, starting with 1-9
+    const errorElement = document.getElementById("zip-error");
 
-      if (!zipPattern.test(zip)) {
-        errorElement.textContent = "ZIP code must contain exactly 6 digits and no letters.";
-      } else {
+    if (!zipPattern.test(zip)) {
+        errorElement.textContent = "invalid post code";
+    } else {
         errorElement.textContent = "";
-      }
     }
-
+}
     function validatePassword() {
       const password = passwordInput.value;
       const confirmPassword = confirmPasswordInput.value;
@@ -394,15 +400,17 @@
     }
 
     function validateUsername() {
-      const username = usernameInput.value.trim();
-      const usernamePattern = /^[A-Za-z]+$/; // Alphabets only
-      const errorElement = document.getElementById("username-error");
-      if (username.length < 3 || !usernamePattern.test(username)) {
-        errorElement.textContent = errorMessages.username;
-      } else {
-        errorElement.textContent = "";
-      }
-    }
+  const username = usernameInput.value.trim();
+  const usernamePattern = /^[A-Za-z][A-Za-z0-9]*$/; // Start with letter, contain letters and numbers
+  const errorElement = document.getElementById("username-error");
+
+  if (username.length < 3 || !usernamePattern.test(username)) {
+    errorElement.textContent = "Username is invalid";
+  } else {
+    errorElement.textContent = "";
+  }
+}
+
 
 
     fullNameInput.addEventListener("input", validateFullName);
@@ -418,6 +426,26 @@
     usernameInput.addEventListener("input", validateUsername);
     passwordInput.addEventListener("input", validatePassword);
     confirmPasswordInput.addEventListener("input", validatePassword);
+  });
+  $(document).ready(function () {
+    // Add an event listener for the username input field
+    $('#username').on('input', function () {
+      const username = $(this).val();
+
+      // Send an AJAX request to check the username
+      $.ajax({
+        url: '/check_username/',
+        data: { 'username': username },
+        dataType: 'json',
+        success: function (data) {
+          if (data.exists) {
+            $('#username-error').text('Username is already taken.');
+          } else {
+            $('#username-error').text('');
+          }
+        }
+      });
+    });
   });
 </script>
 {% endblock %}
