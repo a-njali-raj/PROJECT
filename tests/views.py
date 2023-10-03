@@ -97,6 +97,32 @@ def check_username(request):
 
     # Handle invalid or empty request
     return JsonResponse({'exists': False})
+def check_email(request):
+    if request.method == 'GET':
+        email = request.GET.get('email', None)
+
+        if email is not None:
+            # Check if the email already exists
+            email_exists = User.objects.filter(email=email).exists()
+            data = {'exists': email_exists}
+            return JsonResponse(data)
+
+    # Handle invalid or empty request
+    return JsonResponse({'exists': False})
+def check_phone(request):
+    if request.method == 'GET':
+        phone = request.GET.get('phone', None)
+
+        if phone is not None:
+            # Check if the phone number already exists
+            phone_exists = User.objects.filter(phone_number=phone).exists()
+            data = {'exists': phone_exists}
+            return JsonResponse(data)
+
+    # Handle invalid or empty request
+    return JsonResponse({'exists': False})
+
+
 @login_required
 def appoinment(request):
     context = {

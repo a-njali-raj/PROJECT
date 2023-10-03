@@ -185,11 +185,7 @@
 
 
 
-    <div class="form-row">
-      <label for="dob">Date of Birth:</label>
-      <input type="date" id="dob" name="dob" required>
-      <span id="dob-error" class="error"></span>
-    </div>
+   
     <div class="form-row">
       <label for="email">Email Address:</label>
       <input type="email" id="email" name="email" required>
@@ -254,7 +250,6 @@
     const fullNameInput = document.getElementById("first-name");
     const genderInputs = document.querySelectorAll('input[name="gender"]');
     const genderError = document.getElementById("gender-error");
-    const dobInput = document.getElementById("dob");
     const emailInput = document.getElementById("email");
     const phoneInput = document.getElementById("phone");
     const homeAddressInput = document.getElementById("home");
@@ -267,7 +262,6 @@
     const errorMessages = {
       fullName: "Full Name is required and only letters",
       gender: "Please select a gender",
-      dob: "Invalid date of birth format",
       email: "Invalid email format",
       phone: "Invalid phone number format",
       homeAddress: "Home Address is required",
@@ -290,17 +284,7 @@
     }
 
 
-    function validateDOB() {
-      const dob = dobInput.value.trim();
-      const dobError = document.getElementById("dob-error");
-      // You can add your own validation logic for the date of birth here.
-      // For simplicity, this example assumes that DOB is valid if it's not empty.
-      if (dob === "") {
-        dobError.textContent = errorMessages.dob;
-      } else {
-        dobError.textContent = "";
-      }
-    }
+  
 
     function validateEmail() {
   const email = emailInput.value.trim();
@@ -417,7 +401,7 @@ function validatePhone() {
     genderInputs.forEach((input) =>
       input.addEventListener("change", validateGender)
     );
-    dobInput.addEventListener("input", validateDOB);
+    
     emailInput.addEventListener("input", validateEmail);
     phoneInput.addEventListener("input", validatePhone);
     homeAddressInput.addEventListener("input", validateHomeAddress);
@@ -447,5 +431,72 @@ function validatePhone() {
       });
     });
   });
+  // Check email availability
+$('#email').on('input', function () {
+  const email = $(this).val();
+
+  // Send an AJAX request to check the email
+  $.ajax({
+    url: '/check_email/',
+    data: { 'email': email },
+    dataType: 'json',
+    success: function (data) {
+      if (data.exists) {
+        $('#email-error').text('Email is already registered.');
+      } else {
+        $('#email-error').text('');
+      }
+    }
+  });
+});
+
+// Check phone number availability
+$('#phone').on('input', function () {
+  const phone = $(this).val();
+
+  // Send an AJAX request to check the phone number
+  $.ajax({
+    url: '/check_phone/',
+    data: { 'phone': phone },
+    dataType: 'json',
+    success: function (data) {
+      if (data.exists) {
+        $('#phone-error').text('Phone number is already registered.');
+      } else {
+        $('#phone-error').text('');
+      }
+    }
+  });
+});
+
+  function hasErrors() {
+    const errorElements = document.querySelectorAll(".error");
+    for (const errorElement of errorElements) {
+      if (errorElement.textContent.trim() !== "") {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  // Function to enable or disable the submit button based on errors
+  function updateSubmitButtonState() {
+    const submitButton = document.querySelector("input[type='submit']");
+    if (hasErrors()) {
+      submitButton.disabled = true;
+    } else {
+      submitButton.disabled = false;
+    }
+  }
+
+  // Attach event listeners to all input fields for real-time validation
+  const inputFields = document.querySelectorAll("input, textarea");
+  inputFields.forEach((field) => {
+    field.addEventListener("input", updateSubmitButtonState);
+  });
+
+  // Initially, check and disable the submit button if there are errors on page load
+  updateSubmitButtonState();
+
 </script>
 {% endblock %}
