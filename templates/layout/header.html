@@ -32,10 +32,16 @@
                     <li class="nav-item">
                         <a class="nav-link" href="about.html">About Us</a>
                     </li>
+                    {% if not user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="services1.html">Services</a>
+                    </li>
+                    {% endif %}
+                    {% if user.is_authenticated %}
                     <li class="nav-item">
                         <a class="nav-link" href="services.html">Services</a>
                     </li>
-                    {% if user.is_authenticated %}
+                    
                     <li class="nav-item">
                         <a class="nav-link" href="appoinment.html">Appoinment</a>
                     </li>
