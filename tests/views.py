@@ -85,42 +85,17 @@ def signup(request):
         return redirect("login")
     return render(request, "signup.html")
 
-def check_username(request):
-    if request.method == 'GET':
-        username = request.GET.get('username', None)
+def check_username_availability(request):
+    if request.method == "GET":
+        username = request.GET.get("username")
 
-        if username is not None:
-            # Check if the username already exists
-            user_exists = User.objects.filter(username=username).exists()
-            data = {'exists': user_exists}
-            return JsonResponse(data)
+        try:
+            user = User.objects.get(username=username)
+            available = False
+        except User.DoesNotExist:
+            available = True
 
-    # Handle invalid or empty request
-    return JsonResponse({'exists': False})
-def check_email(request):
-    if request.method == 'GET':
-        email = request.GET.get('email', None)
-
-        if email is not None:
-            # Check if the email already exists
-            email_exists = User.objects.filter(email=email).exists()
-            data = {'exists': email_exists}
-            return JsonResponse(data)
-
-    # Handle invalid or empty request
-    return JsonResponse({'exists': False})
-def check_phone(request):
-    if request.method == 'GET':
-        phone = request.GET.get('phone', None)
-
-        if phone is not None:
-            # Check if the phone number already exists
-            phone_exists = User.objects.filter(phone_number=phone).exists()
-            data = {'exists': phone_exists}
-            return JsonResponse(data)
-
-    # Handle invalid or empty request
-    return JsonResponse({'exists': False})
+        return JsonResponse({"available": available})
 
 
 @login_required

@@ -1,255 +1,399 @@
-{% extends "layout/base.html" %}
 {% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-{% block extra_css %}
-<style>
-  body {
-    font-family: Arial, sans-serif;
-    background-color: #e8f6f4;
-  }
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
-  header {
-    background-color: white;
-  }
+  <meta name="copyright" content="MACode ID, https://macodeid.com/">
 
-  /* Styles for the registration form container */
-  .registration-form-container {
+  <title>One Health - Medical Center HTML5 Template</title>
+
+  <link rel="stylesheet" href="{% static '/assets/css/maicons.css'%}">
+
+  <link rel="stylesheet" href="{% static '/assets/css/bootstrap.css'%}">
+
+  <link rel="stylesheet" href="{% static '/assets/vendor/owl-carousel/css/owl.carousel.css'%}">
+
+  <link rel="stylesheet" href="{% static '/assets/vendor/animate/animate.css'%}">
+
+  <link rel="stylesheet" href="{% static '/assets/css/theme.css' %}">
+  <style>
+     body {
+        font-family: Arial, sans-serif;
+        background-color: #e8f6f4;
+    }
+header{
+  background-color: white;
+}
+    /* Styles for the registration form container */
+.registration-form-container {
     max-width: 600px;
     margin: 0 auto;
     padding: 20px;
     background-color: #dbfcf7;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
+}
 
-  /* Form Styles (retain the existing form styles) */
-  /* ... (form styles from your previous code) ... */
+/* Form Styles (retain the existing form styles) */
+/* ... (form styles from your previous code) ... */
 
-  /* Styles for the registration form container */
-  .registration-form-container {
+    /* Styles for the registration form container */
+.registration-form-container {
     max-width: 600px;
     margin: 0 auto;
     padding: 20px;
     background-color: #fff;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
+}
 
-  /* Form Styles (retain the existing form styles) */
-  /* ... (form styles from your previous code) ... */
+/* Form Styles (retain the existing form styles) */
+/* ... (form styles from your previous code) ... */
 
-  /* Styles for the registration form container */
-  .registration-form-container {
+    /* Styles for the registration form container */
+.registration-form-container {
     max-width: 600px;
     margin: 0 auto;
     padding: 20px;
     background-color: #fff;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
+}
 
-  /* Form Styles (retain the existing form styles) */
-  /* ... (form styles from your previous code) ... */
+/* Form Styles (retain the existing form styles) */
+/* ... (form styles from your previous code) ... */
 
-  /* Styles for the registration form container */
-  .registration-form-container {
+    /* Styles for the registration form container */
+.registration-form-container {
     max-width: 600px;
     margin: 0 auto;
     padding: 20px;
     background-color: #fff;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
+}
 
-  /* Form Styles (retain the existing form styles) */
-  /* ... (form styles from your previous code) ... */
+/* Form Styles (retain the existing form styles) */
+/* ... (form styles from your previous code) ... */
 
-  /* Styles for the registration form container */
-  .registration-form-container {
+    /* Styles for the registration form container */
+.registration-form-container {
     max-width: 600px;
     margin: 0 auto;
     padding: 20px;
     background-color: #fff;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
+}
 
-  /* Form Styles (retain the existing form styles) */
-  /* ... (form styles from your previous code) ... */
+/* Form Styles (retain the existing form styles) */
+/* ... (form styles from your previous code) ... */
 
-  /* Styles for the registration form container */
-  .registration-form-container {
+    /* Styles for the registration form container */
+.registration-form-container {
     max-width: 600px;
     margin: 0 auto;
     padding: 20px;
     background-color: #fff;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
+}
 
-  /* Form Styles (retain the existing form styles) */
-  /* ... (form styles from your previous code) ... */
+/* Form Styles (retain the existing form styles) */
+/* ... (form styles from your previous code) ... */
 
-  /* Styles for the registration form container */
-  .registration-form-container {
+    /* Styles for the registration form container */
+.registration-form-container {
     max-width: 600px;
     margin: 0 auto;
     padding: 20px;
     background-color: #fff;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Form Styles (retain the existing form styles) */
+/* ... (form styles from your previous code) ... */
+
+
+    h1 {
+        text-align: center;
+    }
+
+    /* Form Styles */
+    form {
+        margin-top: 20px;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    input[type="text"],
+    input[type="password"],
+    input[type="email"],
+    input[type="tel"],
+    input[type="date"],
+    textarea {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+
+    input[type="radio"],
+    input[type="checkbox"] {
+        margin-right: 5px;
+    }
+
+    /* Form Layout */
+    .form-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .form-row label {
+        flex: 1;
+    }
+
+    .form-row input,
+    .form-row textarea {
+        flex: 2;
+    }
+
+    .form-row input[type="radio"],
+    .form-row input[type="checkbox"] {
+        flex: unset;
+    }
+
+    /* Consent Checkbox */
+    #consent {
+        margin-top: 10px;
+    }
+
+    /* Submit Button */
+    input[type="submit"] {
+        background-color: #007BFF;
+        color: #fff;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+    .custom-dropdown-button {
+    background-color: #4aecb6d9; /* Change the background color to your desired color */
+    color: #191717; /* Change the text color to white or your preferred color */
+    padding: 5px 10px; /* Adjust padding to control the button size */
+    font-size: 14px; /* Adjust font size as needed */
+    border: none; /* Remove border if not needed */
+    border-radius: 3px; /* Apply rounded corners if desired */
   }
-
-  /* Form Styles (retain the existing form styles) */
-  /* ... (form styles from your previous code) ... */
-
-
-  h1 {
-    text-align: center;
-  }
-
-  /* Form Styles */
-  form {
-    margin-top: 20px;
-  }
-
-  label {
-    display: block;
-    margin-bottom: 5px;
-  }
-
-  input[type="text"],
-  input[type="password"],
-  input[type="email"],
-  input[type="tel"],
-  input[type="date"],
-  textarea {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-  }
-
-  input[type="radio"],
-  input[type="checkbox"] {
-    margin-right: 5px;
-  }
-
-  /* Form Layout */
-  .form-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  .form-row label {
-    flex: 1;
-  }
-
-  .form-row input,
-  .form-row textarea {
-    flex: 2;
-  }
-
-  .form-row input[type="radio"],
-  .form-row input[type="checkbox"] {
-    flex: unset;
-  }
-
-  /* Consent Checkbox */
-  #consent {
-    margin-top: 10px;
-  }
-
-  /* Submit Button */
-  input[type="submit"] {
-    background-color: #007BFF;
-    color: #fff;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-</style>
-{% endblock %}
-
-{% block content %}
-<br><br>
-<div class="container">
-  <h2>
-    <center>Register here</center>
-  </h2>
-  <form action="" method="post" id="registration-form">
-    {% csrf_token %}
-    <!-- Personal Information -->
-    <div class="form-row">
-      <label for="first-name">Full Name:</label>
-      <input type="text" id="first-name" name="first-name" required>
-      <span id="full-name-error" class="error"></span>
-
-    </div>
+  </style>
+  
 
 
 
+
+</head>
+<body>
+
+  <!-- Back to top button -->
+  <div class="back-to-top"></div>
+
+  <header>
+    <div class="topbar">
+      <div class="container">
+        <div class="row">
+          <div class="col-sm-8 text-sm">
+            <div class="site-info">
+              <a href="#"><span class="mai-call text-primary"></span> +00 123 4455 6666</a>
+              <span class="divider">|</span>
+              <a href="#"><span class="mai-mail text-primary"></span> mail@example.com</a>
+            </div>
+          </div>
+          
+          </div>
+        </div> <!-- .row -->
+      </div> <!-- .container -->
+    </div> <!-- .topbar -->
+
+    <nav class="navbar navbar-expand-lg navbar-light shadow-sm">
+      <div class="container">
+        <a class="navbar-brand" href="#"><span class="text-primary">One</span>-Health</a>
+            
+          </div>
+      
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupport" aria-controls="navbarSupport" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupport">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item ">
+              <a class="nav-link" href="index.html">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="about.html">About Us</a>
+            </li>
+            
+            <li class="nav-item">
+              <a class="nav-link" href="contact.html">Contact</a>
+            </li>
+            <li class="nav-item active">
+              <a class="btn btn-primary ml-lg-3" href="login.html">Login</a>
+            </li>
+          </ul>
+          
+        </div> <!-- .navbar-collapse -->
+      </div> <!-- .container -->
+      
+    </nav>
+  </header>
+ 
+  <br><br>
+  <div class="container">
+    <h3><center><b>Join Our Community</b></center></center></h3>
    
-    <div class="form-row">
-      <label for="email">Email Address:</label>
-      <input type="email" id="email" name="email" required>
-      <span id="email-error" class="error"></span>
-    </div>
-    <div class="form-row">
-      <label for="phone">Phone Number:</label>
-      <input type="tel" id="phone" name="phone" required>
-      <span id="phone-error" class="error"></span>
-    </div>
-    <div class="form-row">
-      <label>Address:</label>
-    </div>
-    <div class="form-row">
-      <input type="text" id="home" name="home" placeholder="home Address" required>
-      <span id="home-address-error" class="error"></span>
-    </div>
-    <div class="form-row">
-      <input type="text" id="city" name="city" placeholder="City" required>
-      <span id="city-error" class="error"></span>
-    </div>
+    <form action="" method="post" id="registration-form">
+      {% csrf_token %}
+        <!-- Personal Information -->
+        <div class="form-row">
+            <label for="first-name">Full Name:</label>
+            <input type="text" id="first-name" name="first-name" required>
+            <span id="full-name-error" class="error"></span>
+            
+        </div>
+        
+       
+      
+       
+        <div class="form-row">
+            <label for="email">Email Address:</label>
+            <input type="email" id="email" name="email" required>
+            <span id="email-error" class="error"></span>
+        </div>
+        <div class="form-row">
+            <label for="phone">Phone Number:</label>
+            <input type="tel" id="phone" name="phone" required>
+            <span id="phone-error" class="error"></span>
+        </div>
+<div class="form-row">
+<label>Address:</label>
+</div>
+<div class="form-row">
+<input type="text" id="home" name="home" placeholder="home Address" required>
+<span id="home-address-error" class="error"></span>
+</div>
+<div class="form-row">
+<input type="text" id="city" name="city" placeholder="City" required>
+<span id="city-error" class="error"></span>
+</div>
 
-    <div class="form-row">
-      <input type="text" id="zip" name="zip" placeholder="Postal Code" required>
-      <span id="zip-error" class="error"></span>
-    </div>
+<div class="form-row">
+<input type="text" id="zip" name="zip" placeholder="Postal Code" required>
+<span id="zip-error" class="error"></span>
+</div>
 
-    <!-- User Account -->
-    <div class="form-row">
-      <label for="username">Username:</label>
-      <input type="text" id="username" name="username" required>
-      <span id="username-error" class="error"></span>
-    </div>
-    <div class="form-row">
-      <label for="password">Password:</label>
-      <input type="password" id="password" name="password" required>
-      <span id="password-error" class="error"></span>
+        <!-- User Account -->
+        <div class="form-row">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required>
+            <span id="username-error" class="error"></span>
+            <span id="username-availability" class="availability"></span>
 
-    </div>
-    <div class="form-row">
-      <label for="confirm-password">Confirm Password:</label>
-      <input type="password" id="confirm-password" name="confirm-password" required>
-      <span id="confirm-password-error" class="error"></span>
-    </div>
-    <!-- Consent -->
-    <div class="form-row">
-      <input type="checkbox" id="consent" name="consent" required>
-      <label for="consent">I have read and agree to the terms and conditions.</label>
-    </div>
-    <!-- Submit Button -->
-    <div class="form-row">
-      <input type="submit" value="Submit">
-    </div>
-  </form>
+        </div>
+        <div class="form-row">
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+            <span id="password-error" class="error"></span>
+
+        </div>
+        <div class="form-row">
+            <label for="confirm-password">Confirm Password:</label>
+            <input type="password" id="confirm-password" name="confirm-password" required>
+            <span id="confirm-password-error" class="error"></span>
+        </div>
+        <!-- Consent -->
+        <div class="form-row">
+            <input type="checkbox" id="consent" name="consent" required>
+            <label for="consent">I have read and agree to the terms and conditions.</label>
+        </div>
+        <!-- Submit Button -->
+        <div class="form-row">
+            <input type="submit" value="Submit">
+        </div>
+    </form>
 </div>
 <br><br>
-{% endblock %}
+  <footer class="page-footer">
+    <div class="container">
+      <div class="row px-md-3">
+        <div class="col-sm-6 col-lg-3 py-3">
+          <h5>Company</h5>
+          <ul class="footer-menu">
+            <li><a href="#">About Us</a></li>
+            <li><a href="#">Career</a></li>
+            <li><a href="#">Editorial Team</a></li>
+            <li><a href="#">Protection</a></li>
+          </ul>
+        </div>
+        <div class="col-sm-6 col-lg-3 py-3">
+          <h5>More</h5>
+          <ul class="footer-menu">
+            <li><a href="#">Terms & Condition</a></li>
+            <li><a href="#">Privacy</a></li>
+            <li><a href="#">Advertise</a></li>
+            <li><a href="#">Join as Doctors</a></li>
+          </ul>
+        </div>
+        <div class="col-sm-6 col-lg-3 py-3">
+          <h5>Our partner</h5>
+          <ul class="footer-menu">
+            <li><a href="#">One-Fitness</a></li>
+            <li><a href="#">One-Drugs</a></li>
+            <li><a href="#">One-Live</a></li>
+          </ul>
+        </div>
+        <div class="col-sm-6 col-lg-3 py-3">
+          <h5>Contact</h5>
+          <p class="footer-link mt-2">351 Willow Street Franklin, MA 02038</p>
+          <a href="#" class="footer-link">701-573-7582</a>
+          <a href="#" class="footer-link">healthcare@temporary.net</a>
 
-{% block extra_js %}
+          <h5 class="mt-3">Social Media</h5>
+          <div class="footer-sosmed mt-3">
+            <a href="#" target="_blank"><span class="mai-logo-facebook-f"></span></a>
+            <a href="#" target="_blank"><span class="mai-logo-twitter"></span></a>
+            <a href="#" target="_blank"><span class="mai-logo-google-plus-g"></span></a>
+            <a href="#" target="_blank"><span class="mai-logo-instagram"></span></a>
+            <a href="#" target="_blank"><span class="mai-logo-linkedin"></span></a>
+          </div>
+        </div>
+      </div>
+
+      <hr>
+
+      <p id="copyright">Copyright &copy; 2020 <a href="https://macodeid.com/" target="_blank">MACode ID</a>. All right reserved</p>
+    </div>
+  </footer>
+
+<script src="{% static '/assets/js/jquery-3.5.1.min.js'%}"></script>
+
+<script src="{% static '/assets/js/bootstrap.bundle.min.js'%}"></script>
+
+<script src="{% static '/assets/vendor/owl-carousel/js/owl.carousel.min.js'%}"></script>
+
+<script src="{% static '/assets/vendor/wow/wow.min.js'%}"></script>
+
+<script src="{% static '/assets/js/theme.js'%}"></script>
+<!-- ... (previous HTML code) ... -->
+
 <script>
+  
   document.addEventListener("DOMContentLoaded", function () {
     const fullNameInput = document.getElementById("first-name");
-    const genderInputs = document.querySelectorAll('input[name="gender"]');
-    const genderError = document.getElementById("gender-error");
+   
+   
     const emailInput = document.getElementById("email");
     const phoneInput = document.getElementById("phone");
     const homeAddressInput = document.getElementById("home");
@@ -261,7 +405,7 @@
 
     const errorMessages = {
       fullName: "Full Name is required and only letters",
-      gender: "Please select a gender",
+    
       email: "Invalid email format",
       phone: "Invalid phone number format",
       homeAddress: "Home Address is required",
@@ -272,21 +416,18 @@
       confirmPassword: "Passwords do not match",
     };
     function validateFullName() {
-      const fullName = fullNameInput.value.trim();
-      const fullNamePattern = /^[A-Za-z\s]{3,}$/; // Alphabets and spaces, minimum 3 characters
-      const errorElement = document.getElementById("full-name-error");
+  const fullName = fullNameInput.value.trim();
+  const fullNamePattern = /^[A-Za-z\s]{3,}$/; // Alphabets and spaces, minimum 3 characters
+  const errorElement = document.getElementById("full-name-error");
 
-      if (!fullNamePattern.test(fullName)) {
-        errorElement.textContent = "Full Name must be at least 3 characters long and contain only letters and spaces";
-      } else {
-        errorElement.textContent = "";
-      }
-    }
+  if (!fullNamePattern.test(fullName)) {
+    errorElement.textContent = "Full Name must be letters and minimum length 3";
+  } else {
+    errorElement.textContent = "";
+  }
+}
 
-
-  
-
-    function validateEmail() {
+function validateEmail() {
   const email = emailInput.value.trim();
   const emailPattern = /^[a-z][a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/; // Updated pattern (no capital letters)
   const errorElement = document.getElementById("email-error");
@@ -295,17 +436,31 @@
     errorElement.textContent = "Invalid email format ";
   } else if (!/@(gmail|mca|ajce|yahoo)\.[a-z.]{2,}$/i.test(email)) { // Updated domain check
     errorElement.textContent = "Unsupported domain. Please use an email address with one of the supported domains (gmail, mca, ajce, yahoo).";
-  } else if (email.length > 320) {
-    errorElement.textContent = "Email address is too long. Please use a shorter email address.";
   } else {
-    errorElement.textContent = "";
+    const parts = email.split('@');
+    const domainParts = parts[1].split('.');
+    
+    // Check if there is more than one dot in the domain part, except for specific domains
+    if (domainParts.length > 2 && !/^(mca\.ajce|ajce\.in)$/.test(domainParts.slice(-2).join('.'))) {
+      errorElement.textContent = "Only one dot allowed in domain part";
+    } else {
+      errorElement.textContent = "";
+    }
+    
+    if (email.length > 320) {
+      errorElement.textContent = "Email address is too long. Please use a shorter email address.";
+    }
   }
 }
 
 
 
 
-function validatePhone() {
+
+
+  
+
+    function validatePhone() {
   const phone = phoneInput.value.trim();
   const phonePattern = /^[6789]\d{9}$/; // Starts with 6, 7, 8, or 9 and has 10 digits
   const errorElement = document.getElementById("phone-error");
@@ -320,31 +475,31 @@ function validatePhone() {
 }
 
     function validateHomeAddress() {
-      const homeAddress = homeAddressInput.value.trim();
-      const errorElement = document.getElementById("home-address-error");
-      const minLength = 3; // Minimum length
+    const homeAddress = homeAddressInput.value.trim();
+    const errorElement = document.getElementById("home-address-error");
+    const minLength = 3; // Minimum length
 
-      if (homeAddress.length < minLength || /^\d/.test(homeAddress)) {
+    if (homeAddress.length < minLength || /^\d/.test(homeAddress)) {
         errorElement.textContent = "Home Address must start with a letter and be at least 3 characters long.";
-      } else {
+    } else {
         errorElement.textContent = "";
-      }
     }
+}
 
 
-    function validateCity() {
-      const city = cityInput.value.trim();
-      const errorElement = document.getElementById("city-error");
-      const minLength = 3; // Minimum length
+function validateCity() {
+    const city = cityInput.value.trim();
+    const errorElement = document.getElementById("city-error");
+    const minLength = 3; // Minimum length
 
-      if (!/^[a-zA-Z]+$/.test(city) || city.length < minLength) {
+    if (!/^[a-zA-Z]+$/.test(city) || city.length < minLength) {
         errorElement.textContent = "City must contain only letters and be at least 3 characters long.";
-      } else {
+    } else {
         errorElement.textContent = "";
-      }
     }
+}
 
-    function validateZIP() {
+function validateZIP() {
     const zip = zipInput.value.trim();
     const zipPattern = /^[1-9]\d{5}$/; // Six digits, starting with 1-9
     const errorElement = document.getElementById("zip-error");
@@ -355,41 +510,45 @@ function validatePhone() {
         errorElement.textContent = "";
     }
 }
+
+
     function validatePassword() {
-      const password = passwordInput.value;
-      const confirmPassword = confirmPasswordInput.value;
-      const passwordError = document.getElementById("password-error");
-      const confirmPasswordError = document.getElementById(
-        "confirm-password-error"
-      );
+  const password = passwordInput.value;
+  const confirmPassword = confirmPasswordInput.value;
+  const passwordError = document.getElementById("password-error");
+  const confirmPasswordError = document.getElementById(
+    "confirm-password-error"
+  );
 
-      const uppercasePattern = /[A-Z]/; // At least one uppercase letter
-      const specialCharPattern = /[!@#$%^&*()_+{}\[\]:;<>,.?~\\-]/; // At least one special character
+  const uppercasePattern = /[A-Z]/; // At least one uppercase letter
+  const specialCharPattern = /[!@#$%^&*()_+{}\[\]:;<>,.?~\\-]/; // At least one special character
 
-      if (password.length < 6) {
-        passwordError.textContent = errorMessages.password;
-      } else if (!uppercasePattern.test(password)) {
-        passwordError.textContent = "Password must contain at least one uppercase letter";
-      } else if (!specialCharPattern.test(password)) {
-        passwordError.textContent = "Password must contain at least one special character";
-      } else {
-        passwordError.textContent = "";
-      }
+  if (password.length < 6) {
+    passwordError.textContent = errorMessages.password;
+  } else if (!uppercasePattern.test(password)) {
+    passwordError.textContent = "Password must contain at least one uppercase letter";
+  } else if (!specialCharPattern.test(password)) {
+    passwordError.textContent = "Password must contain at least one special character";
+  } else {
+    passwordError.textContent = "";
+  }
 
-      if (password !== confirmPassword) {
-        confirmPasswordError.textContent = errorMessages.confirmPassword;
-      } else {
-        confirmPasswordError.textContent = "";
-      }
-    }
+  if (password !== confirmPassword) {
+    confirmPasswordError.textContent = errorMessages.confirmPassword;
+  } else {
+    confirmPasswordError.textContent = "";
+  }
+}
 
-    function validateUsername() {
-  const username = usernameInput.value.trim();
-  const usernamePattern = /^[A-Za-z][A-Za-z0-9]*$/; // Start with letter, contain letters and numbers
-  const errorElement = document.getElementById("username-error");
+function validateFullName() {
+  const fullName = fullNameInput.value.trim();
+  const fullNamePattern = /^[A-Za-z\s]*$/; // Allow letters and spaces
+  const errorElement = document.getElementById("full-name-error");
 
-  if (username.length < 3 || !usernamePattern.test(username)) {
-    errorElement.textContent = "Username is invalid";
+  if (!fullNamePattern.test(fullName)) {
+    errorElement.textContent = "Full Name can only contain letters and spaces";
+  } else if (fullName.length < 3) {
+    errorElement.textContent = "Full Name must be at least 3 characters long";
   } else {
     errorElement.textContent = "";
   }
@@ -398,10 +557,7 @@ function validatePhone() {
 
 
     fullNameInput.addEventListener("input", validateFullName);
-    genderInputs.forEach((input) =>
-      input.addEventListener("change", validateGender)
-    );
-    
+   
     emailInput.addEventListener("input", validateEmail);
     phoneInput.addEventListener("input", validatePhone);
     homeAddressInput.addEventListener("input", validateHomeAddress);
@@ -410,93 +566,66 @@ function validatePhone() {
     usernameInput.addEventListener("input", validateUsername);
     passwordInput.addEventListener("input", validatePassword);
     confirmPasswordInput.addEventListener("input", validatePassword);
-  });
-  $(document).ready(function () {
-    // Add an event listener for the username input field
-    $('#username').on('input', function () {
-      const username = $(this).val();
+    function validateForm() {
+      // Check if there are any error messages
+      const errorElements = document.querySelectorAll(".error");
+      const hasErrors = Array.from(errorElements).some((errorElement) => errorElement.textContent !== "");
 
-      // Send an AJAX request to check the username
-      $.ajax({
-        url: '/check_username/',
-        data: { 'username': username },
-        dataType: 'json',
-        success: function (data) {
-          if (data.exists) {
-            $('#username-error').text('Username is already taken.');
-          } else {
-            $('#username-error').text('');
-          }
-        }
-      });
+      // Enable or disable the submit button based on the presence of errors
+      const submitButton = document.getElementById("submit-button");
+      submitButton.disabled = hasErrors;
+    }
+
+    // Add an event listener to each input field for real-time validation
+    fullNameInput.addEventListener("input", validateFullName);
+    // ... Add event listeners for other input fields ...
+    
+    // Add an event listener for the form submission
+    const registrationForm = document.getElementById("registration-form");
+    registrationForm.addEventListener("submit", function (event) {
+      // Prevent form submission if there are validation errors
+      if (document.querySelector(".error:not(:empty)")) {
+        event.preventDefault();
+      }
     });
-  });
-  // Check email availability
-$('#email').on('input', function () {
-  const email = $(this).val();
 
-  // Send an AJAX request to check the email
-  $.ajax({
-    url: '/check_email/',
-    data: { 'email': email },
-    dataType: 'json',
-    success: function (data) {
-      if (data.exists) {
-        $('#email-error').text('Email is already registered.');
-      } else {
-        $('#email-error').text('');
-      }
-    }
+    // Validate the form whenever any input changes
+    registrationForm.addEventListener("input", validateForm);
   });
+    
+ // Function to check username availability
+function checkUsernameAvailability(username) {
+  const usernameAvailability = document.getElementById('username-availability');
+
+  if (username.length >= 3) {
+    // Make an AJAX GET request to the server to check username availability
+    $.get(`/check_username_availability/?username=${username}`, function (data) {
+      if (data.available) {
+        usernameAvailability.textContent = 'Username is available';
+        usernameAvailability.classList.add('available');
+      } else {
+        usernameAvailability.textContent = 'Username already exists';
+        usernameAvailability.classList.remove('available');
+      }
+    });
+  } else {
+    usernameAvailability.textContent = '';
+    usernameAvailability.classList.remove('available');
+  }
+}
+
+// Add an event listener for the username input
+const usernameInput = document.getElementById('username');
+usernameInput.addEventListener('input', function () {
+  const username = usernameInput.value.trim();
+  checkUsernameAvailability(username);
 });
 
-// Check phone number availability
-$('#phone').on('input', function () {
-  const phone = $(this).val();
-
-  // Send an AJAX request to check the phone number
-  $.ajax({
-    url: '/check_phone/',
-    data: { 'phone': phone },
-    dataType: 'json',
-    success: function (data) {
-      if (data.exists) {
-        $('#phone-error').text('Phone number is already registered.');
-      } else {
-        $('#phone-error').text('');
-      }
-    }
-  });
-});
-
-  function hasErrors() {
-    const errorElements = document.querySelectorAll(".error");
-    for (const errorElement of errorElements) {
-      if (errorElement.textContent.trim() !== "") {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  // Function to enable or disable the submit button based on errors
-  function updateSubmitButtonState() {
-    const submitButton = document.querySelector("input[type='submit']");
-    if (hasErrors()) {
-      submitButton.disabled = true;
-    } else {
-      submitButton.disabled = false;
-    }
-  }
-
-  // Attach event listeners to all input fields for real-time validation
-  const inputFields = document.querySelectorAll("input, textarea");
-  inputFields.forEach((field) => {
-    field.addEventListener("input", updateSubmitButtonState);
-  });
-
-  // Initially, check and disable the submit button if there are errors on page load
-  updateSubmitButtonState();
-
+  
 </script>
-{% endblock %}
+
+<!-- ... (rest of your HTML code) ... -->
+
+  
+</body>
+</html>
