@@ -6,6 +6,7 @@ from django.contrib import auth
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.contrib.auth.models import User
+from django.views.decorators.cache import never_cache
 
 from tests.models import (
     Address,
@@ -16,26 +17,26 @@ from tests.models import (
 
 User = get_user_model()
 
-
+@never_cache
 def index(request):
     return render(request, "index.html")
 
-
+@never_cache
 def about(request):
     return render(request, "about.html")
 
-
+@never_cache
 def services(request):
     context = {
         "tests": Test.objects.filter(is_available=True),
     }
     return render(request, "services.html", context)
 
-
+@never_cache
 def contact(request):
     return render(request, "contact.html")
 
-
+@never_cache
 def loginn(request):
     if request.method == "POST":
         username = request.POST["username"]
@@ -43,6 +44,7 @@ def loginn(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
+            request.session['username']=user.username
             if user.is_superuser:
                 return redirect("admin_dashboard")
             elif user.is_staff:
@@ -55,9 +57,11 @@ def loginn(request):
             )  # Add an error message
             return redirect("login")  # Redirect back to the login page
 
-    return render(request, "login.html")
+    response = render(request,"login.html")
+    response['Cache-Control'] = 'no-store,must-revalidate'
+    return response
 
-
+@never_cache
 def signup(request):
     if request.method == "POST":
         username = request.POST["username"]
@@ -97,7 +101,7 @@ def check_username_availability(request):
 
         return JsonResponse({"available": available})
 
-
+@never_cache
 @login_required
 def appoinment(request):
     context = {
@@ -174,15 +178,24 @@ def appoinment(request):
 
     return render(request, "appoinment.html", context)
 
-
+@login_required(login_url='login')
 def user(request):
-    return render(request, "user.html")
+      if 'username' in request.session:
+        response = render(request,"user.html")
+        response['Cache-Control'] = 'no-store,must-revalidate'
+        return response
+      else:
+        return redirect('login')
 
-
+@never_cache
 def logout(request):
     auth.logout(request)
     return redirect("/")
 
-
+@never_cache
 def services1(request):
     return render(request, "services1.html")
+def handlelogout(request):
+    if request.user.is_authenticated:
+        logout(request)
+    return redirect('login')

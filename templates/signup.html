@@ -510,7 +510,19 @@ function validateZIP() {
         errorElement.textContent = "";
     }
 }
+function validateUsername() {
+  const username = usernameInput.value.trim();
+  const usernamePattern = /^[A-Za-z][A-Za-z0-9]*$/; // Start with a letter, letters and numbers
+  const errorElement = document.getElementById("username-error");
 
+  if (!usernamePattern.test(username)) {
+    errorElement.textContent = "Username must start with a letter and can only contain letters and numbers";
+  } else if (username.length < 3) {
+    errorElement.textContent = "Username must be at least 3 characters long";
+  } else {
+    errorElement.textContent = "";
+  }
+}
 
     function validatePassword() {
   const password = passwordInput.value;
@@ -540,19 +552,7 @@ function validateZIP() {
   }
 }
 
-function validateFullName() {
-  const fullName = fullNameInput.value.trim();
-  const fullNamePattern = /^[A-Za-z\s]*$/; // Allow letters and spaces
-  const errorElement = document.getElementById("full-name-error");
 
-  if (!fullNamePattern.test(fullName)) {
-    errorElement.textContent = "Full Name can only contain letters and spaces";
-  } else if (fullName.length < 3) {
-    errorElement.textContent = "Full Name must be at least 3 characters long";
-  } else {
-    errorElement.textContent = "";
-  }
-}
 
 
 
