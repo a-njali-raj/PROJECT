@@ -259,7 +259,7 @@ header{
         <!-- Personal Information -->
         <div class="form-row">
             <label for="first-name">Full Name:</label>
-            <input type="text" id="first-name" name="first-name" required>
+            <input type="text" id="first-name" name="first-name" required autocomplete="off">
             <span id="full-name-error" class="error"></span>
             
         </div>
@@ -269,53 +269,53 @@ header{
        
         <div class="form-row">
             <label for="email">Email Address:</label>
-            <input type="email" id="email" name="email" required>
+            <input type="email" id="email" name="email"  required autocomplete="off">
             <span id="email-error" class="error"></span>
         </div>
         <div class="form-row">
             <label for="phone">Phone Number:</label>
-            <input type="tel" id="phone" name="phone" required>
+            <input type="tel" id="phone" name="phone" required autocomplete="off">
             <span id="phone-error" class="error"></span>
         </div>
 <div class="form-row">
 <label>Address:</label>
 </div>
 <div class="form-row">
-<input type="text" id="home" name="home" placeholder="home Address" required>
+<input type="text" id="home" name="home" placeholder="home Address" required autocomplete="off">
 <span id="home-address-error" class="error"></span>
 </div>
 <div class="form-row">
-<input type="text" id="city" name="city" placeholder="City" required>
+<input type="text" id="city" name="city" placeholder="City" required autocomplete="off">
 <span id="city-error" class="error"></span>
 </div>
 
 <div class="form-row">
-<input type="text" id="zip" name="zip" placeholder="Postal Code" required>
+<input type="text" id="zip" name="zip" placeholder="Postal Code" required autocomplete="off">
 <span id="zip-error" class="error"></span>
 </div>
 
-        <!-- User Account -->
+<!-- User Account -->
         <div class="form-row">
             <label for="username">Username:</label>
-            <input type="text" id="username" name="username" required>
+            <input type="text" id="username" name="username" required autocomplete="off">
             <span id="username-error" class="error"></span>
             <span id="username-availability" class="availability"></span>
 
         </div>
         <div class="form-row">
             <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required>
+            <input type="password" id="password" name="password"required autocomplete="off">
             <span id="password-error" class="error"></span>
 
         </div>
         <div class="form-row">
             <label for="confirm-password">Confirm Password:</label>
-            <input type="password" id="confirm-password" name="confirm-password" required>
+            <input type="password" id="confirm-password" name="confirm-password"required autocomplete="off">
             <span id="confirm-password-error" class="error"></span>
         </div>
         <!-- Consent -->
         <div class="form-row">
-            <input type="checkbox" id="consent" name="consent" required>
+            <input type="checkbox" id="consent" name="consent" required autocomplete="off">
             <label for="consent">I have read and agree to the terms and conditions.</label>
         </div>
         <!-- Submit Button -->
@@ -433,22 +433,29 @@ function validateEmail() {
   const errorElement = document.getElementById("email-error");
 
   if (!emailPattern.test(email)) {
-    errorElement.textContent = "Invalid email format ";
-  } else if (!/@(gmail|mca|ajce|yahoo)\.[a-z.]{2,}$/i.test(email)) { // Updated domain check
-    errorElement.textContent = "Unsupported domain. Please use an email address with one of the supported domains (gmail, mca, ajce, yahoo).";
+    errorElement.textContent = "Invalid email format";
+  } else if (!/@(gmail|mca|ajce|yahoo|amaljyothi\.ac)\.[a-z.]{2,}$/i.test(email)) { // Updated domain check
+    errorElement.textContent = "invalid email";
   } else {
     const parts = email.split('@');
     const domainParts = parts[1].split('.');
-    
-    // Check if there is more than one dot in the domain part, except for specific domains
-    if (domainParts.length > 2 && !/^(mca\.ajce|ajce\.in)$/.test(domainParts.slice(-2).join('.'))) {
-      errorElement.textContent = "Only one dot allowed in domain part";
-    } else {
+
+    // Check if the domain is "amaljyothi.ac.in"
+    if (domainParts.length === 3 && domainParts[1] === 'ac' && domainParts[2] === 'in') {
+      // No additional checks needed, so clear the error message
       errorElement.textContent = "";
-    }
-    
-    if (email.length > 320) {
-      errorElement.textContent = "Email address is too long. Please use a shorter email address.";
+    } else {
+      // Check if there is more than one dot in the domain part, except for specific domains
+      if (
+        domainParts.length > 2 &&
+        !/^(mca\.ajce|ajce\.in|amaljyothi\.ac)$/.test(domainParts.slice(-2).join('.'))
+      ) {
+        errorElement.textContent = "Only one dot allowed in domain part";
+      } else if (email.length > 320) {
+        errorElement.textContent = "Email address is too long. Please use a shorter email address.";
+      } else {
+        errorElement.textContent = "";
+      }
     }
   }
 }
@@ -620,8 +627,21 @@ usernameInput.addEventListener('input', function () {
   const username = usernameInput.value.trim();
   checkUsernameAvailability(username);
 });
+// Function to reset the form fields
+function resetForm() {
+  const registrationForm = document.getElementById("registration-form");
+  const formInputs = registrationForm.querySelectorAll("input, textarea");
 
-  
+  // Clear input values
+  formInputs.forEach((input) => {
+    input.value = "";
+  });
+
+  // Clear any error messages
+  const errorElements = document.querySelectorAll(".error");
+  errorElements.forEach((errorElement) => (errorElement.textContent = ""));
+}
+
 </script>
 
 <!-- ... (rest of your HTML code) ... -->

@@ -177,7 +177,7 @@ def appoinment(request):
         return redirect("/")
 
     return render(request, "appoinment.html", context)
-
+@never_cache
 @login_required(login_url='login')
 def user(request):
       if 'username' in request.session:
