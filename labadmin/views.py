@@ -12,3 +12,4 @@ def admin_dashboard(request):
     if request.user.is_superuser:
         return render(request, "admin_dashboard.html")
     return redirect("home")
+

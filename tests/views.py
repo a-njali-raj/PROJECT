@@ -26,6 +26,7 @@ def about(request):
     return render(request, "about.html")
 
 @never_cache
+@login_required
 def services(request):
     context = {
         "tests": Test.objects.filter(is_available=True),
@@ -185,7 +186,7 @@ def user(request):
         response['Cache-Control'] = 'no-store,must-revalidate'
         return response
       else:
-        return redirect('login')
+        return redirect("login.html")
 
 @never_cache
 def logout(request):
@@ -195,6 +196,7 @@ def logout(request):
 @never_cache
 def services1(request):
     return render(request, "services1.html")
+@never_cache
 def handlelogout(request):
     if request.user.is_authenticated:
         logout(request)

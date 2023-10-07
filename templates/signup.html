@@ -188,6 +188,16 @@ header{
     border: none; /* Remove border if not needed */
     border-radius: 3px; /* Apply rounded corners if desired */
   }
+  .error {
+    color: red; /* Set the text color for error messages to red */
+    font-size: 14px; /* Adjust font size as needed */
+    margin-top: 5px; /* Add some space between the input field and the error message */
+  }
+  .username-exists {
+    color: orange; /* Set a different text color for the "Username already exists" message */
+    font-size: 14px; /* Adjust font size as needed */
+    margin-top: 5px; /* Add some space between the input field and the error message */
+  }
   </style>
   
 
@@ -416,12 +426,12 @@ header{
       confirmPassword: "Passwords do not match",
     };
     function validateFullName() {
-  const fullName = fullNameInput.value.trim();
-  const fullNamePattern = /^[A-Za-z\s]{3,}$/; // Alphabets and spaces, minimum 3 characters
+  const fullName = fullNameInput.value; // Do not trim the input value
+  const fullNamePattern = /^[A-Za-z][A-Za-z\s]{2,}$/; // Starts with a letter, followed by letters and spaces, minimum 3 characters
   const errorElement = document.getElementById("full-name-error");
 
-  if (!fullNamePattern.test(fullName)) {
-    errorElement.textContent = "Full Name must be letters and minimum length 3";
+  if (!fullNamePattern.test(fullName) || /^\s/.test(fullName)) {
+    errorElement.textContent = "Full Name must start with a letter and contain minimum 3 characters";
   } else {
     errorElement.textContent = "";
   }
@@ -608,11 +618,12 @@ function checkUsernameAvailability(username) {
     // Make an AJAX GET request to the server to check username availability
     $.get(`/check_username_availability/?username=${username}`, function (data) {
       if (data.available) {
-        usernameAvailability.textContent = 'Username is available';
+        usernameAvailability.textContent = '';
         usernameAvailability.classList.add('available');
       } else {
-        usernameAvailability.textContent = 'Username already exists';
+        usernameAvailability.textContent = 'Username already registered';
         usernameAvailability.classList.remove('available');
+        usernameAvailability.classList.add('username-exists');
       }
     });
   } else {
@@ -641,6 +652,7 @@ function resetForm() {
   const errorElements = document.querySelectorAll(".error");
   errorElements.forEach((errorElement) => (errorElement.textContent = ""));
 }
+
 
 </script>
 

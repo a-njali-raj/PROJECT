@@ -1,3 +1,4 @@
+{% load static %}
 <header>
     <div class="topbar">
         <div class="container">
@@ -32,6 +33,9 @@
                     <li class="nav-item">
                         <a class="nav-link" href="about.html">About Us</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="contact.html">Contact</a>
+                    </li>
                     {% if not user.is_authenticated %}
                     <li class="nav-item">
                         <a class="nav-link" href="services1.html">Services</a>
@@ -45,17 +49,24 @@
                     <li class="nav-item">
                         <a class="nav-link" href="appoinment.html">Appoinment</a>
                     </li>
+                    <li class="nav-item dropdown">
+                        <!-- User Profile Dropdown -->
+                        <a class="nav-link dropdown-toggle" href="#" id="userProfileDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <img src="{% static '/C:/Project/PROJECT/static/assets/img/picon.png' %}" alt="User Icon" class="user-icon"> <!-- User Icon Image -->
+                            <span>{{ user.username }}</span> <!-- User's Name -->
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="userProfileDropdown">
+                          <a class="dropdown-item" href="profile.html">Profile</a>
+                          <a class="dropdown-item" href="logout">Logout</a>
+                        </div>
+                      </li>
                     {% endif %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="contact.html">Contact</a>
-                    </li>
+                   
                     <!--<li class="nav-item">
           <a class="btn btn-primary ml-lg-3" href="login.html">Login/Signup</a>
         </li> -->
                 </ul>
-                {% if user.is_authenticated %}
-                <a href="logout" class="btn btn-primary ml-lg-3">Logout</a>
-                {% else %}
+                {% if  not user.is_authenticated %}
                 <a href="login.html" class="btn btn-primary ml-lg-3">Login/Signup</a>
                 {% endif %}
             </div>

@@ -23,6 +23,8 @@
 
     <link rel="stylesheet" href="{% static '/assets/css/theme.css' %}">
 
+    
+
     <style>
         /* Custom CSS for the message toaster */
         .message-toaster {
@@ -34,6 +36,13 @@
             transform: translateX(-50%);
             padding: 30px 0;
         }
+        .user-icon {
+            width: 45px; /* Set the desired width for the icon */
+            height: 45px; /* Set the desired height for the icon */
+            margin-right: 10px; /* Add spacing between the icon and the name */
+            border-radius: 60%; /* Make it circular if needed */
+        }
+
     </style>
 
     {% block extra_css %}
