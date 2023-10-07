@@ -1,80 +1,126 @@
-{% extends "layout/base.html" %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
 
-{% block content %}
-<div class="container">
-    <div class="mt-4"></div> 
-    <h3>Welcome to the Admin Dashboard</h3><br><br>
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+        }
 
-    <!-- Diagnostic Lab Statistics -->
-    <div class="row">
-        <div class="col-md-4">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Total Patients</h5>
-                    <p class="card-text">There are {{ total_patients }} registered patients.</p>
-                </div>
-            </div>
-        </div>
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
 
-        <div class="col-md-4">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Total Tests</h5>
-                    <p class="card-text">There are {{ total_tests }} available tests.</p>
-                </div>
-            </div>
-        </div>
+        h1 {
+            font-size: 24px;
+        }
 
-        <div class="col-md-4">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Total Bookings</h5>
-                    <p class="card-text">There are {{ total_bookings }} pending bookings.</p>
-                </div>
-            </div>
-        </div>
-    </div>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
 
-    <!-- Recent Activity -->
-    <div class="mt-4">
-        <h3>Recent Diagnostic Lab Activity</h3>
-        <table class="table table-striped">
+        th, td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+        }
+
+        th {
+            background-color: #333;
+            color: #fff;
+        }
+
+        /* Extend the Action header cell */
+        th.action-header {
+            width: 100px; /* Adjust the width as needed */
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .btn-edit, .btn-delete {
+            padding: 5px 10px;
+            margin-right: 5px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .btn-edit {
+            background-color: #4caf50;
+            color: #fff;
+        }
+
+        .btn-delete {
+            background-color: #f44336;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Admin Dashboard</h1>
+    </header>
+    <div class="container">
+        <h2>Registered Users</h2>
+        <table>
             <thead>
                 <tr>
-                    <th>User</th>
-                    <th>Activity</th>
-                    <th>Date</th>
+                    <th>Full Name</th>
+                    <th>Email Address</th>
+                    <th>Phone Number</th>
+                    <th>Home Address</th>
+                    <th>City</th>
+                    <th>ZIP Code</th>
+                    <th>Username</th>
+                    <!-- Extend the Action header cell -->
+                    <th class="action-header" colspan="2">Action</th>
                 </tr>
             </thead>
             <tbody>
-                {% for activity in recent_activity %}
+                <!-- Replace the following rows with actual user data from your database -->
+                {% for user in users %}
                 <tr>
-                    <td>{{ activity.user }}</td>
-                    <td>{{ activity.action }}</td>
-                    <td>{{ activity.date }}</td>
-                </tr>
-                {% empty %}
-                <tr>
-                    <td colspan="3">No recent activity.</td>
+                    <td>{{ user.get_full_name }}</td>
+                    <td>{{ user.email }}</td>
+                    <td>{{ user.phone_number }}</td>
+                    <td>{{ user.address.street_address }}</td>
+                    <td>{{ user.address.city }}</td>
+                    <td>{{ user.address.pincode }}</td>
+                    <td>{{ user.username }}</td>
+                    <td>
+                        <button class="btn-edit">Edit</button>
+                    </td>
+                    <td>
+                        <button class="btn-delete">Delete</button>
+                    </td>
                 </tr>
                 {% endfor %}
+                <!-- Add more rows for other users as needed -->
             </tbody>
         </table>
     </div>
-</div>
-
-<style>
-    /* Apply styles only to elements within the .container */
-    .container h3 {
-        text-align: center;
-    }
-
-    .container .card {
-        margin-bottom: 20px;
-    }
-
-    .container .mt-4 {
-        margin-top: 30px;
-    }
-</style>
-{% endblock %}
+</body>
+</html>
