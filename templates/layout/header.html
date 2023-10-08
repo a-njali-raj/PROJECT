@@ -5,9 +5,9 @@
             <div class="row">
                 <div class="col-sm-8 text-sm">
                     <div class="site-info">
-                        <a href="#"><span class="mai-call text-primary"></span> +00 123 4455 6666</a>
+                        <a href="#"><span class="mai-call text-primary"></span>+91 8330064687</a>
                         <span class="divider">|</span>
-                        <a href="#"><span class="mai-mail text-primary"></span> mail@example.com</a>
+                        <a href="#"><span class="mai-mail text-primary"></span> onehealth@gmail.com</a>
                     </div>
                 </div>
 
@@ -49,17 +49,20 @@
                     <li class="nav-item">
                         <a class="nav-link" href="appoinment.html">Appoinment</a>
                     </li>
-                    <li class="nav-item dropdown">
-                        <!-- User Profile Dropdown -->
-                        <a class="nav-link dropdown-toggle" href="#" id="userProfileDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <img src="{% static '/C:/Project/PROJECT/static/assets/img/picon.png' %}" alt="User Icon" class="user-icon"> <!-- User Icon Image -->
-                            <span>{{ user.username }}</span> <!-- User's Name -->
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="userProfileDropdown">
-                          <a class="dropdown-item" href="profile.html">Profile</a>
-                          <a class="dropdown-item" href="logout">Logout</a>
-                        </div>
-                      </li>
+                   <!-- Updated HTML -->
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="userProfileDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <div class="user-profile">
+                <img src="{% static '/C:/Project/PROJECT/static/assets/img/picon.png' %}" alt="User Icon" class="user-icon">
+                {{ user.username }}
+            </div>
+                </button>
+    <div class="dropdown-menu" aria-labelledby="userProfileDropdown">
+        <a class="dropdown-item" href="#">Profile</a>
+        <a class="dropdown-item" href="logout">Logout</a>
+    </div>
+</div>
+
                     {% endif %}
                    
                     <!--<li class="nav-item">

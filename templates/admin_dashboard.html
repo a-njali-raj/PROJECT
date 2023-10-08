@@ -80,16 +80,16 @@
         }
 
         .btn-edit, .btn-delete {
-            padding: 5px 10px;
+            padding: 5px 9px;
             margin-right: 5px;
             border: none;
             border-radius: 3px;
             cursor: pointer;
-            font-size: 14px;
+            font-size: 10px;
         }
 
         .btn-edit {
-            background-color: #4caf50;
+            background-color: #76c676;
             color: #fff;
         }
 
@@ -119,12 +119,46 @@
         background-color: #25554e; /* Blue background color */
         color: #fff; /* Text color */
     }
+    nav ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+nav li {
+    display: inline;
+    margin-right: 20px;
+}
+
+nav a {
+    text-decoration: none;
+    color: #fff;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+nav a:hover {
+    color: #042f2d; /* Change color on hover */
+}
+.dropdown-item:hover {
+    background-color: #042f2d; /* Change the background color on hover */
+    color: #fff; /* Change the text color on hover */
+}
    
     </style>
 </head>
 <body>
     <header>
-        <h1>Admin Dashboard</h1>
+        <h1>OneHealth</h1>
+        <div class="header-right"></div>
+        <nav>
+            <ul>
+                
+                <li><a href="#">Appoinment</a></li>
+                <li><a href="#">Test</a></li>
+                <li><a href="#">Staff</a></li>
+            </ul>
+        </nav>
         <div class="dropdown">
 
             <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="userProfileDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -136,10 +170,10 @@
                 <a class="dropdown-item" href="logout">Logout</a>
             </div>
         </div>
-    
+    </div>
     </header>
     <div class="container">
-        <h2>Registered Users</h2>
+        <h2>Recent Users </h2>
         <table>
             <thead>
                 <tr>

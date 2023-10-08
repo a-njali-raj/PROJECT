@@ -36,12 +36,50 @@
             transform: translateX(-50%);
             padding: 30px 0;
         }
-        .user-icon {
-            width: 45px; /* Set the desired width for the icon */
-            height: 45px; /* Set the desired height for the icon */
-            margin-right: 10px; /* Add spacing between the icon and the name */
-            border-radius: 60%; /* Make it circular if needed */
-        }
+       /* Updated CSS */
+/* Style for the dropdown button */
+.dropdown .btn-secondary {
+    background-color: #25554e;
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    padding: 5px 15px;
+}
+
+.dropdown .btn-secondary:hover {
+    background-color: #042f2d; /* Change background color on hover */
+    color: #fff; /* Change text color on hover */
+}
+
+/* Style for the user icon */
+.user-icon {
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+    border-radius: 50%;
+}
+
+/* Style for the user profile dropdown menu */
+.dropdown-menu {
+    background-color: #333;
+    color: #fff;
+}
+
+.dropdown-item {
+    color: #fff;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.dropdown-item:hover {
+    background-color: #042f2d; /* Change background color on hover */
+    color: #fff; /* Change text color on hover */
+}
+
 
     </style>
 

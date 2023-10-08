@@ -281,6 +281,7 @@ header{
             <label for="email">Email Address:</label>
             <input type="email" id="email" name="email"  required autocomplete="off">
             <span id="email-error" class="error"></span>
+            <span id="email-availability" class="availability"></span>
         </div>
         <div class="form-row">
             <label for="phone">Phone Number:</label>
@@ -646,6 +647,55 @@ function resetForm() {
   // Clear input values
   formInputs.forEach((input) => {
     input.value = "";
+  });
+
+  // Clear any error messages
+  const errorElements = document.querySelectorAll(".error");
+  errorElements.forEach((errorElement) => (errorElement.textContent = ""));
+}
+function checkEmailAvailability(email) {
+  const emailAvailability = document.getElementById('email-availability');
+
+  if (email.length >= 5) { // You can adjust the minimum length as needed
+    // Make an AJAX GET request to the server to check email availability
+    $.get(`/check_email_availability/?email=${email}`, function (data) {
+      if (data.available) {
+        emailAvailability.textContent = '';
+        emailAvailability.classList.add('available');
+      } else {
+        emailAvailability.textContent = 'Email already registered';
+        emailAvailability.classList.remove('available');
+        emailAvailability.classList.add('email-exists');
+      }
+    });
+  } else {
+    emailAvailability.textContent = '';
+    emailAvailability.classList.remove('available');
+  }
+}
+
+// Add an event listener for the email input
+const emailInput = document.getElementById('email');
+emailInput.addEventListener('input', function () {
+  const email = emailInput.value.trim();
+  checkEmailAvailability(email);
+});
+
+// Function to reset the form fields and availability messages
+function resetForm() {
+  const registrationForm = document.getElementById("registration-form");
+  const formInputs = registrationForm.querySelectorAll("input, textarea");
+
+  // Clear input values
+  formInputs.forEach((input) => {
+    input.value = "";
+  });
+
+  // Clear any availability messages
+  const availabilityElements = document.querySelectorAll(".availability");
+  availabilityElements.forEach((availabilityElement) => {
+    availabilityElement.textContent = '';
+    availabilityElement.classList.remove('available', 'username-exists', 'email-exists');
   });
 
   // Clear any error messages

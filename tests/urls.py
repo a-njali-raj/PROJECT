@@ -18,7 +18,8 @@ urlpatterns = [
     path('logout/',views.logout,name="logout"),
     path('services1.html',views.services1,name="services1"),
     path('check_username_availability/', views.check_username_availability, name='check_username_availability'),
-    
+    path('check_email_availability/', views.check_email_availability, name='check_email_availability'),
+
     path('password_reset/', auth_views.PasswordResetView.as_view(), name='password_reset'),
     path('password_reset/done/', auth_views.PasswordResetDoneView.as_view(), name='password_reset_done'),
     path('reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(), name='password_reset_confirm'),

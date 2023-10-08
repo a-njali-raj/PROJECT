@@ -102,6 +102,19 @@ def check_username_availability(request):
 
         return JsonResponse({"available": available})
 
+def check_email_availability(request):
+    email = request.GET.get('email', '')
+
+    if len(email) >= 5:  # Adjust the minimum length as needed
+        # Check if the email exists in your database
+        user = User.objects.filter(email=email).first()
+
+        if user:
+            return JsonResponse({'available': False})  # Email is already registered
+        else:
+            return JsonResponse({'available': True})  # Email is available
+    else:
+        return JsonResponse({'available': False})  # Emai
 @never_cache
 @login_required
 def appoinment(request):
