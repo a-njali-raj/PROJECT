@@ -198,6 +198,11 @@ header{
     font-size: 14px; /* Adjust font size as needed */
     margin-top: 5px; /* Add some space between the input field and the error message */
   }
+  .email-exists {
+    color: orange; /* Set a different text color for the "Username already exists" message */
+    font-size: 14px; /* Adjust font size as needed */
+    margin-top: 5px; /* Add some space between the input field and the error message */
+  }
   </style>
   
 
@@ -510,8 +515,8 @@ function validateCity() {
     const errorElement = document.getElementById("city-error");
     const minLength = 3; // Minimum length
 
-    if (!/^[a-zA-Z]+$/.test(city) || city.length < minLength) {
-        errorElement.textContent = "City must contain only letters and be at least 3 characters long.";
+    if (!/^[a-zA-Z][a-zA-Z, ]*$/.test(city) || city.length < minLength) {
+        errorElement.textContent = "City must start with a letter, can contain only letters, spaces, and commas, and be at least 3 characters long.";
     } else {
         errorElement.textContent = "";
     }
@@ -662,6 +667,7 @@ function checkEmailAvailability(email) {
       if (data.available) {
         emailAvailability.textContent = '';
         emailAvailability.classList.add('available');
+     
       } else {
         emailAvailability.textContent = 'Email already registered';
         emailAvailability.classList.remove('available');

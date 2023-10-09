@@ -47,11 +47,13 @@ def loginn(request):
             login(request, user)
             request.session['username']=user.username
             if user.is_superuser:
+                messages.success(request, "Login successful.")
                 return redirect("admin_dashboard")
             elif user.is_staff:
                 return redirect("staff_dashboard")
             messages.success(request, "Login successful.")
             return redirect("user")
+            
         else:
             messages.error(
                 request, "Invalid username or password"
