@@ -129,6 +129,11 @@
         </option>
         {% endfor %}
       </select>
+      <label for="prescription">Upload Prescription (PDF or Image):</label>
+      <div>
+        
+        <input type="file" id="prescription" name="prescription" accept=".pdf, .jpg, .jpeg, .png" />
+      </div><br>
       <p>Preferred Date: <input type="date" id="preferred-date" name="date" value="2023-09-29"></p>
       <p>Preferred Time:
         <select id="preferred-time" name="preferred-time">
@@ -379,5 +384,9 @@
 
   // Initial check to hide/show based on the default selection
   toggleNewAddressFields();
+  $("#prescription").on("change", function (e) {
+    const fileName = e.target.files[0].name;
+    alert(`Selected prescription file: ${fileName}`);
+  });
 </script>
 {% endblock %}

@@ -216,3 +216,6 @@ def handlelogout(request):
     if request.user.is_authenticated:
         logout(request)
     return redirect('login')
+@never_cache
+def userprofile(request):
+    return render(request, "userprofile.html")
