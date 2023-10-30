@@ -140,22 +140,18 @@
         </select>
       </p>
 
-      <select id="persons" name="persons" onchange="showBeneficiaryFields(this.value); calculateTotalAmount();"
-        required>
-        <option value="" selected disabled hidden>Number of Persons</option>
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-        <!-- Add more options for the number of persons -->
-      </select>
+      
 
-
-
-      <div id="beneficiaryFields">
-        <!-- Beneficiary input fields will be added here dynamically based on the number of persons -->
-      </div>
-
+      <div class="person-fields">
+        <div>
+          <input type="text" id="full_name" name="full_name" placeholder="Full name">
+          <select id="gender" name="gender">
+            <option value="" selected>Select Gender</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+          </select>
+          <input type="number" id="age" name="age" placeholder="Age ">
+        </div>
 
       <input type="text" id="email" name="email" placeholder="Email" required>
       <input type="text" id="phone" name="phone" placeholder="Mobile " required>
@@ -243,65 +239,6 @@
 {% endblock %}
 {% block extra_js %}
 <script>
-  function showBeneficiaryFields(numPersons) {
-    const beneficiaryFields = document.getElementById("beneficiaryFields");
-    beneficiaryFields.innerHTML = ""; // Clear previous fields
-
-    for (let i = 1; i <= numPersons; i++) {
-      const beneficiaryDiv = document.createElement("div");
-      beneficiaryDiv.style.float = "left";
-      beneficiaryDiv.style.width = "100%";
-
-      const nameInput = document.createElement("input");
-      nameInput.type = "text";
-      nameInput.id = "name" + i;
-      nameInput.name = "name" + i;
-      nameInput.placeholder = " Name " + i;
-      beneficiaryDiv.appendChild(nameInput);
-
-      const ageDiv = document.createElement("div");
-      ageDiv.style.float = "left";
-      ageDiv.style.width = "49%";
-
-      const ageInput = document.createElement("input");
-      ageInput.type = "number";
-      ageInput.id = "age" + i;
-      ageInput.name = "age" + i;
-      ageInput.placeholder = "Age";
-      ageDiv.appendChild(ageInput);
-      beneficiaryDiv.appendChild(ageDiv);
-
-      const genderDiv = document.createElement("div");
-      genderDiv.style.float = "right";
-      genderDiv.style.width = "49%";
-
-      const genderSelect = document.createElement("select");
-      genderSelect.id = "gender" + i;
-      genderSelect.name = "gender" + i;
-      genderSelect.onchange = calculateTotalAmount;
-
-      const genderOptionDefault = document.createElement("option");
-      genderOptionDefault.value = "";
-      genderOptionDefault.text = "Select Gender";
-      genderSelect.appendChild(genderOptionDefault);
-
-      const genderOptionMale = document.createElement("option");
-      genderOptionMale.value = "Male";
-      genderOptionMale.text = "Male";
-      genderSelect.appendChild(genderOptionMale);
-
-      const genderOptionFemale = document.createElement("option");
-      genderOptionFemale.value = "Female";
-      genderOptionFemale.text = "Female";
-      genderSelect.appendChild(genderOptionFemale);
-
-      genderDiv.appendChild(genderSelect);
-      beneficiaryDiv.appendChild(genderDiv);
-
-      beneficiaryFields.appendChild(beneficiaryDiv);
-    }
-  }
-
   function calculateTotalAmount() {
     // Your calculation logic for the total amount goes here
     // You can access beneficiary names, ages, and genders using their respective IDs

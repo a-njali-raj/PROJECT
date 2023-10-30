@@ -1,101 +1,569 @@
 {% load static %}
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
-    <title>Test Details</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f5f5f5;
-        }
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background-color: #fff;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-        }
-        h1 {
-            text-align: center;
-        }
-        .test-card {
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            padding: 20px;
-            margin: 10px 0;
-            background-color: #fff;
-        }
-        .test-card h2 {
-            margin-top: 0;
-        }
-        .test-card p {
-            font-size: 16px;
-        }
-        .delete-button {
-            color: red;
-            cursor: pointer;
-        }
-        .delete-button:hover {
-            text-decoration: underline;
-        }
-        form {
-            display: flex;
-            flex-direction: column;
-        }
-        input[type="text"] {
-            padding: 10px;
-            margin-bottom: 10px;
-            border: 1px solid #ccc;
-            border-radius: 3px;
-            font-size: 16px;
-        }
-        input[type="submit"] {
-            background-color: #007BFF;
-            color: #fff;
-            border: none;
-            border-radius: 3px;
-            padding: 10px 20px;
-            cursor: pointer;
-            font-size: 18px;
-            transition: background-color 0.3s;
-        }
-        input[type="submit"]:hover {
-            background-color: #0056b3;
-        }
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible"content="IE=edge">
+	<meta name="viewport"content="width=device-width,initial-scale=1.0">
+	<title>admin</title>
+    <link rel="stylesheet" href="{% static '/assets/css/maicons.css'%}">
+
+    <link rel="stylesheet" href="{% static '/assets/css/bootstrap.css'%}">
+
+    <link rel="stylesheet" href="{% static '/assets/vendor/owl-carousel/css/owl.carousel.css'%}">
+
+    <link rel="stylesheet" href="{% static '/assets/vendor/animate/animate.css'%}">
+
+    <link rel="stylesheet" href="{% static '/assets/css/theme.css' %}">
+
+	
+<style>
+            /* Main CSS Here */
+
+
+* {
+margin: 0;
+padding: 0;
+box-sizing: border-box;
+font-family: "Poppins", sans-serif;
+}
+:root {
+--background-color1: #fafaff;
+--background-color2: #ffffff;
+--background-color3: #ededed;
+--background-color4: #cbe2deac;
+--primary-color: #116d589e;
+--secondary-color: #116d589e;
+--Border-color:#116d589e;
+--one-use-color:#116d589e;
+--two-use-color:#116d589e;
+}
+body {
+    background-color: var(--background-color4);
+    max-width: 100%;
+    overflow-x: hidden;
+    }
+    
+    header {
+    height: 70px;
+    width: 100vw;
+    padding: 0 30px;
+    background-color: var(--background-color1);
+    position: fixed;
+    z-index: 100;
+    box-shadow: 1px 1px 15px rgba(190, 251, 247, 0.825);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    }
+    
+    .logo {
+    font-size: 27px;
+    font-weight: 600;
+    color: rgb(30, 157, 127);
+    }
+    
+    .icn {
+    height: 30px;
+    }
+    .menuicn {
+    cursor: pointer;
+    }
+    
+    .searchbar,
+    .message,
+    .logosec {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    }
+    
+    .searchbar2 {
+    display: none;
+    }
+    
+    .logosec {
+    gap: 60px;
+    }
+    
+    .searchbar input {
+    width: 250px;
+    height: 42px;
+    border-radius: 50px 0 0 50px;
+    background-color: var(--background-color3);
+    padding: 0 20px;
+    font-size: 15px;
+    outline: none;
+    border: none;
+    }
+    .searchbtn {
+    width: 50px;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0px 50px 50px 0px;
+    background-color:  #fafaff;
+    cursor: pointer;
+    }
+    
+    .message {
+    gap: 40px;
+    position: relative;
+    cursor: pointer;
+    }
+    .circle {
+    height: 7px;
+    width: 7px;
+    position: absolute;
+    background-color: #fa7bb4;
+    border-radius: 50%;
+    left: 19px;
+    top: 8px;
+    }
+    .dp {
+    height: 40px;
+    width: 40px;
+    background-color: #626262;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    }
+    .main-container {
+    display: flex;
+    width: 100vw;
+    position: relative;
+    top: 70px;
+    z-index: 1;
+    }
+    .dpicn {
+    height: 42px;
+    }
+    
+    .main {
+    height: calc(100vh - 70px);
+    width: 100%;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    padding: 40px 30px 30px 30px;
+    }
+    
+    .main::-webkit-scrollbar-thumb {
+    background-image: 
+            linear-gradient(to bottom, rgb(49, 133, 126), rgb(9, 68, 54));
+    }
+    .main::-webkit-scrollbar {
+    width: 5px;
+    }
+    .main::-webkit-scrollbar-track {
+    background-color: #9e9e9eb2;
+    }
+    
+    .box-container {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 50px;
+    }
+    .nav {
+    min-height: 91vh;
+    width: 250px;
+    background-color: var(--background-color2);
+    position: absolute;
+    top: 0px;
+    left: 00;
+    box-shadow: 1px 1px 10px rgba(189, 245, 234, 0.825);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow: hidden;
+    padding: 30px 0 20px 10px;
+    }
+    .navcontainer {
+    height: calc(100vh - 70px);
+    width: 260px;
+    position: relative;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    transition: all 0.5s ease-in-out;
+    }
+    .navcontainer::-webkit-scrollbar {
+    display: none;
+    }
+    .navclose {
+    width: 80px;
+    }
+    .nav-option {
+    font-size: 9px; /* Set your desired text size */
+}
+    .nav-option {
+    width: 250px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    padding: 0 30px 0 20px;
+    gap: 20px;
+    transition: all 0.1s ease-in-out;
+    }
+   
+    .nav-option:hover {
+    border-left: 5px solid #a2a2a2;
+    background-color: #dadada;
+    cursor: pointer;
+    }
+    .nav-img {
+    height: 30px;
+    }
+    
+    .nav-upper-options {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+    }
+    
+    .option1 {
+    border-left: 5px solid #4fd5c8af;
+    background-color: var(--Border-color);
+    color: white;
+    cursor: pointer;
+    }
+    .option1:hover {
+    border-left: 5px solid #40d0a0af;
+    background-color: var(--Border-color);
+    }
+    
+    
+    .report-container {
+    min-height: 300px;
+    max-width: 1200px;
+    margin: 70px auto 0px auto;
+    background-color: #ffffff;
+    border-radius: 30px;
+    box-shadow: 3px 3px 10px rgb(188, 188, 188);
+    padding: 0px 20px 20px 20px;
+    }
+    .report-header {
+    height: 80px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 20px 10px 20px;
+    border-bottom: 2px solid rgba(86, 220, 202, 0.59);
+    }
+    
+    .recent-Articles {
+    font-size: 30px;
+    font-weight: 600;
+    color: #34a383;
+    }
+    
+    .view {
+    height: 35px;
+    width: 90px;
+    border-radius: 8px;
+    background-color: #268d81;
+    color: white;
+    font-size: 15px;
+    border: none;
+    cursor: pointer;
+    }
+    
+    .report-body {
+    max-width: 1160px;
+    overflow-x: auto;
+    padding: 20px;
+    }
+    .report-topic-heading,
+    .item1 {
+    width: 1120px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    }
+    .t-op {
+    font-size: 18px;
+    letter-spacing: 0px;
+    }
+    
+    .items {
+    width: 1120px;
+    margin-top: 15px;
+    }
+    
+    .item1 {
+    margin-top: 20px;
+    }
+    .t-op-nextlvl {
+    font-size: 14px;
+    letter-spacing: 0px;
+    font-weight: 600;
+    }
+    
+    .label-tag {
+    width: 100px;
+    text-align: center;
+    background-color: rgb(117, 184, 171);
+    color: white;
+    border-radius: 4px;
+    }
+    .container {
+    max-width: 1000px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(65, 117, 109, 0.1);
+}
+
+
+/* Style the action buttons in the table */
+
+.dropdown .btn-secondary {
+    background-color: #09ae96;
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    padding: 5px 15px;
+}
+
+.dropdown .btn-secondary:hover {
+    background-color: #035b52; /* Change background color on hover */
+    color: #fff; /* Change text color on hover */
+}
+
+/* Style for the user icon */
+.user-icon {
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+    border-radius: 50%;
+}
+
+/* Style for the user profile dropdown menu */
+.dropdown-menu {
+    background-color: #333;
+    color: #fff;
+}
+
+.dropdown-item {
+    color: #fff;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.dropdown-item:hover {
+    background-color: #042f2d; /* Change background color on hover */
+    color: #fff; /* Change text color on hover */
+}
+body {
+        font-family: Arial, sans-serif;
+    }
+    .container {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+    .test-listing {
+        border: 1px solid #ccc;
+        padding: 10px;
+        margin: 10px 0;
+    }
+    .test-title {
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+    .lab-name {
+        color: #666;
+    }
+    .test-price {
+        color: rgb(5, 33, 35);
+    }
+   
+    /* Form Styles */
+    .form-container {
+        margin-top: 20px;
+        border: 1px solid #ccc;
+        padding: 20px;
+    }
+    .form-input {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+    }
+    .form-label {
+        font-weight: bold;
+    }
+    .error-message {
+        color: red;
+    }
+    .edit-button {
+        font-size: 10px; /* Adjust the font size as needed */
+        padding: 3px 8px; /* Adjust the padding as needed */
+    }
+
+    /* Style for the delete button */
+    .delete-button {
+        font-size: 10px; /* Adjust the font size as needed */
+        padding: 3px 8px; /* Adjust the padding as needed */
+    }
+    .button-link {
+    display: inline-block;
+    padding: 10px 10px;
+    background-color: rgb(19, 76, 71);
+    color: white;
+    text-decoration: none;
+    border: none;
+    border-radius: 6px;
+}
+
+.button-link:hover {
+    background-color: #065651; /* Darken the color on hover */
+}
     </style>
-</head>
-<body>
-    <div class="container">
-        <h1>Test Details</h1>
+    </head>
+    
+    <body>
+    
+        <!-- for header part -->
+        <header>
+    
+            <div class="logosec">
+                <div class="logo">OneHealth</div>
+                
+                   
+            </div>
+    
+            <div class="searchbar">
+                <input type="text"
+                    placeholder="Search">
+                <div class="searchbtn">
+                <img src="{% static '/C:/Project/PROJECT/static/assets/img/search.png' %}"
+                        class="icn srchicn"
+                        alt="search-icon">
+                </div>
+            </div>
+    
+            <div class="message">
+                <div class="circle"></div>
+                <img src=
+    "https://media.geeksforgeeks.org/wp-content/uploads/20221210183322/8.png"
+                    class="icn"
+                    alt="">
+                   <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="userProfileDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <div class="user-profile">
+                        <img src="{% static '/C:/Project/PROJECT/static/assets/img/picon.png' %}" alt="User Icon" class="user-icon">
+                        {{ user.username }}
+                    </div>
+                        </button>
+            <div class="dropdown-menu" aria-labelledby="userProfileDropdown">
+              
+                <a class="dropdown-item" href="logout">Logout</a>
+            </div>
+        </div>
+            </div>
+    
+        </header>
+    
+        <div class="main-container">
+            <div class="navcontainer">
+                <nav class="nav">
+                    <div class="nav-upper-options">
+                        <div class="nav-option option1">
+                            
+                            <h3 style="font-size: 17px;"> Dashboard</h3>
+                        </div>
+                        <a href="userdetails.html">
+                        <div class="option2 nav-option">
+                            <img src=
+    "https://media.geeksforgeeks.org/wp-content/uploads/20221210183322/9.png"
+                                class="nav-img"
+                                alt="articles">
+                            <h3 style="font-size: 17px;"> Registered Users</h3>
+                        </div>
+                        </a>
+                        <div class="nav-option option3">
+                            <img src=
+    "https://media.geeksforgeeks.org/wp-content/uploads/20221210183320/5.png"
+                                class="nav-img"
+                                alt="report">
+                            <h3 style="font-size: 17px;"> Appointments</h3>
+                        </div>
+                        <a href="admintest.html">
+                        <div class="nav-option option3">
+                            <img src=
+    "https://media.geeksforgeeks.org/wp-content/uploads/20221210183320/5.png"
+                                class="nav-img"
+                                alt="report">
+                            <h3 style="font-size: 17px;"> Test</h3>
+                        </div>
+                    </a>
+                        <div class="nav-option option4">
+                            <img src=
+    "https://media.geeksforgeeks.org/wp-content/uploads/20221210183321/6.png"
+                                class="nav-img"
+                                alt="institution">
+                            <h3 style="font-size: 17px;"> Staffs</h3>
+                        </div>
+    
+                    </div>
+                </nav>
+            </div>
+            <div class="main">
+    
+               
+                <div class="container">
+
+                    
+                    <b><a href="{% url 'addtest' %}" class="button-link">Add a Test</a></b>
+
+                          <div class="container">
+                            <ul>
+                                {% for test in tests %}
+                                    <li class="test-listing">
+                                        <div class="test-title">{{ test.name }}</div>
+                                        <div class="lab-name">{{ test.price }}</div>
+                                        <div class="test-price">Available: {{ test.is_available }}</div>
+                        
+                                        <!-- Edit button -->
+                                        <button class="btn btn-primary edit-button" data-test-id="{{ test.id }}">Edit</button>
+                        
+                                        <!-- Delete button (use a form for safety) -->
+                                        <button class="btn btn-danger delete-button" data-test-id="{{ test.id }}">Delete</button>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        
+                    
+                    </div>
+                   
+                    <!-- Add more test listings here -->
+                  </div>
+               
+    
+            
+            </div>
+        </div>
+        <script src="{% static '/assets/js/jquery-3.5.1.min.js'%}"></script>
+
+        <script src="{% static '/assets/js/bootstrap.bundle.min.js'%}"></script>
+    
+        <script src="{% static '/assets/vendor/owl-carousel/js/owl.carousel.min.js'%}"></script>
+    
+        <script src="{% static '/assets/vendor/wow/wow.min.js'%}"></script>
+    
+        <script src="{% static '/assets/js/theme.js'%}"></script>
         
-        <div class="test-card">
-            <h2>Test Name 1</h2>
-            <p><strong>Description:</strong> This is a detailed description of Test Name 1. It provides information about the purpose, procedure, and other relevant details of the test.</p>
-            <p><strong>Price:</strong> $50.00</p>
-            <p><strong>Duration:</strong> 1 hour</p>
-            <p><strong>Sample Type:</strong> Blood</p>
-            <p><strong>Preparation:</strong> Fasting required for 8 hours before the test.</p>
-            <p class="delete-button">Delete Test</p>
-        </div>
-
-        <div class="test-card">
-            <h2>Test Name 2</h2>
-            <p><strong>Description:</strong> This is a detailed description of Test Name 2. It provides information about the purpose, procedure, and other relevant details of the test.</p>
-            <p><strong>Price:</strong> $75.00</p>
-            <p><strong>Duration:</strong> 2 hours</p>
-            <p><strong>Sample Type:</strong> Urine</p>
-            <p><strong>Preparation:</strong> Drink plenty of water before the test.</p>
-            <p class="delete-button">Delete Test</p>
-        </div>
-
-        <!-- Add more test cards here for additional tests -->
-
-        <h2>Add a New Test</h2>
-        <form method="post" action="#">
-            <input type="text" name="test_name" placeholder="Test Name" required>
-            <input type="submit" value="Add Test">
-        </form>
-    </div>
-</body>
-</html>
+        
+    </body>
+    </html>
