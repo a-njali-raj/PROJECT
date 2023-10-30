@@ -1,0 +1,101 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Details</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+        }
+        .test-card {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 20px;
+            margin: 10px 0;
+            background-color: #fff;
+        }
+        .test-card h2 {
+            margin-top: 0;
+        }
+        .test-card p {
+            font-size: 16px;
+        }
+        .delete-button {
+            color: red;
+            cursor: pointer;
+        }
+        .delete-button:hover {
+            text-decoration: underline;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        input[type="text"] {
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            font-size: 16px;
+        }
+        input[type="submit"] {
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            border-radius: 3px;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 18px;
+            transition: background-color 0.3s;
+        }
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Test Details</h1>
+        
+        <div class="test-card">
+            <h2>Test Name 1</h2>
+            <p><strong>Description:</strong> This is a detailed description of Test Name 1. It provides information about the purpose, procedure, and other relevant details of the test.</p>
+            <p><strong>Price:</strong> $50.00</p>
+            <p><strong>Duration:</strong> 1 hour</p>
+            <p><strong>Sample Type:</strong> Blood</p>
+            <p><strong>Preparation:</strong> Fasting required for 8 hours before the test.</p>
+            <p class="delete-button">Delete Test</p>
+        </div>
+
+        <div class="test-card">
+            <h2>Test Name 2</h2>
+            <p><strong>Description:</strong> This is a detailed description of Test Name 2. It provides information about the purpose, procedure, and other relevant details of the test.</p>
+            <p><strong>Price:</strong> $75.00</p>
+            <p><strong>Duration:</strong> 2 hours</p>
+            <p><strong>Sample Type:</strong> Urine</p>
+            <p><strong>Preparation:</strong> Drink plenty of water before the test.</p>
+            <p class="delete-button">Delete Test</p>
+        </div>
+
+        <!-- Add more test cards here for additional tests -->
+
+        <h2>Add a New Test</h2>
+        <form method="post" action="#">
+            <input type="text" name="test_name" placeholder="Test Name" required>
+            <input type="submit" value="Add Test">
+        </form>
+    </div>
+</body>
+</html>

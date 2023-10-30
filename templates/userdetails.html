@@ -185,7 +185,7 @@ body {
     }
     .navcontainer {
     height: calc(100vh - 70px);
-    width: 350px;
+    width: 260px;
     position: relative;
     overflow-y: scroll;
     overflow-x: hidden;
@@ -236,51 +236,7 @@ body {
     border-left: 5px solid #40d0a0af;
     background-color: var(--Border-color);
     }
-    .box {
-    height: 130px;
-    width: 230px;
-    border-radius: 20px;
-    box-shadow: 3px 3px 10px rgba(90, 238, 194, 0.751);
-    padding: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
-    cursor: pointer;
-    transition: transform 0.3s ease-in-out;
-    }
-    .box:hover {
-    transform: scale(1.08);
-    }
     
-    .box:nth-child(1) {
-    background-color: var(--one-use-color);
-    }
-    .box:nth-child(2) {
-    background-color: var(--two-use-color);
-    }
-    .box:nth-child(3) {
-    background-color: var(--one-use-color);
-    }
-    .box:nth-child(4) {
-    background-color: var(--two-use-color);
-    }
-    
-    .box img {
-    height: 50px;
-    }
-    .box .text {
-    color: white;
-    }
-    .topic {
-    font-size: 13px;
-    font-weight: 400;
-    letter-spacing: 1px;
-    }
-    
-    .topic-heading {
-    font-size: 30px;
-    letter-spacing: 3px;
-    }
     
     .report-container {
     min-height: 300px;
@@ -511,7 +467,7 @@ th.action-header {
                     </div>
                         </button>
             <div class="dropdown-menu" aria-labelledby="userProfileDropdown">
-                
+              
                 <a class="dropdown-item" href="logout">Logout</a>
             </div>
         </div>
@@ -527,7 +483,7 @@ th.action-header {
                             
                             <h3 style="font-size: 17px;"> Dashboard</h3>
                         </div>
-                    <a href="userdetails.html">
+                        <a href="userdetails.html">
                         <div class="option2 nav-option">
                             <img src=
     "https://media.geeksforgeeks.org/wp-content/uploads/20221210183322/9.png"
@@ -535,7 +491,7 @@ th.action-header {
                                 alt="articles">
                             <h3 style="font-size: 17px;"> Registered Users</h3>
                         </div>
-                    </a>
+                        </a>
                         <div class="nav-option option3">
                             <img src=
     "https://media.geeksforgeeks.org/wp-content/uploads/20221210183320/5.png"
@@ -551,7 +507,7 @@ th.action-header {
                                 alt="report">
                             <h3 style="font-size: 17px;"> Test</h3>
                         </div>
-                        </a>
+                    </a>
                         <div class="nav-option option4">
                             <img src=
     "https://media.geeksforgeeks.org/wp-content/uploads/20221210183321/6.png"
@@ -581,53 +537,19 @@ th.action-header {
                     </div>
                 </div>
     
-                <div class="box-container">
+               
     
-                    <div class="box box1">
-                        <div class="text">
-                            <h2 class="topic-heading">450</h2>
-                            <h2 class="topic">Registered Users</h2>
-                        </div>
-    
-                       
-                    </div>
-    
-                    <div class="box box2">
-                        <div class="text">
-                            <h2 class="topic-heading">150</h2>
-                            <h2 class="topic">Reviews</h2>
-                        </div>
-    
-                       
-                    </div>
-    
-                    <div class="box box3">
-                        <div class="text">
-                            <h2 class="topic-heading">4.9</h2>
-                            <h2 class="topic">Ratings</h2>
-                        </div>
-    
-                    </div>
-    
-                   
-                </div>  
-    
-                <div class="container">
-                    <div class="report-header">
-
-                    <h3>Recent Users</h3>
-                    <a href="userdetails.html">
-                    <button class="view">View All</button>
-                </a>
-                </div>
-
-
-                    <table>
+                <div class="container" style="max-width: 100%;">
+                    <h2>Recent Users </h2>
+                    <table style="max-width: 100%;">
                         <thead>
                             <tr>
-                                
+                                <th>Full Name</th>
                                 <th>Email Address</th>
-                                
+                                <th>Phone Number</th>
+                                <th>Home Address</th>
+                                <th>City</th>
+                                <th>ZIP Code</th>
                                 <th>Username</th>
                                 <!-- Extend the Action header cell -->
                                 <th class="action-header" colspan="2">Action</th>
@@ -637,21 +559,22 @@ th.action-header {
                             <!-- Replace the following rows with actual user data from your database -->
                             {% for user in users %}
                             <tr>
-                                
+                                <td>{{ user.get_full_name }}</td>
                                 <td>{{ user.email }}</td>
-                               
+                                <td>{{ user.phone_number }}</td>
+                                <td>{{ user.address.street_address }}</td>
+                                <td>{{ user.address.city }}</td>
+                                <td>{{ user.address.pincode }}</td>
                                 <td>{{ user.username }}</td>
                                 <td>
                                     <button class="btn-edit">Active</button>
                                 </td>
-                               
+                                
                             </tr>
                             {% endfor %}
                             <!-- Add more rows for other users as needed -->
                         </tbody>
                     </table>
-                </div>
-                    </div>
                 </div>
             </div>
         </div>

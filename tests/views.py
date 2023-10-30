@@ -217,5 +217,6 @@ def handlelogout(request):
         logout(request)
     return redirect('login')
 @never_cache
+@login_required(login_url='login')
 def userprofile(request):
     return render(request, "userprofile.html")
