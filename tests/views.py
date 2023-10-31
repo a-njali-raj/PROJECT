@@ -219,4 +219,8 @@ def handlelogout(request):
 @never_cache
 @login_required(login_url='login')
 def userprofile(request):
-    return render(request, "userprofile.html")
+    users = User.objects.all()
+    return render(request, "userprofile.html", {'users': users})
+def updateprofile(request):
+    users = User.objects.all()
+    return render(request, "updateprofile.html", {'users': users})

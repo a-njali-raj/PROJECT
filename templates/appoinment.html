@@ -157,21 +157,29 @@
       <input type="text" id="phone" name="phone" placeholder="Mobile " required>
 
       <div class="radio-box">
-        <label class="radio-label">
-          <input type="radio" id="current-address-choice" name="address-choice" value="current-address" checked>
-          Use Current Address
-        </label>
-        <label class="radio-label">
-          <input type="radio" id="new-address-choice" name="address-choice" value="new-address">
-          Enter New Address
-        </label>
-      </div>
+  <label class="radio-label">
+    <input type="radio" id="current-address-choice" name="address-choice" value="current-address" checked>
+    Use Current Address
+  </label>
+  <label class="radio-label">
+    <input type="radio" id="new-address-choice" name="address-choice" value="new-address">
+    Enter New Address
+  </label>
+</div>
 
-      <div id="new-address-fields" class="new-address-fields" style="display: none;">
-        <input type="text" id="new-home-address" name="new-home-address" placeholder="New Home Address">
-        <input type="text" id="new-city" name="new-city" placeholder="New City">
-        <input type="text" id="new-pincode" name="new-pincode" placeholder="New Pincode">
-      </div>
+<div id="current-address-fields">
+  <!-- Fields for the current address -->
+  <input type="text" id="current-home-address" name="current-home-address" placeholder="Current Home Address">
+  <input type="text" id="current-city" name="current-city" placeholder="Current City">
+  <input type="text" id="current-pincode" name="current-pincode" placeholder="Current Pincode">
+</div>
+
+<div id="new-address-fields" class="new-address-fields" style="display: none;">
+  <!-- Fields for the new address -->
+  <input type="text" id="new-home-address" name="new-home-address" placeholder="New Home Address">
+  <input type="text" id="new-city" name="new-city" placeholder="New City">
+  <input type="text" id="new-pincode" name="new-pincode" placeholder="New Pincode">
+</div>
 
       <!-- Additional tests checkboxes -->
 
@@ -254,20 +262,7 @@
       additionalTestContainer.style.display = "none";
     }
   }
-  function toggleNewAddressFields() {
-    const newAddressChoice = document.getElementById("new-address-choice");
-    const newAddressFields = document.getElementById("new-address-fields");
-    const newPincodeContainer = document.getElementById("new-pincode-container");
-
-    if (newAddressChoice.checked) {
-      newAddressFields.style.display = "block";
-      newPincodeContainer.style.display = "block";
-    } else {
-      newAddressFields.style.display = "none";
-      newPincodeContainer.style.display = "none";
-    }
-  }
-
+ 
   // Get the select element by its ID
   const selectElement = document.getElementById('preferred-time');
 
@@ -310,20 +305,35 @@
 
   // Call the function to add time options
   addTimeOptions();
+function toggleAddressFields() {
+    const currentAddressChoice = document.getElementById("current-address-choice");
+    const newAddressChoice = document.getElementById("new-address-choice");
+    const currentAddressFields = document.getElementById("current-address-fields");
+    const newAddressFields = document.getElementById("new-address-fields");
 
+    if (currentAddressChoice.checked) {
+      currentAddressFields.style.display = "block";
+      newAddressFields.style.display = "none";
+    } else if (newAddressChoice.checked) {
+      currentAddressFields.style.display = "none";
+      newAddressFields.style.display = "block";
+    } else {
+      currentAddressFields.style.display = "none";
+      newAddressFields.style.display = "none";
+    }
+  }
+
+  // Add event listeners to the radio buttons to detect changes
+  const currentAddressChoice = document.getElementById("current-address-choice");
+  const newAddressChoice = document.getElementById("new-address-choice");
+
+  currentAddressChoice.addEventListener("change", toggleAddressFields);
+  newAddressChoice.addEventListener("change", toggleAddressFields);
+
+  // Call the function to set the initial state
+  toggleAddressFields();
 
   // Add an event listener to the radio buttons to detect changes
-  const newAddressChoice = document.getElementById("new-address-choice");
-  const currentAddressChoice = document.getElementById("current-address-choice");
-
-  newAddressChoice.addEventListener("change", toggleNewAddressFields);
-  currentAddressChoice.addEventListener("change", toggleNewAddressFields);
-
-  // Initial check to hide/show based on the default selection
-  toggleNewAddressFields();
-  $("#prescription").on("change", function (e) {
-    const fileName = e.target.files[0].name;
-    alert(`Selected prescription file: ${fileName}`);
-  });
+  
 </script>
 {% endblock %}

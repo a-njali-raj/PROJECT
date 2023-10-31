@@ -12,11 +12,11 @@ class User(AbstractUser):
     phone_number = models.CharField(max_length=10, null=True, blank=True)
 
 
+
 class Test(models.Model):
     name = models.CharField(max_length=255)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     is_available = models.BooleanField(default=True)
-
 
 class Patient(models.Model):
     full_name = models.CharField(max_length=255)
