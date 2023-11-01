@@ -428,6 +428,11 @@ body {
 .button-link:hover {
     background-color: #065651; /* Darken the color on hover */
 }
+.button-container {
+    display: flex; /* Display buttons in a row */
+    gap: 10px; /* Adjust the gap between buttons */
+    align-items: center; /* Align buttons vertically */
+}
     </style>
     </head>
     
@@ -531,14 +536,26 @@ body {
                                 {% for test in tests %}
                                     <li class="test-listing">
                                         <div class="test-title">{{ test.name }}</div>
-                                        <div class="lab-name">{{ test.price }}</div>
-                                        <div class="test-price">Available: {{ test.is_available }}</div>
-                        
+                                        <div class="test-price">{{ test.price }}</div>
+                                        <div class="available">
+                                            {% if test.is_available %}
+                                                true
+                                            {% else %}
+                                                false
+                                            {% endif %}
+                                        </div>
                                         <!-- Edit button -->
-                                        <button class="btn btn-primary edit-button" data-test-id="{{ test.id }}">Edit</button>
-                        
-                                        <!-- Delete button (use a form for safety) -->
-                                        <button class="btn btn-danger delete-button" data-test-id="{{ test.id }}">Delete</button>
+                                        <div class="button-container">
+                                            <!-- Edit button -->
+                                            <button class="btn btn-primary edit-button" data-test-id="{{ test.id }}">Edit</button>
+                            
+                                            <!-- Delete button (use a form for safety) -->
+                                            <form action="{% url 'delete_test' test.id %}" method="post"onsubmit="return confirmDelete()">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="test_id" value="{{ test.id }}">
+                                                <button type="submit" class="btn btn-danger delete-button">Delete</button>
+                                            </form>
+                                        </div>
                                     </li>
                                 {% endfor %}
                             </ul>
@@ -563,7 +580,23 @@ body {
         <script src="{% static '/assets/vendor/wow/wow.min.js'%}"></script>
     
         <script src="{% static '/assets/js/theme.js'%}"></script>
-        
+        <script>
+            // Add an event listener to all "Edit" buttons with class "edit-button"
+            const editButtons = document.querySelectorAll('.edit-button');
+            editButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Get the test ID from the data attribute
+                    const testId = this.getAttribute('data-test-id');
+                    
+                    // Redirect to the updatetest.html page with the test ID as a parameter
+                    window.location.href = `{% url 'updatetest' %}?test_id=${testId}`;
+                });
+            });
+            function confirmDelete() {
+        return confirm("Are you sure you want to delete this test?"); // Display a confirmation dialog
+    }
+        </script>
+           
         
     </body>
     </html>

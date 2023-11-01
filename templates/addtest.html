@@ -459,6 +459,20 @@ th.action-header {
         input[type="submit"]:hover {
             background-color: #0056b3;
         }
+        .availability-checkbox {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.availability-checkbox input[type="checkbox"] {
+    margin-right: 10px; /* Add some spacing between the checkbox and label */
+}
+
+.availability-checkbox label {
+    font-size: 16px;
+    color: #333; /* You can adjust the color as needed */
+}
     </style>
     </head>
     
@@ -568,7 +582,13 @@ th.action-header {
                     
                         <label for="price">Price:</label>
                         <input type="text" id="price" name="price" required>
-                        
+                        <input type="hidden" id="availability" name="is_available" value="False">
+                    
+                        <div class="availability-checkbox">
+                            <input type="checkbox" id="checkbox-availability" onchange="updateAvailability()">
+                            <label for="availability">Available</label>
+                        </div>
+                
                         <a href="{% url 'admintest'  %}">
                         <input type="submit" value="Add Test">
                         </a>
@@ -586,6 +606,18 @@ th.action-header {
     
         <script src="{% static '/assets/js/theme.js'%}"></script>
         
-        
+        <script>
+          function updateAvailability() {
+            const checkbox = document.getElementById("checkbox-availability");
+            const availabilityField = document.getElementById("availability");
+
+            // Update the hidden input field value based on the checkbox status
+            if (checkbox.checked) {
+                availabilityField.value = "True";
+            } else {
+                availabilityField.value = "False";
+            }
+        }
+        </script>
     </body>
     </html>

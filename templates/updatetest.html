@@ -459,6 +459,20 @@ th.action-header {
         input[type="submit"]:hover {
             background-color: #0056b3;
         }
+        .availability-checkbox {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.availability-checkbox input[type="checkbox"] {
+    margin-right: 10px; /* Add some spacing between the checkbox and label */
+}
+
+.availability-checkbox label {
+    font-size: 16px;
+    color: #333; /* You can adjust the color as needed */
+}
     </style>
     </head>
     
@@ -567,10 +581,12 @@ th.action-header {
                             
                             <label for="price">Price:</label>
                             <input type="text" id="price" name="price" value="{{ test.price }}" required>
-                            
-                           
-                            <label for="is_available">Availability:</label>
-                            <input type="checkbox" id="is_available" name="is_available" {% if test.is_available %}checked{% endif %}>
+                            <input type="hidden" id="availability" name="availability" value="False">
+                            <div class="availability-checkbox">
+                                <!-- Add the "onclick" attribute to call the JavaScript function -->
+                                <input type="checkbox" id="checkbox-availability" onclick="updateAvailability()">
+                                <label for="availability">Available</label>
+                            </div>
                             
                             <input type="submit" value="Update Test">
                         </form>
@@ -586,7 +602,19 @@ th.action-header {
         <script src="{% static '/assets/vendor/wow/wow.min.js'%}"></script>
     
         <script src="{% static '/assets/js/theme.js'%}"></script>
+        <script>
+            function updateAvailability() {
+                const checkbox = document.getElementById("checkbox-availability");
+                const availabilityField = document.getElementById("availability");
         
+                // Update the hidden input field value based on the checkbox status
+                if (checkbox.checked) {
+                    availabilityField.value = "True";
+                } else {
+                    availabilityField.value = "False";
+                }
+            }
+        </script>
         
     </body>
     </html>
