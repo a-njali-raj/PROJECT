@@ -483,10 +483,12 @@ body {
             <div class="navcontainer">
                 <nav class="nav">
                     <div class="nav-upper-options">
-                        <div class="nav-option option1">
-                            
-                            <h3 style="font-size: 17px;"> Dashboard</h3>
-                        </div>
+                        <a href="admin-dashboard">
+                            <div class="nav-option option1">
+                                
+                                <h3 style="font-size: 17px;"> Dashboard</h3>
+                            </div>
+                            </a>
                         <a href="userdetails.html">
                         <div class="option2 nav-option">
                             <img src=
@@ -512,6 +514,7 @@ body {
                             <h3 style="font-size: 17px;"> Test</h3>
                         </div>
                     </a>
+                    <a href="adminstaff.html">
                         <div class="nav-option option4">
                             <img src=
     "https://media.geeksforgeeks.org/wp-content/uploads/20221210183321/6.png"
@@ -519,7 +522,7 @@ body {
                                 alt="institution">
                             <h3 style="font-size: 17px;"> Staffs</h3>
                         </div>
-    
+                    </a>
                     </div>
                 </nav>
             </div>
@@ -527,9 +530,13 @@ body {
     
                
                 <div class="container">
-
+                    <div class="button-row">
+                        <b><a href="{% url 'addtest' %}" class="button-link">Add a Test</a></b>
+                        <b><a href="" class="button-link">Add Staff</a></b>
+                    </div>
                     
-                    <b><a href="{% url 'addtest' %}" class="button-link">Add a Test</a></b>
+                    
+                
 
                           <div class="container">
                             <ul>
