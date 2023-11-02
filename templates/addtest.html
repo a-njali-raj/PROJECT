@@ -488,12 +488,9 @@ th.action-header {
             </div>
     
             <div class="searchbar">
-                <input type="text"
-                    placeholder="Search">
-                <div class="searchbtn">
-                <img src="{% static '/C:/Project/PROJECT/static/assets/img/search.png' %}"
-                        class="icn srchicn"
-                        alt="search-icon">
+                <input type="text" id="searchInput" placeholder="Search" oninput="searchTable()">
+                <div class="searchbtn" onclick="performSearch()">
+                    <img src="{% static '/C:/Project/PROJECT/static/assets/img/search.png' %}" class="icn srchicn" alt="search-icon">
                 </div>
             </div>
     
@@ -622,6 +619,31 @@ th.action-header {
                 availabilityField.value = "False";
             }
         }
+       
+            function searchTable() {
+                var input, filter, table, tr, td, i, txtValue;
+                input = document.getElementById("searchInput");
+                filter = input.value.toUpperCase();
+                table = document.querySelector("table"); // Replace with the actual table ID or class
+                tr = table.getElementsByTagName("tr");
+        
+                for (i = 0; i < tr.length; i++) {
+                    td = tr[i].getElementsByTagName("td")[0]; // Change index to match the column you want to search
+                    if (td) {
+                        txtValue = td.textContent || td.innerText;
+                        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                            tr[i].style.display = "";
+                        } else {
+                            tr[i].style.display = "none";
+                        }
+                    }
+                }
+            }
+        
+            function performSearch() {
+                searchTable(); // Call the searchTable function when the search icon is clicked
+            }
+      
         </script>
     </body>
     </html>

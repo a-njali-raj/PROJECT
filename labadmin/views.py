@@ -3,6 +3,8 @@ from django.contrib.auth.decorators import login_required
 from tests.models import User 
 from django.views.decorators.cache import never_cache
 from tests.models import Test
+from django.contrib.auth import authenticate, login
+from django.contrib import messages
 @never_cache
 @login_required(login_url='login')
 def staff_dashboard(request):
@@ -15,14 +17,15 @@ def staff_dashboard(request):
 @login_required(login_url='login')
 def admin_dashboard(request):
     if request.user.is_superuser:
-        users = User.objects.filter(is_superuser=False, is_staff=False)
+        users = User.objects.filter(is_superuser=False, is_staff=False, is_active=True)
         return render(request, "admin_dashboard.html", {"users": users})
     return redirect("home")
+
 @never_cache
 @login_required(login_url='login')
 def userdetails(request):
     if request.user.is_superuser:
-        users = User.objects.filter(is_superuser=False, is_staff=False)
+        users = User.objects.filter(is_superuser=False, is_staff=False, is_active=True)
         return render(request, "userdetails.html", {"users": users})
     return redirect("home")
    
@@ -47,6 +50,7 @@ def addtest(request):
 
         if name and price:
             Test.objects.create(name=name, price=price, is_available=is_available)
+            messages.success(request, "Test  added successfully.")
             return redirect("admintest")  # Redirect to a success page or any other page
     return render(request, "addtest.html")
 
@@ -56,6 +60,7 @@ def delete_test(request,test_id):
     # Instead of deleting, change the availability status to False
     test.is_available = False
     test.save()
+    messages.success(request, "test deleted successfully.")
 
     return redirect("admintest")
 @never_cache
@@ -82,6 +87,7 @@ def updatetest(request):
         test.save()
 
         # Redirect to a success page or return a response
+        messages.success(request, "Test updated successfully.")
         return redirect('admintest')  # Replace 'success_page' with the appropriate URL
 
     # Handle GET requests for editing the test details
@@ -94,7 +100,40 @@ def updatetest(request):
         return render(request, "updatetest.html", context)
 @never_cache
 def adminstaff(request):
-    return render(request, "adminstaff.html")
+    staff_users = User.objects.filter(is_staff=True,is_superuser=False)
+    context = {'staff_users': staff_users}
+    return render(request, 'adminstaff.html', context)
 @never_cache
 def addstaff(request):
-    return render(request, "addstaff.html")
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        first_name = request.POST["first-name"]
+
+        # Create the user and set is_staff to True
+        user = User.objects.create_user(username=username, password=password)
+        user.is_staff = True
+        user.first_name = first_name
+
+        user.save()
+
+        # Log in the new staff member
+        
+        messages.success(request, "Staff is added successfully.")
+        return redirect('admin_dashboard')  # Redirect to staff_dashboard
+
+    return render(request, 'addstaff.html')
+def delete_staff(request, user_id):
+    # Get the user object to delete
+    user = get_object_or_404(User, id=user_id)
+
+    # Set is_staff status to 0
+    user.is_staff = False
+    user.is_active = False
+    user.save()
+
+    # You can add a confirmation message if needed
+    messages.success(request, "staff is removed successfully.")
+
+    # Redirect to a staff list page or wherever you need to go
+    return redirect('admin_dashboard')  # Replace 'staff_list' with the actual URL name for your staff list page

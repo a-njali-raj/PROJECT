@@ -433,6 +433,15 @@ body {
     gap: 10px; /* Adjust the gap between buttons */
     align-items: center; /* Align buttons vertically */
 }
+.message-toaster {
+            position: fixed;
+            top: 0;
+            left: 50%;
+            text-align: center;
+            z-index: 9999;
+            transform: translateX(-50%);
+            padding: 30px 0;
+        }
     </style>
     </head>
     
@@ -448,12 +457,9 @@ body {
             </div>
     
             <div class="searchbar">
-                <input type="text"
-                    placeholder="Search">
-                <div class="searchbtn">
-                <img src="{% static '/C:/Project/PROJECT/static/assets/img/search.png' %}"
-                        class="icn srchicn"
-                        alt="search-icon">
+                <input type="text" id="searchInput" placeholder="Search" oninput="searchTable()">
+                <div class="searchbtn" onclick="performSearch()">
+                    <img src="{% static '/C:/Project/PROJECT/static/assets/img/search.png' %}" class="icn srchicn" alt="search-icon">
                 </div>
             </div>
     
@@ -478,7 +484,7 @@ body {
             </div>
     
         </header>
-    
+        {% include "layout/messages.html" %}
         <div class="main-container">
             <div class="navcontainer">
                 <nav class="nav">
@@ -602,8 +608,30 @@ body {
             function confirmDelete() {
         return confirm("Are you sure you want to delete this test?"); // Display a confirmation dialog
     }
-        </script>
-           
         
+            function searchTable() {
+                var input, filter, table, tr, td, i, txtValue;
+                input = document.getElementById("searchInput");
+                filter = input.value.toUpperCase();
+                table = document.querySelector("table"); // Replace with the actual table ID or class
+                tr = table.getElementsByTagName("tr");
+        
+                for (i = 0; i < tr.length; i++) {
+                    td = tr[i].getElementsByTagName("td")[0]; // Change index to match the column you want to search
+                    if (td) {
+                        txtValue = td.textContent || td.innerText;
+                        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                            tr[i].style.display = "";
+                        } else {
+                            tr[i].style.display = "none";
+                        }
+                    }
+                }
+            }
+        
+            function performSearch() {
+                searchTable(); // Call the searchTable function when the search icon is clicked
+            }
+        </script>
     </body>
     </html>

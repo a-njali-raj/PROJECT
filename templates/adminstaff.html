@@ -321,9 +321,72 @@ body {
     box-shadow: 0 0 10px rgba(65, 117, 109, 0.1);
 }
 
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(168, 236, 226, 0.1);
+}
+
+/* Style the table header */
+th {
+    background-color: #a5c4bd;
+    color: #fff;
+    font-weight: bold;
+    padding: 10px;
+    text-align: left;
+}
+
+/* Style the table rows */
+tr {
+    transition: background-color 0.3s;
+}
+
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+/* Style the table cells (columns) */
+th, td {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    text-align: left;
+}
+
+/* Extend the Action header cell */
+th.action-header {
+    width: 100px;
+}
 
 /* Style the action buttons in the table */
+.btn-edit, .btn-delete {
+    padding: 5px 9px;
+    margin-right: 5px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 12px;
+    color: #fff;
+    transition: background-color 0.3s;
+}
 
+.btn-edit {
+    background-color: #76c676;
+}
+
+.btn-delete {
+    background-color: #f44336;
+}
+
+.btn-edit:hover {
+    background-color: #5aaf5a;
+}
+
+.btn-delete:hover {
+    background-color: #d63737;
+}
 .dropdown .btn-secondary {
     background-color: #09ae96;
     color: #fff;
@@ -363,62 +426,21 @@ body {
 
 .dropdown-item:hover {
     background-color: #042f2d; /* Change background color on hover */
-    color: #fff; /* Change text color on hover */
-}
-body {
-        font-family: Arial, sans-serif;
-    }
-    .container {
-        max-width: 800px;
-        margin: 0 auto;
-    }
-    .test-listing {
-        border: 1px solid #ccc;
-        padding: 10px;
-        margin: 10px 0;
-    }
-    .test-title {
-        font-weight: bold;
-        margin-bottom: 5px;
-    }
-    .lab-name {
-        color: #666;
-    }
-    .test-price {
-        color: rgb(5, 33, 35);
-    }
-   
-    /* Form Styles */
-    .form-container {
-        margin-top: 20px;
-        border: 1px solid #ccc;
-        padding: 20px;
-    }
-    .form-input {
-        width: 100%;
-        padding: 10px;
-        margin-bottom: 10px;
-    }
-    .form-label {
-        font-weight: bold;
-    }
-    .error-message {
-        color: red;
-    }
-    .edit-button {
-        font-size: 10px; /* Adjust the font size as needed */
-        padding: 3px 8px; /* Adjust the padding as needed */
-    }
-
-    /* Style for the delete button */
-    .delete-button {
-        font-size: 10px; /* Adjust the font size as needed */
-        padding: 3px 8px; /* Adjust the padding as needed */
-    }
+    color: #fff; 
     .button-link {
     display: inline-block;
     padding: 10px 10px;
-    background-color: rgb(19, 76, 71);
+    background-color: rgb(4, 48, 48);
+    color: white;
+    text-decoration: none;
+    border: none;
+    border-radius: 6px;
+}
+}
+.button-link {
+    display: inline-block;
+    padding: 10px 10px;
+    background-color: rgb(9, 131, 133);
     color: white;
     text-decoration: none;
     border: none;
@@ -426,13 +448,10 @@ body {
 }
 
 .button-link:hover {
-    background-color: #065651; /* Darken the color on hover */
+    background-color: #0a6d66; /* Darken the color on hover */
 }
-.button-container {
-    display: flex; /* Display buttons in a row */
-    gap: 10px; /* Adjust the gap between buttons */
-    align-items: center; /* Align buttons vertically */
-}
+
+
     </style>
     </head>
     
@@ -448,12 +467,9 @@ body {
             </div>
     
             <div class="searchbar">
-                <input type="text"
-                    placeholder="Search">
-                <div class="searchbtn">
-                <img src="{% static '/C:/Project/PROJECT/static/assets/img/search.png' %}"
-                        class="icn srchicn"
-                        alt="search-icon">
+                <input type="text" id="searchInput" placeholder="Search" oninput="searchTable()">
+                <div class="searchbtn" onclick="performSearch()">
+                    <img src="{% static '/C:/Project/PROJECT/static/assets/img/search.png' %}" class="icn srchicn" alt="search-icon">
                 </div>
             </div>
     
@@ -523,11 +539,40 @@ body {
                             <h3 style="font-size: 17px;"> Staffs</h3>
                         </div>
                     </a>
-    
                     </div>
                 </nav>
             </div>
-            
+            <div class="main">
+    
+               
+    
+                <div class="container" style="max-width: 100%;">
+                 <b><a href="{% url 'addstaff' %}" class="button-link">Add Staff</a></b>
+                    <table style="max-width: 100%;">
+                        <thead>
+                            <tr>
+                                <th>Username</th>
+                                <th>Full Name</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Replace the following rows with actual user data from your database -->
+                            {% for user in staff_users %}
+                            <tr>
+                                <td>{{ user.username }}</td>
+                                <td>{{ user.first_name }}</td>
+                                <td>
+                                    <a href="" class="btn-edit">Edit</a>
+                                    <a href="{% url 'delete_staff' user.id %}" class="btn-delete" onclick="return confirm('Are you sure you want to delete this staff member?')">Delete</a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                            <!-- Add more rows for other users as needed -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
         <script src="{% static '/assets/js/jquery-3.5.1.min.js'%}"></script>
 
@@ -538,8 +583,30 @@ body {
         <script src="{% static '/assets/vendor/wow/wow.min.js'%}"></script>
     
         <script src="{% static '/assets/js/theme.js'%}"></script>
+        <script>
+            function searchTable() {
+                var input, filter, table, tr, td, i, txtValue;
+                input = document.getElementById("searchInput");
+                filter = input.value.toUpperCase();
+                table = document.querySelector("table"); // Replace with the actual table ID or class
+                tr = table.getElementsByTagName("tr");
         
-            
-            
+                for (i = 0; i < tr.length; i++) {
+                    td = tr[i].getElementsByTagName("td")[0]; // Change index to match the column you want to search
+                    if (td) {
+                        txtValue = td.textContent || td.innerText;
+                        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                            tr[i].style.display = "";
+                        } else {
+                            tr[i].style.display = "none";
+                        }
+                    }
+                }
+            }
+        
+            function performSearch() {
+                searchTable(); // Call the searchTable function when the search icon is clicked
+            }
+        </script>
     </body>
     </html>
