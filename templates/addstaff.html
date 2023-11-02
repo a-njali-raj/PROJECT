@@ -573,32 +573,40 @@ th.action-header {
             <!-- Add this form within the "main" div -->
             <div class="report-container">
                 <div class="report-header">
-                    <h3>Add New Laboratory Test</h3>
+                    <h3>Add New Staff</h3>
                 </div>
                 <div class="report-body">
-                    <form method="post">
+                    <form method="post" >
                         {% csrf_token %}
-                    
-                 
-                    
-                        <label for="name">Test Name:</label>
-                        <input type="text" id="name" name="name" required>
-                    
-                        <label for="price">Price:</label>
-                        <input type="text" id="price" name="price" required>
-                        <input type="hidden" id="availability" name="is_available" value="False">
-                    
-                        <div class="availability-checkbox">
-                            <input type="checkbox" id="checkbox-availability" onchange="updateAvailability()">
-                            <label for="availability">Available</label>
+                        <!-- Full Name -->
+                        <div class="form-row">
+                            <label for="first-name">Full Name:</label>
+                            <input type="text" id="first-name" name="first-name" required autocomplete="off">
+                            <span id="full-name-error" class="error"></span>
                         </div>
-                
-                        <a href="{% url 'admintest'  %}">
-                        <input type="submit" value="Add Test">
-                        </a>
+            
+                        <!-- Username -->
+                        <div class="form-row">
+                            <label for="username">Username:</label>
+                            <input type="text" id="username" name="username" required autocomplete="off">
+                            <span id="username-error" class="error"></span>
+                        </div>
+            
+                        <!-- Password -->
+                        <div class="form-row">
+                            <label for="password">Password:</label>
+                            <input type="password" id="password" name="password" required autocomplete="off">
+                            <span id="password-error" class="error"></span>
+                        </div>
+            
+                        <br><!-- Submit Button -->
+                        <div class="form-row">
+                            <input type="submit" value="Add Staff">
+                        </div>
                     </form>
                 </div>
             </div>
+            
        
         <script src="{% static '/assets/js/jquery-3.5.1.min.js'%}"></script>
 
@@ -610,18 +618,6 @@ th.action-header {
     
         <script src="{% static '/assets/js/theme.js'%}"></script>
         
-        <script>
-          function updateAvailability() {
-            const checkbox = document.getElementById("checkbox-availability");
-            const availabilityField = document.getElementById("availability");
-
-            // Update the hidden input field value based on the checkbox status
-            if (checkbox.checked) {
-                availabilityField.value = "True";
-            } else {
-                availabilityField.value = "False";
-            }
-        }
-        </script>
+       
     </body>
     </html>

@@ -472,6 +472,20 @@ th.action-header {
     background-color: #042f2d; /* Change background color on hover */
     color: #fff; /* Change text color on hover */
 }
+.button-link {
+    display: inline-block;
+    padding: 10px 10px;
+    background-color: rgb(4, 48, 48);
+    color: white;
+    text-decoration: none;
+    border: none;
+    border-radius: 6px;
+}
+
+.button-link:hover {
+    background-color: #072f2c; /* Darken the color on hover */
+}
+
 
     </style>
     </head>
@@ -496,7 +510,10 @@ th.action-header {
                         alt="search-icon">
                 </div>
             </div>
-    
+            <div class="button-row">
+                <b><a href="{% url 'addtest' %}" class="button-link">Add a Test</a></b>
+                <b><a href="{% url 'addstaff' %}" class="button-link">Add Staff</a></b>
+            </div>
             <div class="message">
                 <div class="circle"></div>
                 <img src=
@@ -574,7 +591,7 @@ th.action-header {
                 </nav>
             </div>
             <div class="main">
-    
+                
                 <div class="searchbar2">
                     <input type="text"
                         name=""
@@ -622,6 +639,7 @@ th.action-header {
                     <a href="userdetails.html">
                     <button class="view">View All</button>
                 </a>
+             
                 </div>
 
 

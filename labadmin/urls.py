@@ -13,5 +13,6 @@ urlpatterns = [
     path('updatetest.html', views.updatetest, name="updatetest"),
     path('delete_test/<int:test_id>/', views.delete_test, name='delete_test'),
     path('adminstaff.html', views.adminstaff, name="adminstaff"),
+    path('addstaff.html', views.addstaff, name="addstaff"),
 ]
 

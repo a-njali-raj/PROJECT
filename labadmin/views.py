@@ -95,3 +95,6 @@ def updatetest(request):
 @never_cache
 def adminstaff(request):
     return render(request, "adminstaff.html")
+@never_cache
+def addstaff(request):
+    return render(request, "addstaff.html")
