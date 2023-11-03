@@ -580,9 +580,13 @@ th.action-header {
                     
                         <label for="name">Test Name:</label>
                         <input type="text" id="name" name="name" required>
+                        <div id="nameError" class="error-message" style="color: red; display: none;"></div>
+
                     
                         <label for="price">Price:</label>
                         <input type="text" id="price" name="price" required>
+                        <div id="priceError" class="error-message" style="color: red; display: none;"></div>
+
                         <input type="hidden" id="availability" name="is_available" value="False">
                     
                         <div class="availability-checkbox">
@@ -643,7 +647,35 @@ th.action-header {
             function performSearch() {
                 searchTable(); // Call the searchTable function when the search icon is clicked
             }
-      
+            document.getElementById("name").addEventListener("input", validateName);
+        document.getElementById("price").addEventListener("input", validatePrice);
+
+        function validateName() {
+            const name = document.getElementById("name").value;
+            const nameError = document.getElementById("nameError");
+
+            if (name.trim() === "") {
+                nameError.textContent = "Test Name is required";
+                nameError.style.display = "block";
+            } else {
+                nameError.textContent = "";
+                nameError.style.display = "none";
+            }
+        }
+
+        function validatePrice() {
+            const price = document.getElementById("price").value;
+            const priceError = document.getElementById("priceError");
+
+            if (!/^\d+(\.\d{1,2})?$/.test(price) || parseFloat(price) <= 0) {
+                priceError.textContent = "Price must be a positive number";
+                priceError.style.display = "block";
+            } else {
+                priceError.textContent = "";
+                priceError.style.display = "none";
+            }
+        }
+
         </script>
     </body>
     </html>

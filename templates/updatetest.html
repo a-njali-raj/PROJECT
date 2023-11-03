@@ -578,9 +578,10 @@ th.action-header {
                             
                             <label for="name">Test Name:</label>
                             <input type="text" id="name" name="name" value="{{ test.name }}" required>
-                            
+                            <div id="nameError" class="error-message" style="color: red; display: none;"></div>
                             <label for="price">Price:</label>
                             <input type="text" id="price" name="price" value="{{ test.price }}" required>
+                            <div id="priceError" class="error-message" style="color: red; display: none;"></div>
                             <input type="hidden" id="availability" name="availability" value="False">
                             <div class="availability-checkbox">
                                 <!-- Add the "onclick" attribute to call the JavaScript function -->
@@ -639,6 +640,34 @@ th.action-header {
             function performSearch() {
                 searchTable(); // Call the searchTable function when the search icon is clicked
             }
+            const nameInput = document.getElementById("name");
+    const priceInput = document.getElementById("price");
+    const nameError = document.getElementById("nameError");
+    const priceError = document.getElementById("priceError");
+
+    // Add an input event listener to validate the Test Name in real-time
+    nameInput.addEventListener("input", function() {
+        const name = nameInput.value.trim();
+        if (name === "") {
+            nameError.textContent = "Test Name is required";
+            nameError.style.display = "block";
+        } else {
+            nameError.textContent = "";
+            nameError.style.display = "none";
+        }
+    });
+
+    // Add an input event listener to validate the Price in real-time
+    priceInput.addEventListener("input", function() {
+        const price = priceInput.value;
+        if (!/^\d+(\.\d{0,2})?$/.test(price) || parseFloat(price) <= 0) {
+            priceError.textContent = "Price must be a positive number";
+            priceError.style.display = "block";
+        } else {
+            priceError.textContent = "";
+            priceError.style.display = "none";
+        }
+    });
         </script>
         
         

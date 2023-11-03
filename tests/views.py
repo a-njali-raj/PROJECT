@@ -224,3 +224,14 @@ def userprofile(request):
 def updateprofile(request):
     users = User.objects.all()
     return render(request, "updateprofile.html", {'users': users})
+def get_test_price(request):
+    test_id = request.GET.get('test_id')
+
+    try:
+        test = Test.objects.get(id=test_id)
+        test_price = test.price  # Assuming your Test model has a "price" field
+    except Test.DoesNotExist:
+        test_price = None
+
+    data = {'price': test_price}
+    return JsonResponse(data)

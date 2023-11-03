@@ -17,7 +17,7 @@ def staff_dashboard(request):
 @login_required(login_url='login')
 def admin_dashboard(request):
     if request.user.is_superuser:
-        users = User.objects.filter(is_superuser=False, is_staff=False, is_active=True)
+        users = User.objects.filter(is_superuser=False)
         return render(request, "admin_dashboard.html", {"users": users})
     return redirect("home")
 
@@ -53,7 +53,8 @@ def addtest(request):
             messages.success(request, "Test  added successfully.")
             return redirect("admintest")  # Redirect to a success page or any other page
     return render(request, "addtest.html")
-
+@never_cache
+@login_required(login_url='login')
 def delete_test(request,test_id):
     test = get_object_or_404(Test, id=test_id)
 
@@ -99,11 +100,13 @@ def updatetest(request):
         }
         return render(request, "updatetest.html", context)
 @never_cache
+@login_required(login_url='login')
 def adminstaff(request):
     staff_users = User.objects.filter(is_staff=True,is_superuser=False)
     context = {'staff_users': staff_users}
     return render(request, 'adminstaff.html', context)
 @never_cache
+@login_required(login_url='login')
 def addstaff(request):
     if request.method == 'POST':
         username = request.POST['username']
@@ -123,6 +126,8 @@ def addstaff(request):
         return redirect('admin_dashboard')  # Redirect to staff_dashboard
 
     return render(request, 'addstaff.html')
+@never_cache
+@login_required(login_url='login')
 def delete_staff(request, user_id):
     # Get the user object to delete
     user = get_object_or_404(User, id=user_id)
