@@ -142,3 +142,8 @@ def delete_staff(request, user_id):
 
     # Redirect to a staff list page or wherever you need to go
     return redirect('admin_dashboard')  # Replace 'staff_list' with the actual URL name for your staff list page
+@never_cache
+@login_required(login_url='login')
+def stafftest(request):
+    tests = Test.objects.all() 
+    return render(request, "stafftest.html", {'tests': tests}) # Retrieve all Test objects from the database
