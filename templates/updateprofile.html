@@ -2,70 +2,77 @@
 {% load static %}
 {% block extra_css %}
 <style type="text/css">
-    	body {
-    margin: 0;
-    padding-top: 40px;
-    color: #2e323c;
-    background: #f5f6fa;
-    position: relative;
-    height: 100%;
-}
-.account-settings .user-profile {
-    margin: 0 0 1rem 0;
-    padding-bottom: 1rem;
-    text-align: center;
-}
-.account-settings .user-profile .user-avatar {
-    margin: 0 0 1rem 0;
-}
-.account-settings .user-profile .user-avatar img {
-    width: 40px;
-    height: 40px;
-    -webkit-border-radius: 50px;
-    -moz-border-radius: 50px;
-    border-radius: 50px;
-}
-.account-settings .user-profile h5.user-name {
-    margin: 0 0 0.5rem 0;
-}
-.account-settings .user-profile h6.user-email {
-    margin: 0;
-    font-size: 0.8rem;
-    font-weight: 400;
-    color: #9fa8b9;
-}
-.account-settings .about {
-    margin: 2rem 0 0 0;
-    text-align: center;
-}
-.account-settings .about h5 {
-    margin: 0 0 15px 0;
-    color: #007ae1;
-}
-.account-settings .about p {
-    font-size: 0.825rem;
-}
-.form-control {
-    border: 1px solid #cfd1d8;
-    -webkit-border-radius: 2px;
-    -moz-border-radius: 2px;
-    border-radius: 2px;
-    font-size: .825rem;
-    background: #ffffff;
-    color: #2e323c;
-}
+    body {
+        margin: 0;
+        padding-top: 40px;
+        color: #2e323c;
+        background: #f5f6fa;
+        position: relative;
+        height: 100%;
+    }
 
-.card {
-    background: #ffffff;
-    -webkit-border-radius: 5px;
-    -moz-border-radius: 5px;
-    border-radius: 5px;
-    border: 0;
-    margin-bottom: 1rem;
-}
+    .account-settings .user-profile {
+        margin: 0 0 1rem 0;
+        padding-bottom: 1rem;
+        text-align: center;
+    }
 
+    .account-settings .user-profile .user-avatar {
+        margin: 0 0 1rem 0;
+    }
 
-    </style>
+    .account-settings .user-profile .user-avatar img {
+        width: 40px;
+        height: 40px;
+        -webkit-border-radius: 50px;
+        -moz-border-radius: 50px;
+        border-radius: 50px;
+    }
+
+    .account-settings .user-profile h5.user-name {
+        margin: 0 0 0.5rem 0;
+    }
+
+    .account-settings .user-profile h6.user-email {
+        margin: 0;
+        font-size: 0.8rem;
+        font-weight: 400;
+        color: #9fa8b9;
+    }
+
+    .account-settings .about {
+        margin: 2rem 0 0 0;
+        text-align: center;
+    }
+
+    .account-settings .about h5 {
+        margin: 0 0 15px 0;
+        color: #007ae1;
+    }
+
+    .account-settings .about p {
+        font-size: 0.825rem;
+    }
+
+    .form-control {
+        border: 1px solid #cfd1d8;
+        -webkit-border-radius: 2px;
+        -moz-border-radius: 2px;
+        border-radius: 2px;
+        font-size: .825rem;
+        background: #ffffff;
+        color: #2e323c;
+    }
+
+    .card {
+        background: #ffffff;
+        -webkit-border-radius: 5px;
+        -moz-border-radius: 5px;
+        border-radius: 5px;
+        border: 0;
+        margin-bottom: 1rem;
+    }
+</style>
 {% endblock %}
 
 {% block content %}
@@ -78,13 +85,19 @@
                     <div class="account-settings">
                         <div class="user-profile">
                             <label for="profile-pic" class="edit-profile-pic">
-                                <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="Maxwell Admin"style="width: 40px; height: 40px;">
+                                {% if user.profile_pic %}
+                                <img src="{{user.profile_pic}}" alt="{{user.first_name}}"
+                                    style="width: 40px; height: 40px;object-fit: cover;border-radius: 50%;">
+                                {% else %}
+                                <img src="https://api.dicebear.com/7.x/initials/svg?seed={{user.first_name}}"
+                                    alt="{{user.first_name}}" style="width: 40px; height: 40px;border-radius: 50%;">
+                                {% endif %}
                             </label>
-                            <input type="file" id="profile-pic" accept="image/*" style="display: none;">
+                            <!-- <input type="file" id="profile-pic" accept="image/*" style="display: none;"> -->
                             <h5 class="user-name">{{ user.username }}</h5>
                             <h6 class="user-email">{{ user.email }}</a></h6>
                         </div>
-                        
+
                     </div>
                 </div>
             </div>
@@ -92,61 +105,75 @@
         <div class="col-xl-9 col-lg-9 col-md-12 col-sm-12 col-12">
             <div class="card h-100">
                 <div class="card-body">
-                    <div class="row gutters">
+                    <form class="row gutters" action="" method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                             <h6 class="mb-2 text-primary">Personal Details</h6>
                         </div>
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
                             <div class="form-group">
                                 <label for="fullName">Full Name</label>
-                                <input type="text" class="form-control" id="first-Name" value="{{ user.first_name }}" >
+                                <input type="text" class="form-control" id="first-Name" value="{{ user.first_name }}"
+                                    name="first_name">
                             </div>
                         </div>
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
                             <div class="form-group">
                                 <label for="eMail">Email</label>
-                                <input type="email" class="form-control" id="eMail" value="{{ user.email }}" >
+                                <input type="email" class="form-control" id="eMail" value="{{ user.email }}"
+                                    name="email">
                             </div>
                         </div>
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
                             <div class="form-group">
                                 <label for="phone">Phone</label>
-                                <input type="text" class="form-control" id="phone" value="{{ user.phone_number }}" >
+                                <input type="text" class="form-control" id="phone" value="{{ user.phone_number }}"
+                                    name="phone">
                             </div>
                         </div>
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
                             <div class="form-group">
                                 <label for="username">Username</label>
-                                <input type="text" class="form-control" id="username" value="{{ user.username }}">
+                                <input type="text" class="form-control" id="username" value="{{ user.username }}"
+                                    name="username">
                             </div>
                         </div>
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
                             <div class="form-group">
                                 <label for="street">Home Address</label>
-                                <input type="text" class="form-control" id="home" value="{{ user.address.street_address }}" >
+                                <input type="text" class="form-control" id="home"
+                                    value="{{ user.address.street_address }}" name="street_address">
                             </div>
                         </div>
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
                             <div class="form-group">
                                 <label for="city">City</label>
-                                <input type="text" class="form-control" id="city" value="{{ user.address.city}}" >
+                                <input type="text" class="form-control" id="city" value="{{ user.address.city}}"
+                                    name="city">
                             </div>
                         </div>
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
                             <div class="form-group">
                                 <label for="zip">Zip Code</label>
-                                <input type="text" class="form-control" id="zip" value="{{ user.address.pincode }}">
+                                <input type="text" class="form-control" id="zip" value="{{ user.address.pincode }}"
+                                    name="pincode">
+                            </div>
+                        </div>
+                        <div class="col-12 mb-2">
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input" id="validatedCustomFile" accept="image/*"
+                                    name="profile_pic">
+                                <label class="custom-file-label" for="validatedCustomFile">Choose profile
+                                    picture...</label>
                             </div>
                         </div>
                         <div class="col-12">
                             <div class="text-center">
-                                <button class="btn btn-primary" id="updateButton">
-                                    <a href="updateprofile.html" style="color: white; text-decoration: none;">Update</a>
-                                </button>
+                                <input type="submit" class="btn btn-primary" value="Submit">
                             </div>
                         </div>
-                        
-                    </div>
+
+                    </form>
                     <!-- Rest of your HTML -->
                 </div>
             </div>

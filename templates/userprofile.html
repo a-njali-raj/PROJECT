@@ -77,9 +77,15 @@
                 <div class="card-body">
                     <div class="account-settings">
                         <div class="user-profile">
-                            <div class="user-avatar">
-                                <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="Maxwell Admin">
-                            </div>
+                            <label for="profile-pic" class="edit-profile-pic">
+                                {% if user.profile_pic %}
+                                <img src="{{user.profile_pic}}" alt="{{user.first_name}}"
+                                    style="width: 40px; height: 40px;object-fit: cover;border-radius: 50%;">
+                                {% else %}
+                                <img src="https://api.dicebear.com/7.x/initials/svg?seed={{user.first_name}}"
+                                    alt="{{user.first_name}}" style="width: 40px; height: 40px;border-radius: 50%;">
+                                {% endif %}
+                            </label>
                             <h5 class="user-name">{{ user.username }}</h5>
                             <h6 class="user-email">{{ user.email }}</a></h6>
                         </div>
@@ -96,7 +102,8 @@
                             <h6 class="mb-2 text-primary">Personal Details</h6>
                         </div>
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
-                            <div class="form-group">
+                            <div class="form-group" action="" method="POST" enctype="multipart/form-data">
+                                {% csrf_token %}
                                 <label for="fullName">Full Name</label>
                                 <input type="text" class="form-control" id="first-Name" value="{{ user.first_name }}" disabled>
                             </div>
@@ -144,7 +151,7 @@
                                 </button>
                             </div>
                         </div>
-                        
+                    </form>
                     </div>
                     <!-- Rest of your HTML -->
                 </div>

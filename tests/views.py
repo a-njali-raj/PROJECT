@@ -7,12 +7,16 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.contrib.auth.models import User
 from django.views.decorators.cache import never_cache
+from django.shortcuts import get_object_or_404
 
 from tests.models import (
     Address,
     Test,
     Patient,
     Appoinment,
+    Location,
+    Payment,
+    PaymentDetail,
 )
 
 User = get_user_model()
@@ -117,27 +121,29 @@ def check_email_availability(request):
             return JsonResponse({'available': True})  # Email is available
     else:
         return JsonResponse({'available': False})  # Emai
+
 @never_cache
 @login_required
 def appoinment(request):
     context = {
         "tests": Test.objects.filter(is_available=True),
+        "locations": Location.objects.all(),
     }
+    print(request.POST)
     if request.method == "POST":
-        print(request.POST)
         patients = []
         additional_test = None
+        location = None
         # Parsing data from payload
         test = request.POST["test"]
         preffered_date = request.POST["date"]
         preffered_time = request.POST["preferred-time"]
-        patient_count = request.POST["persons"]
-        patient_count = int(patient_count) if patient_count else 0
         email = request.POST["email"]
         phone = request.POST["phone"]
         address_choice = request.POST["address-choice"]
         additional_test_id = request.POST.get("additional_tests_select")
         appoinment_type = request.POST["appointmentType"]
+        amount = request.POST["amount"]
 
         # Getting main test object
         main_test = Test.objects.get(pk=test)
@@ -159,17 +165,20 @@ def appoinment(request):
             )
 
         # Creating patient instances from payload
-        for i in range(1, patient_count + 1):
-            patient_name = request.POST.get(f"name{i}")
-            patient_age = request.POST.get(f"age{i}")
-            patient_gender = request.POST.get(f"gender{i}")
-            patients.append(
-                Patient.objects.create(
-                    full_name=patient_name,
-                    age=patient_age or None,
-                    gender=patient_gender or None,
-                )
+        patient_name = request.POST.get("full_name")
+        patient_age = request.POST.get("age")
+        patient_gender = request.POST.get("gender")
+        patients.append(
+            Patient.objects.create(
+                full_name=patient_name,
+                age=patient_age or None,
+                gender=patient_gender or None,
             )
+        )
+
+        if request.POST.get("location"):
+            location = Location.objects.get(pk=request.POST["location"])
+
 
         # Creating appoinment instance
         _appoinment = Appoinment.objects.create(
@@ -181,18 +190,59 @@ def appoinment(request):
             address=address,
             additional_test=additional_test,
             appoinment_type=appoinment_type,
+            location=location,
+            amount=amount,
             user=request.user,
         )
 
         # Setting patients to appoinment instance
         if patients:
             _appoinment.patients.add(*patients)
+        
+        if request.FILES.get("prescription"):
+            print(request.FILES)
+            file = request.FILES["prescription"]
+            _appoinment.prescription = file
+        
+        _appoinment.save()
 
-        messages.success(request, "Appoinment created successfully.")
+        # messages.success(request, "Appoinment created successfully.")
 
-        return redirect("/")
+        return redirect("payment", appoinment_id=_appoinment.object_id)
 
     return render(request, "appoinment.html", context)
+
+@login_required
+def payment(request, appoinment_id):
+    appoinment = get_object_or_404(Appoinment, object_id=appoinment_id)
+    if request.method == "POST":
+        data = request.POST
+        detail = None
+        if data["payment_method"] == "card":
+            detail = PaymentDetail(
+                card_number = data["card_number"],
+                card_full_name=data["full_name"],
+                card_expiration=data["expiration_date"],
+            )
+        elif data["payment_method"] == "upi":
+            detail = PaymentDetail(
+                upi_id=data["upi_id"],
+            )
+        detail.save()
+        payment = Payment.objects.create(
+            user=request.user,
+            appoinment=appoinment,
+            amount=appoinment.amount,
+            status=True,
+            detail=detail,
+        )
+        messages.success(request, 'Appoinment created successfully.')
+        return redirect("/")
+    context = {
+        "appoinment": appoinment
+    }
+    return render(request, "payment.html", context)
+
 @never_cache
 @login_required(login_url='login')
 def user(request):
@@ -216,14 +266,37 @@ def handlelogout(request):
     if request.user.is_authenticated:
         logout(request)
     return redirect('login')
+
 @never_cache
 @login_required(login_url='login')
 def userprofile(request):
     users = User.objects.all()
     return render(request, "userprofile.html", {'users': users})
+
+@login_required()
 def updateprofile(request):
     users = User.objects.all()
+    if request.method == "POST":
+        user = request.user
+        user.first_name = request.POST["first_name"]
+        user.email = request.POST["email"]
+        user.phone_number = request.POST["phone"]
+        user.username = request.POST["username"]
+        address = user.address
+        if not user.address:
+            # If the address doesn't exist, you may want to create it
+            address = Address()
+        address.street_address = request.POST["street_address"]
+        address.city = request.POST["city"]
+        address.pincode = request.POST["pincode"]
+        address.save()
+        if request.FILES.get("profile_pic"):
+            profile_pic = request.FILES["profile_pic"]
+            user.profile_pic = profile_pic
+        user.address = address
+        user.save()
     return render(request, "updateprofile.html", {'users': users})
+
 def get_test_price(request):
     test_id = request.GET.get('test_id')
 
@@ -235,3 +308,6 @@ def get_test_price(request):
 
     data = {'price': test_price}
     return JsonResponse(data)
+
+
+# Appoinment.objects.filter(payment_set__status=True)

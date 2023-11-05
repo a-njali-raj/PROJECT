@@ -117,7 +117,7 @@
 {% block content %}
 <div class="form-container">
   <!-- Your form content goes here -->
-  <form method="POST">
+  <form method="POST" enctype="multipart/form-data">
     {% csrf_token %}
     <div class="frminput">
 
@@ -132,10 +132,9 @@
         </option>
         {% endfor %}
       </select>
-      <label for="prescription">Upload Prescription (PDF or Image):</label>
       <div>
-        
-        <input type="file" id="prescription" name="prescription" accept=".pdf, .jpg, .jpeg, .png" />
+        <label for="prescription" style="display: inline-block; margin-right: 10px;">Upload Prescription (PDF or Image):</label>
+        <input type="file" id="prescription" name="prescription" accept=".pdf, .jpg, .jpeg, .png" style="display: inline-block;" />
       </div><br>
       <p>Preferred Date: <input type="date" id="preferred-date" name="date" value="2023-09-29"></p>
       <p>Preferred Time:
@@ -147,19 +146,19 @@
 
       <div class="person-fields">
         <div>
-          <input type="text" id="full_name" name="full_name" placeholder="Full name">
+          <input type="text" id="full_name" name="full_name" placeholder="Full name" required>
           <span id="full_name_error" class="error-message"></span>
-          <select id="gender" name="gender">
+          <select id="gender" name="gender" required>
             <option value="" selected>Select Gender</option>
             <option value="Male">Male</option>
             <option value="Female">Female</option>
           </select>
-          <input type="number" id="age" name="age" placeholder="Age ">
+          <input type="number" id="age" name="age" placeholder="Age" required>
         </div>
 
-      <input type="text" id="email" name="email" placeholder="Email" required>
+      <input type="text" id="email" name="email" placeholder="Email" required readonly value="{{user.email}}">
       <span id="email_error" class="error-message"></span>
-      <input type="text" id="phone" name="phone" placeholder="Mobile " required>
+      <input type="text" id="phone" name="phone" placeholder="Mobile" required readonly value="{{user.phone_number}}">
       <span id="phone_error" class="error-message"></span>
 
       <div class="radio-box">
@@ -175,9 +174,9 @@
 
 <div id="current-address-fields">
   <!-- Fields for the current address -->
-  <input type="text" id="current-home-address" name="current-home-address" placeholder="Current Home Address">
-  <input type="text" id="current-city" name="current-city" placeholder="Current City">
-  <input type="text" id="current-pincode" name="current-pincode" placeholder="Current Pincode">
+  <input type="text" id="current-home-address" name="current-home-address" placeholder="Current Home Address" readonly value="{{user.address.street_address}}">
+  <input type="text" id="current-city" name="current-city" placeholder="Current City" readonly value="{{user.address.city}}">
+  <input type="text" id="current-pincode" name="current-pincode" placeholder="Current Pincode" readonly value="{{user.address.pincode}}">
 </div>
 
 <div id="new-address-fields" class="new-address-fields" style="display: none;">
@@ -201,7 +200,7 @@
         <select id="additionalTestsSelect" name="additional_tests_select">
           <option value="" selected>Select Test</option>
           {% for test in tests %}
-          <option value="{{ test.id }}">{{ test.name }}</option>
+          <option data-price="{{ test.price }}" value="{{ test.id }}">{{ test.name }}</option>
           {% endfor %}
         </select>
       </div>
@@ -216,6 +215,17 @@
           <input type="radio" id="labAppointment" name="appointmentType" value="Lab"> Lab
         </label>
       </div>
+
+      <select name="location" id="location" class="mt-3" required>
+        {% for location in locations %}
+        <option data-price="{{ location.amount }}" value="{{ location.id }}">
+          {{ location.name }}
+        </option>
+        {% endfor %}
+      </select>
+
+      <input type="number" hidden name="amount" id="total-amount" value="0.0">
+
   </form>
 
 
@@ -388,76 +398,82 @@ phoneField.addEventListener("input", () => {
   }
 });
 
+
 const testDropdown = document.getElementById("testname");
-const testPriceElement = document.getElementById("tprice");
+  const testPriceElement = document.getElementById("tprice");
+  const homeCollectionChargeElement = document.getElementById("hcprice");
+  const totalAmountElement = document.getElementById("totalprice");
+  const additionalTestsSelect = document.getElementById("additionalTestsSelect");
 
-// Function to update the test price based on the selected test
-function updateTestPrice() {
-  const selectedOption = testDropdown.options[testDropdown.selectedIndex];
-  const testId = selectedOption.value;
+  // Function to fetch and update the test price based on the selected test
+  function updateTestPrice() {
+    const selectedOption = testDropdown.options[testDropdown.selectedIndex];
+    const testId = selectedOption.value;
 
-  fetch(`/get_test_price/?test_id=${testId}`) // Replace with your actual URL
-    .then(response => response.json())
-    .then(data => {
-      if (data.price !== null) {
-        testPriceElement.textContent = `Rs. ${data.price}`;
-      } else {
-        testPriceElement.textContent = "Price not available";
-      }
-    })
-    .catch(error => {
-      console.error("Error fetching test price:", error);
-      testPriceElement.textContent = "Error fetching price";
-    });
-}
-
-// Add an event listener to the test dropdown to update the test price
-testDropdown.addEventListener("change", updateTestPrice);
-
-// Call the updateTestPrice function initially to set the default price
-updateTestPrice();
-
-const homeCollectionChargeElement = document.getElementById("hcprice");
-const totalAmountElement = document.getElementById("totalprice");
-
-// Function to update the test price based on the selected test
-function updateTestPrice() {
-  const selectedOption = testDropdown.options[testDropdown.selectedIndex];
-  const testId = selectedOption.value;
-
-  fetch(`/get_test_price/?test_id=${testId}`) // Replace with your actual URL
-    .then(response => response.json())
-    .then(data => {
-      if (data.price !== null) {
-        testPriceElement.textContent = `Rs. ${data.price}`;
-        calculateTotalAmount(); // Recalculate total amount
-      } else {
-        testPriceElement.textContent = "Price not available";
+    fetch(`/get_test_price/?test_id=${testId}`) // Replace with your actual URL
+      .then(response => response.json())
+      .then(data => {
+        if (data.price !== null) {
+          testPriceElement.textContent = `Rs. ${parseFloat(data.price) || 0}`;
+          calculateTotalAmount(); // Recalculate total amount
+        } else {
+          testPriceElement.textContent = "Price not available";
+          totalAmountElement.textContent = "Total Amount: N/A";
+        }
+      })
+      .catch(error => {
+        console.error("Error fetching test price:", error);
+        testPriceElement.textContent = "Error fetching price";
         totalAmountElement.textContent = "Total Amount: N/A";
-      }
-    })
-    .catch(error => {
-      console.error("Error fetching test price:", error);
-      testPriceElement.textContent = "Error fetching price";
+      });
+  }
+
+  // Function to calculate and update the total amount
+  function calculateTotalAmount() {
+    const testPrice = parseFloat(testPriceElement.textContent.replace("Rs. ", " ")) || 0;
+    const homeCollectionCharge = parseFloat(homeCollectionChargeElement.textContent.replace("Rs. ", " ")) || 0;
+    const totalAmountInput = document.getElementById("total-amount");
+
+    // Calculate the total amount including the selected additional tests
+    const additionalTestsTotalPrice = Array.from(additionalTestsSelect.selectedOptions)
+      .map(option => parseFloat(option.dataset.price) || 0)
+      .reduce((acc, price) => acc + price, 0);
+
+    const totalAmount = testPrice + homeCollectionCharge + additionalTestsTotalPrice;
+
+    if (!isNaN(totalAmount)) {
+      totalAmountElement.textContent = `Rs. ${totalAmount}`;
+      totalAmountInput.value = totalAmount;
+    } else {
       totalAmountElement.textContent = "Total Amount: N/A";
-    });
-}
+    }
+  }
 
-// Function to calculate and update the total amount
-function calculateTotalAmount() {
-  const testPrice = parseFloat(testPriceElement.textContent.replace("Rs. ", ""));
-  const homeCollectionCharge = parseFloat(homeCollectionChargeElement.textContent.replace("Rs. ", ""));
-  const totalAmount = testPrice + homeCollectionCharge;
+  // Add an event listener to the test dropdown to update the test price and total amount
+  testDropdown.addEventListener("change", updateTestPrice);
 
-  totalAmountElement.textContent = ` ${totalAmount}`;
-}
+  // Add an event listener to the additional tests dropdown to recalculate total amount on changes
+  additionalTestsSelect.addEventListener("change", calculateTotalAmount);
 
-// Add an event listener to the test dropdown to update the test price and total amount
-testDropdown.addEventListener("change", updateTestPrice);
+  // Call the updateTestPrice function initially to set the default price
+  updateTestPrice();
+  const homeAppointment = document.getElementById("homeAppointment");
+  const labAppointment = document.getElementById("labAppointment");
+  const locationSelect = document.getElementById("location");
 
-// Call the updateTestPrice function initially to set the default price
-updateTestPrice();
+  function toggleLocationSelection() {
+    if (homeAppointment.checked) {
+      locationSelect.style.display = "block";
+    } else {
+      locationSelect.style.display = "none";
+    }
+  }
 
+  // Add event listeners to the radio buttons
+  homeAppointment.addEventListener("change", toggleLocationSelection);
+  labAppointment.addEventListener("change", toggleLocationSelection);
 
+  // Call the function to set the initial state
+  toggleLocationSelection();
 </script>
 {% endblock %}
