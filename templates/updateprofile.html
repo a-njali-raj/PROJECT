@@ -115,6 +115,7 @@
                                 <label for="fullName">Full Name</label>
                                 <input type="text" class="form-control" id="first-Name" value="{{ user.first_name }}"
                                     name="first_name">
+                                <div class="error-message" id="full-name-error" style="color: red; display: none;"></div>
                             </div>
                         </div>
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
@@ -129,6 +130,7 @@
                                 <label for="phone">Phone</label>
                                 <input type="text" class="form-control" id="phone" value="{{ user.phone_number }}"
                                     name="phone">
+                                    <div class="error-message" id="phone-error" style="color: red; display: none;"></div>
                             </div>
                         </div>
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
@@ -187,5 +189,53 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.bundle.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#first-Name').on('input', function () {
+            var fullName = $(this).val();
+            var validFullName = /^[A-Za-z\s]+$/.test(fullName);
+            var errorContainer = $('#full-name-error');
 
+            if (!validFullName) {
+                // Display an error message below the input field
+                errorContainer.text('Full Name must start with letters, contain only letters and spaces, and not contain numbers.');
+                errorContainer.show();
+            } else {
+                // Clear the error message and hide the error container if the input is valid
+                errorContainer.text('');
+                errorContainer.hide();
+            }
+        });
+    });
+</script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#phone').on('input', function () {
+            var phoneNumber = $(this).val();
+            var validPhoneNumber = /^[6-9]\d{9}$/.test(phoneNumber);
+
+            if (validPhoneNumber) {
+                // Check if all digits are the same or all zeros
+                var allSameDigits = /^(.)\1+$/.test(phoneNumber);
+                var allZeros = /^0+$/.test(phoneNumber);
+
+                if (allSameDigits || allZeros) {
+                    validPhoneNumber = false;
+                }
+            }
+
+            var errorContainer = $('#phone-error');
+
+            if (!validPhoneNumber) {
+                // Display an error message below the input field
+                errorContainer.text('Invalid phone number. Please enter a valid 10-digit number starting with 6, 7, 8, or 9.');
+                errorContainer.show();
+            } else {
+                // Clear the error message and hide the error container if the input is valid
+                errorContainer.text('');
+                errorContainer.hide();
+            }
+        });
+    });
+</script>
 {% endblock %}

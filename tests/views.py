@@ -138,6 +138,10 @@ def appoinment(request):
         test = request.POST["test"]
         preffered_date = request.POST["date"]
         preffered_time = request.POST["preferred-time"]
+        time_slot_count = Appoinment.objects.filter(preffered_date=preffered_date, preffered_time=preffered_time).count()
+        if time_slot_count >= 3:
+            messages.error(request, "This time slot is already fully booked. Please choose another time.")
+            return redirect("appoinment")  # Redirect back to the appointment page
         email = request.POST["email"]
         phone = request.POST["phone"]
         address_choice = request.POST["address-choice"]

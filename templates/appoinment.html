@@ -155,6 +155,7 @@
           </select>
           <input type="number" id="age" name="age" placeholder="Age" required>
         </div>
+      </div>
 
       <input type="text" id="email" name="email" placeholder="Email" required readonly value="{{user.email}}">
       <span id="email_error" class="error-message"></span>
@@ -185,7 +186,7 @@
   <input type="text" id="new-city" name="new-city" placeholder="New City">
   <input type="text" id="new-pincode" name="new-pincode" placeholder="New Pincode">
 </div>
-
+</div>
       <!-- Additional tests checkboxes -->
 
       <label class="agreecheck">
@@ -262,11 +263,7 @@
 {% endblock %}
 {% block extra_js %}
 <script>
-  function calculateTotalAmount() {
-    // Your calculation logic for the total amount goes here
-    // You can access beneficiary names, ages, and genders using their respective IDs
-    // Update the total amount fields accordingly
-  }
+  
   function toggleAdditionalTestDropdown() {
     const additionalTestsCheckbox = document.getElementById("additionalTestsCheckbox");
     const additionalTestContainer = document.getElementById("additionalTestContainer");
@@ -460,6 +457,26 @@ const testDropdown = document.getElementById("testname");
   const homeAppointment = document.getElementById("homeAppointment");
   const labAppointment = document.getElementById("labAppointment");
   const locationSelect = document.getElementById("location");
+  function updateHomeCollectionCharge() {
+    const locationSelect = document.getElementById("location");
+    const selectedLocationOption = locationSelect.options[locationSelect.selectedIndex];
+    const homeCollectionCharge = parseFloat(selectedLocationOption.dataset.price) || 0;
+    const homeCollectionChargeElement = document.getElementById("hcprice");
+    
+    if (!isNaN(homeCollectionCharge)) {
+      homeCollectionChargeElement.textContent = ` ${homeCollectionCharge}`;
+      calculateTotalAmount(); // Recalculate total amount
+    } else {
+      homeCollectionChargeElement.textContent = "Home Collection Charge: N/A";
+      totalAmountElement.textContent = "Total Amount: N/A";
+    }
+  }
+
+  // Add an event listener to the location dropdown to update home collection charge
+  locationSelect.addEventListener("change", updateHomeCollectionCharge);
+
+  // Call the updateHomeCollectionCharge function initially to set the default home collection charge
+  updateHomeCollectionCharge();
 
   function toggleLocationSelection() {
     if (homeAppointment.checked) {
@@ -475,5 +492,23 @@ const testDropdown = document.getElementById("testname");
 
   // Call the function to set the initial state
   toggleLocationSelection();
+  const form = document.querySelector('form');
+  const submitButton = document.getElementById('frmsubbtn');
+
+  form.addEventListener('submit', function (event) {
+    // Prevent the default form submission
+    event.preventDefault();
+
+    // You can perform any additional actions here, such as form validation
+
+    // If everything is valid, you can submit the form
+    form.submit();
+  });
+
+  // Alternatively, you can also handle form submission when the "Book Now" button is clicked
+  submitButton.addEventListener('click', function (event) {
+    event.preventDefault();
+    form.submit();
+  });
 </script>
 {% endblock %}

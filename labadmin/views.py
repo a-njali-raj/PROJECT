@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from tests.models import User 
 from django.views.decorators.cache import never_cache
 from tests.models import Test
+from tests.models import Appoinment
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
 @never_cache
@@ -147,3 +148,23 @@ def delete_staff(request, user_id):
 def stafftest(request):
     tests = Test.objects.all() 
     return render(request, "stafftest.html", {'tests': tests}) # Retrieve all Test objects from the database
+@never_cache
+@login_required(login_url='login')
+def appoinmentlist(request):
+    # Query the database to get all appointments
+    appointments = Appoinment.objects.filter(payment__status=True)
+    
+    # Pass the appointments to the template
+    context = {
+        'appointments': appointments,
+    }
+    
+    return render(request, 'appoinmentlist.html', context)
+@never_cache
+@login_required(login_url='login')
+def appdetaillist(request):
+    # Query the database to get all appointments
+    
+    appointments = Appoinment.objects.all()  # Modify the queryset as needed
+
+    return render(request, 'appdetaillist.html', {'appointments': appointments})

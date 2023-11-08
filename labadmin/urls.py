@@ -16,5 +16,7 @@ urlpatterns = [
     path('addstaff.html', views.addstaff, name="addstaff"),
     path('delete_staff/<int:user_id>/', views.delete_staff, name='delete_staff'),
     path('stafftest.html', views.stafftest, name="stafftest"),
+    path('appoinmentlist.html',views.appoinmentlist,name="appoinmentlist"),
+    path('appdetaillist.html',views.appdetaillist,name="appdetaillist"),
 ]
 
