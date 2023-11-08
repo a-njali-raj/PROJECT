@@ -660,8 +660,13 @@ th.action-header {
                                 <td>{{ user.email }}</td>
                                
                                 <td>{{ user.username }}</td>
+                                
                                 <td>
-                                    <button class="btn-edit">Active</button>
+                                    {% if user.is_active %}
+                                        <button class="btn-edit">Active</button>
+                                    {% else %}
+                                        <button class="btn-delete">Inactive</button>
+                                    {% endif %}
                                 </td>
                                
                             </tr>

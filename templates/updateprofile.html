@@ -123,6 +123,7 @@
                                 <label for="eMail">Email</label>
                                 <input type="email" class="form-control" id="eMail" value="{{ user.email }}"
                                     name="email">
+                                    <div class="error-message" id="email-error" style="color: red;"></div>
                             </div>
                         </div>
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
@@ -138,6 +139,7 @@
                                 <label for="username">Username</label>
                                 <input type="text" class="form-control" id="username" value="{{ user.username }}"
                                     name="username">
+                                    <div class="error-message" id="username-error" style="color: red; display: none;"></div>
                             </div>
                         </div>
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
@@ -145,6 +147,7 @@
                                 <label for="street">Home Address</label>
                                 <input type="text" class="form-control" id="home"
                                     value="{{ user.address.street_address }}" name="street_address">
+                                    <div class="error-message" id="street-address-error" style="color: red; display: none;"></div>
                             </div>
                         </div>
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
@@ -152,6 +155,7 @@
                                 <label for="city">City</label>
                                 <input type="text" class="form-control" id="city" value="{{ user.address.city}}"
                                     name="city">
+                                    <div class="error-message" id="city-error" style="color: red; display: none;"></div>
                             </div>
                         </div>
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
@@ -159,6 +163,7 @@
                                 <label for="zip">Zip Code</label>
                                 <input type="text" class="form-control" id="zip" value="{{ user.address.pincode }}"
                                     name="pincode">
+                                <div class="error-message" id="pincode-error" style="color: red; display: none;"></div>   
                             </div>
                         </div>
                         <div class="col-12 mb-2">
@@ -193,21 +198,21 @@
     $(document).ready(function () {
         $('#first-Name').on('input', function () {
             var fullName = $(this).val();
-            var validFullName = /^[A-Za-z\s]+$/.test(fullName);
+            var validFullName = /^[A-Za-z\s]{3,}$/.test(fullName); // Allows letters and spaces, with a minimum of 3 letters
+
             var errorContainer = $('#full-name-error');
 
             if (!validFullName) {
-                // Display an error message below the input field
-                errorContainer.text('Full Name must start with letters, contain only letters and spaces, and not contain numbers.');
+                errorContainer.text('Full Name must start with letters, contain only letters and spaces, and have a minimum of 3 letters.');
                 errorContainer.show();
             } else {
-                // Clear the error message and hide the error container if the input is valid
                 errorContainer.text('');
                 errorContainer.hide();
             }
         });
     });
 </script>
+
 <script type="text/javascript">
     $(document).ready(function () {
         $('#phone').on('input', function () {
@@ -238,4 +243,144 @@
         });
     });
 </script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#home').on('input', function () {
+            var streetAddress = $(this).val();
+            var validStreetAddress = /^[A-Za-z\s]{3,}$/.test(streetAddress); // At least 3 letters
+
+            var errorContainer = $('#street-address-error');
+
+            if (!validStreetAddress) {
+                // Display an error message below the input field
+                errorContainer.text('Address must start with letters and contain at least 3 characters.');
+                errorContainer.show();
+            } else {
+                // Clear the error message and hide the error container if the input is valid
+                errorContainer.text('');
+                errorContainer.hide();
+            }
+        });
+    });
+</script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#zip').on('input', function () {
+            var pincode = $(this).val();
+            var validPincode = /^[1-9]\d{5}$/.test(pincode); // Starts with a digit (excluding 0) and has 6 digits
+
+            var errorContainer = $('#pincode-error');
+
+            if (!validPincode) {
+                // Display an error message below the input field
+                errorContainer.text('Invalid pincode. It must start with a non-zero digit and contain 6 digits.');
+                errorContainer.show();
+            } else {
+                // Clear the error message and hide the error container if the input is valid
+                errorContainer.text('');
+                errorContainer.hide();
+            }
+        });
+    });
+</script>
+<script type="text/javascript">
+    $(document).ready(function () {
+      const emailInput = $('#eMail'); // Replace with the correct input ID or class
+      const errorContainer = $('#email-error'); // Replace with the correct error message container ID or class
+  
+      emailInput.on('input', function () {
+        const email = $(this).val().trim();
+        const emailPattern = /^[a-z][a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/; // Updated pattern (no capital letters)
+  
+        if (!emailPattern.test(email)) {
+          errorContainer.text('Invalid email format');
+          errorContainer.show();
+        } else if (!/@(gmail|mca|ajce|yahoo|amaljyothi\.ac)\.[a-z.]{2,}$/i.test(email)) { // Updated domain check
+          errorContainer.text('Invalid email');
+          errorContainer.show();
+        } else {
+          const parts = email.split('@');
+          const domainParts = parts[1].split('.');
+  
+          // Check if the domain is "amaljyothi.ac.in"
+          if (domainParts.length === 3 && domainParts[1] === 'ac' && domainParts[2] === 'in') {
+            errorContainer.text('');
+            errorContainer.hide();
+          } else {
+            // Check if there is more than one dot in the domain part, except for specific domains
+            if (domainParts.length > 2 && !/^(mca\.ajce|ajce\.in|amaljyothi\.ac)$/.test(domainParts.slice(-2).join('.'))) {
+              errorContainer.text('Only one dot allowed in the domain part');
+              errorContainer.show();
+            } else if (email.length > 320) {
+              errorContainer.text('Email address is too long. Please use a shorter email address.');
+              errorContainer.show();
+            } else {
+              errorContainer.text('');
+              errorContainer.hide();
+            }
+          }
+        }
+      });
+    });
+  </script>
+  <script type="text/javascript">
+    $(document).ready(function () {
+        const usernameInput = $('#username');
+        const errorContainer = $('#username-error');
+
+        usernameInput.on('input', function () {
+            const username = $(this).val().trim();
+            const usernamePattern = /^[A-Za-z][A-Za-z0-9]*$/;
+            const currentUsername = "{{ user.username }}"; // Replace with the current user's username
+
+            if (username.length < 3) {
+                errorContainer.text('Username must contain a minimum of 3 characters.');
+                errorContainer.show();
+            } else if (!usernamePattern.test(username)) {
+                errorContainer.text('Username must start with letters and can contain digits.');
+                errorContainer.show();
+            } else if (username === currentUsername) {
+                errorContainer.text('You are already using this username.');
+                errorContainer.show();
+            } else {
+                checkUsernameAvailability(username, currentUsername);
+            }
+        });
+    });
+
+    function checkUsernameAvailability(username, currentUsername) {
+        $.get("/check_username_availability/", { username: username, currentUsername: currentUsername }, function (data) {
+            const errorContainer = $('#username-error');
+            if (data.available) {
+                errorContainer.text('');
+                errorContainer.hide();
+            } else {
+                errorContainer.text('This username is already registered.');
+                errorContainer.show();
+            }
+        });
+    }
+</script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        const cityInput = $('#city');
+        const errorContainer = $('#city-error');
+
+        cityInput.on('input', function () {
+            const city = $(this).val().trim();
+            const cityPattern = /^[A-Za-z\s]{3,}$/; // Allows letters and spaces, with a minimum of 3 letters
+
+            if (!cityPattern.test(city)) {
+                errorContainer.text('City must contain only letters and have a minimum of 3 letters.');
+                errorContainer.show();
+            } else {
+                errorContainer.text('');
+                errorContainer.hide();
+            }
+        });
+    });
+</script>
+
+
 {% endblock %}

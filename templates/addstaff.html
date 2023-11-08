@@ -473,6 +473,21 @@ th.action-header {
     font-size: 16px;
     color: #333; /* You can adjust the color as needed */
 }
+.error {
+    color: #ff0000; /* Red color for the error message */
+    font-size: 14px; /* Adjust the font size as needed */
+    margin-top: 5px; /* Add some spacing between the input field and the error message */
+    display: none; /* Initially hide the error message */
+}
+
+/* Style for a success message (e.g., availability message) */
+.success {
+    color: #008000; /* Green color for success messages */
+    font-size: 14px; /* Adjust the font size as needed */
+    margin-top: 5px; /* Add some spacing between the input field and the success message */
+    display: none; /* Initially hide the success message */
+}
+
     </style>
     </head>
     
@@ -581,14 +596,16 @@ th.action-header {
                         <div class="form-row">
                             <label for="first-name">Full Name:</label>
                             <input type="text" id="first-name" name="first-name" required autocomplete="off">
-                            <span id="full-name-error" class="error"></span>
+                            <span class="error" id="full-name-error"></span>
                         </div>
             
                         <!-- Username -->
                         <div class="form-row">
                             <label for="username">Username:</label>
                             <input type="text" id="username" name="username" required autocomplete="off">
-                            <span id="username-error" class="error"></span>
+                   
+                            <span class="error" id="username-error"></span>
+                            <span class="success" id="username-availability"></span>
                         </div>
             
                         <!-- Password -->
@@ -600,7 +617,7 @@ th.action-header {
             
                         <br><!-- Submit Button -->
                         <div class="form-row">
-                            <input type="submit" value="Add Staff">
+                            <input type="submit" value="Add Staff"id="submit-button" >
                         </div>
                     </form>
                 </div>
@@ -641,6 +658,118 @@ th.action-header {
                 searchTable(); // Call the searchTable function when the search icon is clicked
             }
         </script>
-       
+       <!-- Your existing HTML content -->
+
+<script>
+    $(document).ready(function () {
+        // Full Name validation
+        $('#first-name').on('input', function () {
+            var fullName = $(this).val();
+            var validFullName = /^[A-Za-z\s]{3,}$/.test(fullName); // Minimum 3 letters
+
+            var errorContainer = $('#full-name-error');
+
+            if (!validFullName) {
+                errorContainer.text('Full Name must start with letters, contain only letters and spaces, and have a minimum of 3 letters.');
+                errorContainer.show();
+            } else {
+                errorContainer.text('');
+                errorContainer.hide();
+            }
+        });
+
+        // Username validation
+        $('#username').on('input', function () {
+            var username = $(this).val();
+            var validUsername = /^[A-Za-z0-9]+$/.test(username); // Letters and digits allowed
+            var errorContainer = $('#username-error');
+            var availabilityContainer = $('#username-availability');
+
+            if (!validUsername || username.length < 3) {
+                errorContainer.text('Username must start with letters, contain only letters and digits, and have a minimum length of 3 characters.');
+                errorContainer.show();
+                availabilityContainer.hide();
+            } else {
+                // Send an AJAX request to check username availability
+                $.ajax({
+                    type: "GET",
+                    url: "/check_username_availability/",
+                    data: {
+                        username: username
+                    },
+                    success: function (response) {
+                        if (response.available) {
+                            errorContainer.text('');
+                            errorContainer.hide();
+                            availabilityContainer.text('Username is available.');
+                            availabilityContainer.show();
+                        } else {
+                            errorContainer.text('Username is already taken.');
+                            errorContainer.show();
+                            availabilityContainer.text('');
+                            availabilityContainer.hide();
+                        }
+                    }
+                });
+            }
+        });
+    });
+    $(document).ready(function () {
+        // Function to check if the password is valid
+        function isPasswordValid(password) {
+            return /^(?=.*[A-Z])(?=.*[!@#$%^&*])[A-Za-z0-9!@#$%^&*]{6,}$/.test(password);
+        }
+
+        // Password validation on input
+        $('#password').on('input', function () {
+            var password = $(this).val();
+            var errorContainer = $('#password-error');
+
+            if (!password) {
+                errorContainer.text('Password is required.');
+                errorContainer.show();
+            } else if (password.length < 6) {
+                errorContainer.text('Password must have at least 6 characters.');
+                errorContainer.show();
+            } else if (!isPasswordValid(password)) {
+                errorContainer.text('Password must contain at least one capital letter and one special character (!@#$%^&*).');
+                errorContainer.show();
+            } else {
+                errorContainer.text('');
+                errorContainer.hide();
+            }
+
+            updateSubmitButton(); // Update the button state
+        });
+    });
+</script>
+<script>
+    function validateForm() {
+        var firstName = document.getElementById('first-name').value;
+        var username = document.getElementById('username').value;
+        var password = document.getElementById('password').value;
+        
+        var fullNameValid = /^[A-Za-z\s]{3,}$/.test(firstName);
+        var usernameValid = /^[A-Za-z0-9]+$/.test(username) && username.length >= 3;
+        var passwordValid = /^(?=.*[A-Z])(?=.*[!@#$%^&*])[A-Za-z0-9!@#$%^&*]{6,}$/.test(password);
+
+        var addButton = document.getElementById('submit-button');
+        if (fullNameValid && usernameValid && passwordValid) {
+            addButton.disabled = false;
+        } else {
+            addButton.disabled = true;
+        }
+    }
+
+    document.addEventListener('input', function () {
+        validateForm();
+    });
+
+    // Initial state check
+    validateForm();
+</script>
+
+<!-- Your existing HTML content -->
+
     </body>
     </html>
