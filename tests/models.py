@@ -141,3 +141,9 @@ class Payment(models.Model):
     status = models.BooleanField(default=False)
     razorpay_payment_id = models.CharField(max_length=100, null=True, blank=True)
     razorpay_signature = models.CharField(max_length=200, null=True, blank=True)
+    
+class Review(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    comment = models.TextField(max_length=250)
+    rating = models.IntegerField(default=0)
+    created_at = models.DateTimeField(auto_now_add=True)

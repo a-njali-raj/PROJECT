@@ -184,13 +184,13 @@ body {
     padding: 30px 0 20px 10px;
     }
     .navcontainer {
-    height: calc(100vh - 70px);
-    width: 260px;
-    position: relative;
-    overflow-y: scroll;
-    overflow-x: hidden;
-    transition: all 0.5s ease-in-out;
-    }
+            height: calc(100vh - 70px);
+            width: 260px;
+            position: fixed; /* Set the navigation container as fixed */
+            top: 70px;
+            left: 0;
+            box-shadow: 1px 1px 10px rgba(189, 245, 234, 0.825);
+        }
     .navcontainer::-webkit-scrollbar {
     display: none;
     }
@@ -423,12 +423,14 @@ table {
     background-color: #0a6d66; /* Darken the color on hover */
 }
 .table-container {
-            max-width: 1050px;
+            max-width: 1000px;
             margin: 20px auto;
             padding: 20px;
             background-color: #fff;
             border-radius: 5px;
             box-shadow: 0 0 10px rgba(65, 117, 109, 0.1);
+            margin-left: 280px; /* Add margin to the left to accommodate the fixed navigation container */
+            overflow: auto; /* Make the table container scrollable */
         }
 
 
@@ -558,12 +560,13 @@ table {
                             <td>{{ appointment.email }}</td>
                             <td>{{ appointment.phone_number }}</td>
                             <td>
-                                {% if appointment.address %}
-                                    {{ appointment.address.street_address }}, {{ appointment.address.city }}, {{ appointment.address.pincode }}
+                                {% if appointment.location.address %}
+                                    {{ appointment.location.address }}
                                 {% else %}
                                     Address Not Available
                                 {% endif %}
                             </td>
+                            
                             <td>{{ appointment.additional_test.name }}</td>
                             <td>{{ appointment.created_at }}</td>
                             

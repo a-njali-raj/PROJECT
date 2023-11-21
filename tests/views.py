@@ -18,6 +18,7 @@ from tests.models import (
     Appoinment,
     Location,
     Payment,
+    Review,
 )
 from .razorpay import generate_order
 
@@ -25,7 +26,11 @@ User = get_user_model()
 
 @never_cache
 def index(request):
-    return render(request, "index.html")
+    reviews = Review.objects.all()
+    for review in reviews:
+        review.stars = range(review.rating)
+    return render(request, "index.html", {'reviews': reviews})
+
 
 @never_cache
 def about(request):
@@ -328,3 +333,18 @@ def verify_payment(request):
         razorpay_signature=signature,
     )
     return render(request, "payment_success.html")
+
+
+@never_cache
+@login_required()
+def Review_rate(request):
+    if request.method == 'POST':
+        comment = request.POST.get('comment')
+        rating = request.POST.get('rating')
+
+        # Create a new review
+        review = Review(user=request.user, comment=comment, rating=rating)
+        review.save()
+
+        messages.success(request, 'Review submitted successfully!')
+        return redirect('home')  # Redirect to home or another appropriate page

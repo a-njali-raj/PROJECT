@@ -1,6 +1,29 @@
 {% extends "layout/base.html" %}
 {% load static %}
+{% block extra_css %}
+<style>
+.rating {
+  cursor: pointer;
+}
 
+.rating .star {
+  display: inline-block;
+  font-size: 24px;
+  color: #ccc;
+}
+
+.rating .star.selected {
+  color: #ffcc00;
+}
+.existing-reviews {
+    margin-top: 20px;
+  }
+
+  .existing-review {
+    margin-bottom: 20px;
+  }
+</style>
+{% endblock %}
 {% block content %}
 
 <div class="page-hero bg-image overlay-dark" style="background-image: url('{% static "assets/img/bg_image_2.jpg" %}');">
@@ -63,4 +86,75 @@
     </div>
   </div> <!-- .bg-light -->
 </div> <!-- .bg-light -->
+
+<div class="container">
+  <h2 class="text-center mb-5 wow fadeInUp">Leave a Review</h2>
+<!-- Add the appoinment ID to the form -->
+<form class="review-form" method="POST" action="review/">
+  {% csrf_token %}
+  <input type="hidden" name="appoinment_id" value="{{ appoinment.id }}">
+  
+  <div class="form-group">
+    <label for="user_review">Your Review:</label>
+    <textarea class="form-control" id="comment" name="comment" rows="4" placeholder="Write your review here..."></textarea>
+  </div>
+
+  <div class="form-group">
+    <label for="user_rating">Your Rating:</label>
+    <div class="rating" id="rating" name="rating">
+      <span class="star" data-value="5">&#9733;</span>
+      <span class="star" data-value="4">&#9733;</span>
+      <span class="star" data-value="3">&#9733;</span>
+      <span class="star" data-value="2">&#9733;</span>
+      <span class="star" data-value="1">&#9733;</span>
+    </div>
+    <input type="hidden" name="rating" id="rating-value" value="">
+  </div>
+
+  <button type="submit" class="btn btn-primary">Submit Review</button>
+</form>
+
+  <!-- Display existing reviews and ratings -->
+  <div class="existing-reviews">
+    {% for review in reviews %}
+      <div class="existing-review card mb-3">
+        <div class="card-body">
+          <h5 class="card-title">{{ review.user.username }}</h5>
+          <div class="rating">
+            {% for _ in "12345"|slice:review.rating %}
+              <span class="star selected">&#9733;</span>
+            {% endfor %}
+          </div>
+          <p class="card-text">{{ review.comment }}</p>
+          <p class="card-text text-muted">Created at: {{ review.created_at|date:"F j, Y" }}</p>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}
+{% block extra_js %}
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+<script>
+  $(document).ready(function() {
+    $('.rating .star').on('click', function() {
+      const value = $(this).data('value');
+      const $hiddenInput = $('#rating-value');
+      
+      // Toggle selection for the clicked star
+      if ($(this).hasClass('selected')) {
+        // If the clicked star is already selected, deselect it
+        $(this).removeClass('selected');
+      } else {
+        // If the clicked star is not selected, select it and deselect all higher stars
+        $('.rating .star:gt(' + (value - 1) + ')').removeClass('selected');
+        $(this).addClass('selected');
+      }
+
+      // Update the hidden input with the overall rating based on the number of selected stars
+      $hiddenInput.val($('.rating .star.selected').length);
+    });
+  });
+</script>
 {% endblock %}

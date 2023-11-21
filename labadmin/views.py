@@ -6,6 +6,7 @@ from tests.models import Test
 from tests.models import Appoinment
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
+from django.core.mail import send_mail
 @never_cache
 @login_required(login_url='login')
 def staff_dashboard(request):
@@ -113,16 +114,22 @@ def addstaff(request):
         username = request.POST['username']
         password = request.POST['password']
         first_name = request.POST["first-name"]
-
+        email = request.POST['email']
         # Create the user and set is_staff to True
         user = User.objects.create_user(username=username, password=password)
         user.is_staff = True
         user.first_name = first_name
-
+        user.email=email
         user.save()
 
         # Log in the new staff member
-        
+        send_mail(
+            'Welcome to OneHealth',
+            f'Dear {first_name},\n\nYou have been added as a staff member.Your username is {username} and your password is {password}.\n\nPlease keep your credentials secure.',
+            'your_email@example.com',  # Replace with your email address
+            [email],  # Use the staff member's email address
+            fail_silently=False,
+        )
         messages.success(request, "Staff is added successfully.")
         return redirect('admin_dashboard')  # Redirect to staff_dashboard
 
@@ -152,7 +159,7 @@ def stafftest(request):
 @login_required(login_url='login')
 def appoinmentlist(request):
     # Query the database to get all appointments
-    appointments = Appoinment.objects.filter(payment__status=True)
+    appointments = Appoinment.objects.filter(payment__status=True).order_by('-created_at')
     
     # Pass the appointments to the template
     context = {
@@ -165,7 +172,7 @@ def appoinmentlist(request):
 def appdetaillist(request):
     # Query the database to get all appointments
     
-    appointments = Appoinment.objects.all()  # Modify the queryset as needed
+    appointments = Appoinment.objects.filter(payment__status=True).order_by('-created_at')
 
     return render(request, 'appdetaillist.html', {'appointments': appointments})
 
