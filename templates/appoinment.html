@@ -2,6 +2,9 @@
 {% load static %}
 
 {% block extra_css %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+     integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+     crossorigin=""/>
 <style>
   body {
     font-family: Arial, sans-serif;
@@ -111,6 +114,7 @@
   .error-message {
   color: red;
 }
+
 </style>
 {% endblock %}
 
@@ -137,6 +141,7 @@
         <input type="file" id="prescription" name="prescription" accept=".pdf, .jpg, .jpeg, .png" style="display: inline-block;" />
       </div><br>
       <p>Preferred Date: <input type="date" id="preferred-date" name="date" value="2023-09-29"></p>
+      <span id="preferred-date-error" class="error-message"></span>
       <p>Preferred Time:
         <select id="preferred-time" name="preferred-time">
         </select>
@@ -217,15 +222,25 @@
         </label>
       </div>
 
-      <select name="location" id="location" class="mt-3" required>
+      <!-- Button trigger modal -->
+      <button type="button" class="btn btn-primary btn-sm mt-3" data-toggle="modal" data-target="#mapModal"
+      id="select-location">
+        Select Location
+      </button>
+
+      <!-- <select name="location" id="location" class="mt-3" required>
         {% for location in locations %}
         <option data-price="{{ location.amount }}" value="{{ location.id }}">
           {{ location.name }}
         </option>
         {% endfor %}
-      </select>
+      </select> -->
 
       <input type="number" hidden name="amount" id="total-amount" value="0.0">
+      <input type="text" hidden name="location-address" id="location-address">
+      <input type="text" hidden name="location-distance" id="location-distance">
+      <input type="text" hidden name="location-lat" id="location-lat">
+      <input type="text" hidden name="location-lng" id="location-lng">
 
   </form>
 
@@ -260,8 +275,32 @@
 </form>
 </div>
 </div>
+
+<!-- Modal -->
+<div class="modal fade" id="mapModal" tabindex="-1" role="dialog" aria-labelledby="mapModalTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Select Location</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div id="map" style="height: 240px;"></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary btn-sm" id="confirm-location">Confirm Location</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 {% endblock %}
 {% block extra_js %}
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+     crossorigin=""></script>
 <script>
   
   function toggleAdditionalTestDropdown() {
@@ -456,24 +495,35 @@ const testDropdown = document.getElementById("testname");
   updateTestPrice();
   const homeAppointment = document.getElementById("homeAppointment");
   const labAppointment = document.getElementById("labAppointment");
-  const locationSelect = document.getElementById("location");
+  const locationSelect = document.getElementById("select-location");
+
   function updateHomeCollectionCharge() {
-    const locationSelect = document.getElementById("location");
-    const selectedLocationOption = locationSelect.options[locationSelect.selectedIndex];
-    const homeCollectionCharge = parseFloat(selectedLocationOption.dataset.price) || 0;
-    const homeCollectionChargeElement = document.getElementById("hcprice");
+    const FIXED_CHARGE = 20;
+    const PER_KM = 10;
+    let distance = window.kilometer;
+    let amount;
+
+    if (!homeAppointment.checked || !distance){
+      amount = 0;
+    }
+    else if (distance <= 1){
+      amount = FIXED_CHARGE;
+    }
+    else {
+      amount = (FIXED_CHARGE + (distance - 1) * PER_KM).toFixed(2);
+    }
     
-    if (!isNaN(homeCollectionCharge)) {
-      homeCollectionChargeElement.textContent = ` ${homeCollectionCharge}`;
+    if (!isNaN(amount)) {
+      homeCollectionChargeElement.textContent = ` ${amount}`;
       calculateTotalAmount(); // Recalculate total amount
     } else {
-      homeCollectionChargeElement.textContent = "Home Collection Charge: N/A";
-      totalAmountElement.textContent = "Total Amount: N/A";
+      homeCollectionChargeElement.textContent = " N/A";
+      totalAmountElement.textContent = " N/A";
     }
   }
 
   // Add an event listener to the location dropdown to update home collection charge
-  locationSelect.addEventListener("change", updateHomeCollectionCharge);
+  // locationSelect.addEventListener("change", updateHomeCollectionCharge);
 
   // Call the updateHomeCollectionCharge function initially to set the default home collection charge
   updateHomeCollectionCharge();
@@ -484,6 +534,7 @@ const testDropdown = document.getElementById("testname");
     } else {
       locationSelect.style.display = "none";
     }
+    updateHomeCollectionCharge();
   }
 
   // Add event listeners to the radio buttons
@@ -510,5 +561,139 @@ const testDropdown = document.getElementById("testname");
     event.preventDefault();
     form.submit();
   });
+  document.addEventListener('DOMContentLoaded', function () {
+    // Function to validate the preferred date
+    function validatePreferredDate() {
+      const preferredDateInput = document.getElementById("preferred-date");
+      const currentDate = new Date();
+      const selectedDate = new Date(preferredDateInput.value);
+
+      // Check if the selected date is today or a future date
+      if (selectedDate < currentDate) {
+        document.getElementById("preferred-date-error").textContent = "Please select a date valid date";
+        
+        return false; // Prevent form submission
+      } else {
+        document.getElementById("preferred-date-error").textContent = ""; // Clear error message
+        return true; // Allow form submission
+      }
+    }
+
+    // Add an input event listener to the "Preferred Date" input field for real-time validation
+    const preferredDateInput = document.getElementById("preferred-date");
+    preferredDateInput.addEventListener('input', validatePreferredDate);
+
+    // Add an event listener to the form to trigger the date validation on submission
+    const form = document.querySelector('form');
+    const submitButton = document.getElementById('frmsubbtn');
+
+    form.addEventListener('submit', function (event) {
+      // Prevent the default form submission
+      event.preventDefault();
+
+      // Call the date validation function
+      if (validatePreferredDate()) {
+        // If validation passes, submit the form
+        form.submit();
+      }
+    });
+
+    // Alternatively, you can also handle form submission when the "Book Now" button is clicked
+    submitButton.addEventListener('click', function (event) {
+      event.preventDefault();
+      // Call the date validation function
+      if (validatePreferredDate()) {
+        // If validation passes, submit the form
+        form.submit();
+      }
+    });
+  });
+  
+</script>
+<script>
+  var marker, map, kilometer;
+  const SOURCE = [9.0827879, 76.5650678];
+  const RADIUS = 5;
+
+  function haversineDistance(lat1, lon1, lat2, lon2) {
+    // Convert latitude and longitude from degrees to radians
+    const toRadians = (angle) => angle * (Math.PI / 180);
+    lat1 = toRadians(lat1);
+    lon1 = toRadians(lon1);
+    lat2 = toRadians(lat2);
+    lon2 = toRadians(lon2);
+
+    // Haversine formula
+    const dLat = lat2 - lat1;
+    const dLon = lon2 - lon1;
+    const a =
+        Math.sin(dLat / 2) ** 2 +
+        Math.cos(lat1) * Math.cos(lat2) * Math.sin(dLon / 2) ** 2;
+    const c = 2 * Math.asin(Math.sqrt(a));
+
+    // Radius of the Earth in kilometers (mean value)
+    const radiusOfEarth = 6371;
+
+    // Calculate the distance
+    const distance = radiusOfEarth * c;
+
+    return distance;
+  }
+
+  $('#mapModal').on('shown.bs.modal', function (e) {
+    if (!map){
+      map = L.map('map').setView([9.0827879, 76.5650678], 15);
+
+      L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '&copy; Anjali Raj'
+      }).addTo(map);
+
+      L.circle(SOURCE, {
+        color: 'blue',
+        fillColor: '#FFFFFF00',
+        // fillOpacity: 0.5,
+        radius: RADIUS * 1000,
+      }).addTo(map);
+
+      var location = navigator.geolocation.getCurrentPosition(
+        function success(pos){
+          marker = L.marker(
+            [pos.coords.latitude, pos.coords.longitude],
+            // {draggable:true}
+          ).addTo(map);
+        }
+      );
+
+      map.on('click', function onMapClick(e){
+        kilometer = haversineDistance(SOURCE[0], SOURCE[1], e.latlng.lat, e.latlng.lng);
+        if (kilometer > RADIUS){
+          alert(`Select a radius within ${RADIUS} Kilometers.`);
+          return;
+        }
+        if (marker){
+          map.removeLayer(marker);
+        }
+        marker = L.marker(e.latlng).addTo(map);
+      });
+
+      $('#confirm-location').on('click', function onConfirmation(e){
+        destination = marker.getLatLng();
+        kilometer = haversineDistance(SOURCE[0], SOURCE[1], destination.lat, destination.lng);
+        $('#mapModal').modal('hide');
+        updateHomeCollectionCharge();
+        $.get(
+          `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${destination.lat}&lon=${destination.lng}`,
+          function (data){
+            console.log(data)
+            $('#location-address').val(data.display_name);
+            $('#location-distance').val(kilometer);
+            $('#location-lat').val(data.lat);
+            $('#location-lng').val(data.lon);
+          }
+        );
+      })
+    }
+  })
 </script>
 {% endblock %}

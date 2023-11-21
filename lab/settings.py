@@ -152,3 +152,6 @@ SESSION_ENGINE = "django.contrib.sessions.backends.db"
 SESSION_COOKIE_NAME = "sessionid"
 SESSION_COOKIE_AGE = 600
 LOGIN_URL = 'login'
+
+RAZORPAY_KEY_ID = "rzp_test_YXwrVeiAI8OSFX"
+RAZORPAY_KEY_SECRET = "U8IPfzX4Q1H00RGSM6qfd4Pf"

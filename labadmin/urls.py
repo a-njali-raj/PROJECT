@@ -18,5 +18,6 @@ urlpatterns = [
     path('stafftest.html', views.stafftest, name="stafftest"),
     path('appoinmentlist.html',views.appoinmentlist,name="appoinmentlist"),
     path('appdetaillist.html',views.appdetaillist,name="appdetaillist"),
+    
 ]
 

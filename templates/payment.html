@@ -16,77 +16,36 @@
     <p><strong>Sample Collection Type:</strong> <span style="text-transform: capitalize;">{{ appoinment.appoinment_type }}</span> Collection</p>
 
     <!-- Payment Method Form -->
-    <form action="" method="POST" class="was-validated">
-        {% csrf_token %}
-        <label for="payment-method">Payment Method:</label>
-        <select id="payment-method" name="payment_method" v-model="method" required class="form-control">
-            <option value="">--Select--</option>
-            <option value="card">Credit/Debit Card</option>
-            <option value="upi">UPI</option>
-        </select>
-
-        <!-- Payment Details Fields -->
-        <div id="card-details" class="payment-details" v-if="method == 'card'">
-            <div class="row">
-                <div class="col-md-6">
-                    <label for="card-number">Card Number:</label>
-                    <input type="text" id="card-number" name="card_number" required v-model="card.number" class="form-control" minlength="16" maxlength="16">
-                    <div class="invalid-feedback" v-if="card.number.length != 16">
-                        Please enter a valid card number.
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <label for="full-name">Name on Card:</label>
-                    <input type="text" id="full-name" name="full_name" required v-model="card.full_name" class="form-control">
-                </div>
-                <div class="col-md-6">
-                    <label for="expiration-date">Expiration Date:</label>
-                    <input type="text" id="expiration-date" name="expiration_date" required v-model="card.expiration" class="form-control">
-                </div>
-                <div class="col-md-6">
-                    <label for="cvv">CVV:</label>
-                    <input type="number" id="cvv" name="cvv" required v-model="card.cvv" class="form-control">
-                </div>
-            </div>
-
-        </div>
-
-        <div id="upi-details" class="payment-details" v-else-if="method == 'upi'">
-            <label for="upi-email">UPI Id:</label>
-            <input type="text" id="upi-id" name="upi_id" required v-model="upi.id" class="form-control">
-        </div>
-
-        <!-- Submit Button -->
-        <button type="submit" class="btn btn-primary my-3" :disabled="isValid">Complete Payment</button>
-    </form>
+    <button type="submit" class="btn btn-primary my-3" @click="proceedToPayment">Proceed to Payment</button>
 </div>
 {% endblock %}
 
 {% block extra_js %}
 <!-- Add JavaScript to show/hide payment details -->
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script>
     new Vue({
         el: '#app',
         delimiters: ['[[', ']]'],
-        data: {
-            method: null,
-            card: {
-                number: "",
-                full_name: "",
-                expiration: "",
-                cvv: "",
-            },
-            upi: {
-                id: "",
-            }
-        },
-        computed: {
-            isValid() {
-                if (this.method == "card")
-                    return !(this.card.number && this.card.full_name && this.card.expiration && this.card.cvv);
-                else if (this.method == "upi")
-                    return !(this.upi.id);
-                return true;
+        methods: {
+            proceedToPayment(){
+                var options = {
+                    "key": "{{ razorpay_key_id }}", // Enter the Key ID generated from the Dashboard
+                    "amount": "{{ appoinment.amount }}", // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+                    "currency": "INR",
+                    "name": "E-Diagnostic Lab Management System", //your business name
+                    "description": "Lab Appoinment",
+                    // "image": "https://example.com/your_logo",
+                    "order_id": "{{ order.id }}", //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+                    "callback_url": "{{ callback_url }}",
+                    "prefill": { //We recommend using the prefill parameter to auto-fill customer's contact information especially their phone number
+                        "name": "{{ appoinment.patients.1.full_name }}", //your customer's name
+                        "email": "{{ appoinment.user.email }}",
+                        "contact": "{{ appoinment.user.phone_number }}" //Provide the customer's phone number for better conversion rates 
+                    },
+                };
+                var rzp1 = new Razorpay(options);
+                rzp1.open();
             }
         }
     })

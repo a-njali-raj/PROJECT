@@ -28,26 +28,26 @@
             <div class="collapse navbar-collapse" id="navbarSupport">
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item ">
-                        <a class="nav-link" href="index.html">Home</a>
+                        <a class="nav-link" href="{% url 'home' %}">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="about.html">About Us</a>
+                        <a class="nav-link" href="{% url 'about' %}">About Us</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="contact.html">Contact</a>
+                        <a class="nav-link" href="{% url 'contact' %}">Contact</a>
                     </li>
                     {% if not user.is_authenticated %}
                     <li class="nav-item">
-                        <a class="nav-link" href="services1.html">Services</a>
+                        <a class="nav-link" href="{% url 'services1' %}">Services</a>
                     </li>
                     {% endif %}
                     {% if user.is_authenticated %}
                     <li class="nav-item">
-                        <a class="nav-link" href="services.html">Services</a>
+                        <a class="nav-link" href="{% url 'services' %}">Services</a>
                     </li>
                     
                     <li class="nav-item">
-                        <a class="nav-link" href="appoinment.html">Appoinment</a>
+                        <a class="nav-link" href="{% url 'appoinment' %}">Appoinment</a>
                     </li>
                    <!-- Updated HTML -->
             <div class="dropdown">
@@ -58,8 +58,8 @@
             </div>
                 </button>
     <div class="dropdown-menu" aria-labelledby="userProfileDropdown">
-        <a class="dropdown-item" href="userprofile.html">My Profile</a>
-        <a class="dropdown-item" href="logout">Logout</a>
+        <a class="dropdown-item" href="{% url 'userprofile' %}">My Profile</a>
+        <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
     </div>
 </div>
 

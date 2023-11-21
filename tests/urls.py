@@ -28,5 +28,5 @@ urlpatterns = [
     path('userprofile.html',views.userprofile,name="userprofile"),
     path('updateprofile.html',views.updateprofile,name="updateprofile"),
     path('get_test_price/', views.get_test_price, name='get_test_price'),
-    
+    path('verify-payment/',views.verify_payment, name="verify-payment"),
 ]

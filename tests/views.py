@@ -8,7 +8,9 @@ from django.http import JsonResponse
 from django.contrib.auth.models import User
 from django.views.decorators.cache import never_cache
 from django.shortcuts import get_object_or_404
-
+from django.conf import settings
+from django.urls import reverse
+from django.views.decorators.csrf import csrf_exempt
 from tests.models import (
     Address,
     Test,
@@ -16,8 +18,8 @@ from tests.models import (
     Appoinment,
     Location,
     Payment,
-    PaymentDetail,
 )
+from .razorpay import generate_order
 
 User = get_user_model()
 
@@ -138,7 +140,7 @@ def appoinment(request):
         test = request.POST["test"]
         preffered_date = request.POST["date"]
         preffered_time = request.POST["preferred-time"]
-        time_slot_count = Appoinment.objects.filter(preffered_date=preffered_date, preffered_time=preffered_time).count()
+        time_slot_count = Appoinment.objects.filter(preffered_date=preffered_date, preffered_time=preffered_time,payment__status=True).count()
         if time_slot_count >= 3:
             messages.error(request, "This time slot is already fully booked. Please choose another time.")
             return redirect("appoinment")  # Redirect back to the appointment page
@@ -180,8 +182,13 @@ def appoinment(request):
             )
         )
 
-        if request.POST.get("location"):
-            location = Location.objects.get(pk=request.POST["location"])
+        if appoinment_type == "Home":
+            location = Location.objects.create(
+                address=request.POST.get("location-address"),
+                distance=request.POST.get("location-distance"),
+                latitude=request.POST.get("location-lat"),
+                longitude=request.POST.get("location-lng"),
+            )
 
 
         # Creating appoinment instance
@@ -216,34 +223,23 @@ def appoinment(request):
 
     return render(request, "appoinment.html", context)
 
+@never_cache
 @login_required
 def payment(request, appoinment_id):
     appoinment = get_object_or_404(Appoinment, object_id=appoinment_id)
-    if request.method == "POST":
-        data = request.POST
-        detail = None
-        if data["payment_method"] == "card":
-            detail = PaymentDetail(
-                card_number = data["card_number"],
-                card_full_name=data["full_name"],
-                card_expiration=data["expiration_date"],
-            )
-        elif data["payment_method"] == "upi":
-            detail = PaymentDetail(
-                upi_id=data["upi_id"],
-            )
-        detail.save()
-        payment = Payment.objects.create(
-            user=request.user,
-            appoinment=appoinment,
-            amount=appoinment.amount,
-            status=True,
-            detail=detail,
-        )
-        messages.success(request, 'Appoinment created successfully.')
-        return redirect("/")
+    if appoinment.payment_set.exists():
+        messages.error(request, "Payment for this appoinment is already complete.")
+        return redirect("home")
+    order = generate_order(
+        appoinment.amount,
+    )
+    appoinment.razorpay_order_id = order.get("id")
+    appoinment.save()
     context = {
-        "appoinment": appoinment
+        "appoinment": appoinment,
+        "razorpay_key_id": settings.RAZORPAY_KEY_ID,
+        "order": order,
+        "callback_url": request.build_absolute_uri(reverse('verify-payment')),
     }
     return render(request, "payment.html", context)
 
@@ -276,7 +272,7 @@ def handlelogout(request):
 def userprofile(request):
     users = User.objects.all()
     return render(request, "userprofile.html", {'users': users})
-
+@never_cache
 @login_required()
 def updateprofile(request):
     users = User.objects.all()
@@ -313,5 +309,22 @@ def get_test_price(request):
     data = {'price': test_price}
     return JsonResponse(data)
 
-
-# Appoinment.objects.filter(payment_set__status=True)
+@csrf_exempt
+def verify_payment(request):
+    data = request.POST
+    order_id = data.get("razorpay_order_id")
+    payment_id = data.get("razorpay_payment_id")
+    signature = data.get("razorpay_signature")
+    if not order_id:
+        messages.error(request, "Invalid request.")
+        return redirect("home")
+    appoinment = Appoinment.objects.get(razorpay_order_id=order_id)
+    Payment.objects.create(
+        user=appoinment.user,
+        appoinment=appoinment,
+        amount=appoinment.amount,
+        status=True,
+        razorpay_payment_id=payment_id,
+        razorpay_signature=signature,
+    )
+    return render(request, "payment_success.html")

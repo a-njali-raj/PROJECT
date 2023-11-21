@@ -168,3 +168,4 @@ def appdetaillist(request):
     appointments = Appoinment.objects.all()  # Modify the queryset as needed
 
     return render(request, 'appdetaillist.html', {'appointments': appointments})
+
