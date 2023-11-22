@@ -7,6 +7,13 @@ from tests.models import Appoinment
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
 from django.core.mail import send_mail
+from django.contrib.auth.decorators import user_passes_test
+
+#superuser accessed condition
+def is_superuser(user):
+    return user.is_superuser
+
+
 @never_cache
 @login_required(login_url='login')
 def staff_dashboard(request):
@@ -17,6 +24,7 @@ def staff_dashboard(request):
 
 @never_cache
 @login_required(login_url='login')
+@user_passes_test(is_superuser)
 def admin_dashboard(request):
     if request.user.is_superuser:
         users = User.objects.filter(is_superuser=False)
@@ -25,6 +33,7 @@ def admin_dashboard(request):
 
 @never_cache
 @login_required(login_url='login')
+@user_passes_test(is_superuser)
 def userdetails(request):
     if request.user.is_superuser:
         users = User.objects.filter(is_superuser=False, is_staff=False, is_active=True)
@@ -33,11 +42,14 @@ def userdetails(request):
    
 @never_cache
 @login_required(login_url='login')
+@user_passes_test(is_superuser)
 def admintest(request):
     tests = Test.objects.all() 
     return render(request, "admintest.html", {'tests': tests}) # Retrieve all Test objects from the database
+
 @never_cache
 @login_required(login_url='login')
+@user_passes_test(is_superuser)
 def addtest(request):
     if request.method == 'POST':
         name = request.POST.get('name')
@@ -55,8 +67,10 @@ def addtest(request):
             messages.success(request, "Test  added successfully.")
             return redirect("admintest")  # Redirect to a success page or any other page
     return render(request, "addtest.html")
+
 @never_cache
 @login_required(login_url='login')
+@user_passes_test(is_superuser)
 def delete_test(request,test_id):
     test = get_object_or_404(Test, id=test_id)
 
@@ -64,10 +78,11 @@ def delete_test(request,test_id):
     test.is_available = False
     test.save()
     messages.success(request, "test deleted successfully.")
-
     return redirect("admintest")
+
 @never_cache
 @login_required(login_url='login')
+@user_passes_test(is_superuser)
 def updatetest(request):
     # Retrieve 'test_id' from the query parameter 'test_id'
     test_id = request.GET.get('test_id')
@@ -101,14 +116,19 @@ def updatetest(request):
             'test': test,
         }
         return render(request, "updatetest.html", context)
+
 @never_cache
 @login_required(login_url='login')
+@user_passes_test(is_superuser)
 def adminstaff(request):
     staff_users = User.objects.filter(is_staff=True,is_superuser=False)
     context = {'staff_users': staff_users}
     return render(request, 'adminstaff.html', context)
+
+
 @never_cache
 @login_required(login_url='login')
+@user_passes_test(is_superuser)
 def addstaff(request):
     if request.method == 'POST':
         username = request.POST['username']
@@ -134,8 +154,10 @@ def addstaff(request):
         return redirect('admin_dashboard')  # Redirect to staff_dashboard
 
     return render(request, 'addstaff.html')
+
 @never_cache
 @login_required(login_url='login')
+@user_passes_test(is_superuser)
 def delete_staff(request, user_id):
     # Get the user object to delete
     user = get_object_or_404(User, id=user_id)
@@ -150,6 +172,7 @@ def delete_staff(request, user_id):
 
     # Redirect to a staff list page or wherever you need to go
     return redirect('admin_dashboard')  # Replace 'staff_list' with the actual URL name for your staff list page
+
 @never_cache
 @login_required(login_url='login')
 def stafftest(request):
