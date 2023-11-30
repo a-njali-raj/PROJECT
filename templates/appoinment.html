@@ -189,8 +189,11 @@
 <div id="new-address-fields" class="new-address-fields" style="display: none;">
   <!-- Fields for the new address -->
   <input type="text" id="new-home-address" name="new-home-address" placeholder="New Home Address">
+  <div class="error-message" id="new-home-address-error" style="color: red; display: none;"></div>   
   <input type="text" id="new-city" name="new-city" placeholder="New City">
+  <div class="error-message" id="new-city-error" style="color: red; display: none;"></div>   
   <input type="text" id="new-pincode" name="new-pincode" placeholder="New Pincode">
+  <div class="error-message" id="pincode-error" style="color: red; display: none;"></div>   
 </div>
 </div>
       <!-- Additional tests checkboxes -->
@@ -703,4 +706,62 @@ const testDropdown = document.getElementById("testname");
     }
   })
 </script>
+<script type="text/javascript">
+  $(document).ready(function () {
+      // Validation for New Home Address
+      $('#new-home-address').on('input', function () {
+          var newHomeAddress = $(this).val();
+          var validHomeAddress = /^[A-Za-z0-9\s]{3,}$/.test(newHomeAddress); // At least 3 alphanumeric characters
+
+          var errorContainer = $('#new-home-address-error');
+
+          if (!validHomeAddress) {
+              // Display an error message below the input field
+              errorContainer.text('Address must start with letters or numbers and contain at least 3 characters.');
+              errorContainer.show();
+          } else {
+              // Clear the error message and hide the error container if the input is valid
+              errorContainer.text('');
+              errorContainer.hide();
+          }
+      });
+
+      // Validation for New City
+      $('#new-city').on('input', function () {
+          var newCity = $(this).val();
+          var validCity = /^[A-Za-z\s]{3,}$/.test(newCity); // At least 3 letters
+
+          var errorContainer = $('#new-city-error');
+
+          if (!validCity) {
+              // Display an error message below the input field
+              errorContainer.text('City must start with letters and contain at least 3 characters.');
+              errorContainer.show();
+          } else {
+              // Clear the error message and hide the error container if the input is valid
+              errorContainer.text('');
+              errorContainer.hide();
+          }
+      });
+
+      // Validation for New Pincode
+      $('#new-pincode').on('input', function () {
+          var newPincode = $(this).val();
+          var validPincode = /^[1-9]\d{5}$/.test(newPincode); // Starts with a digit (excluding 0) and has 6 digits
+
+          var errorContainer = $('#pincode-error');
+
+          if (!validPincode) {
+              // Display an error message below the input field
+              errorContainer.text('Invalid pincode. It must start with a non-zero digit and contain 6 digits.');
+              errorContainer.show();
+          } else {
+              // Clear the error message and hide the error container if the input is valid
+              errorContainer.text('');
+              errorContainer.hide();
+          }
+      });
+  });
+</script>
+
 {% endblock %}

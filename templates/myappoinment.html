@@ -1,0 +1,24 @@
+{% extends "layout/base.html" %}
+{% load static %}
+{% block content %}
+
+<div class="container mt-4">
+  <h3><center>Appointment history</center></h3>
+  <ul class="list-group">
+    {% for appointment in user_appoinments %}
+      <li class="list-group-item">
+        <div class="d-flex justify-content-between">
+          <div>
+            <p class="mb-1"><strong>Test:</strong> {{ appointment.main_test.name }}</p>
+            <p class="mb-1"><strong> Date:</strong> {{ appointment.preffered_date }}</p>
+            <p class="mb-1"><strong> Time:</strong> {{ appointment.preffered_time }}</p>
+            <p><strong>Sample Collection Type:</strong> <span style="text-transform: capitalize;">{{ appointment.appoinment_type }}</span> Collection</p>
+          </div>
+         
+        </div>
+      </li>
+    {% endfor %}
+  </ul>
+</div>
+
+{% endblock %}

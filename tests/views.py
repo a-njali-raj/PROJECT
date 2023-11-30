@@ -352,3 +352,18 @@ def Review_rate(request):
 
         messages.success(request, 'Review submitted successfully!')
         return redirect('home')  # Redirect to home or another appropriate page
+    
+@never_cache
+@login_required()
+def myappoinment(request):
+    context = {
+        "tests": Test.objects.filter(is_available=True),
+        "locations": Location.objects.all(),
+    }
+
+    # Fetch the user's appointments
+    user_appoinments = Appoinment.objects.filter(user=request.user).order_by('-created_at')
+
+    context["user_appoinments"] = user_appoinments # Add this line
+
+    return render(request, "myappoinment.html", context)
