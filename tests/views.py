@@ -235,18 +235,22 @@ def payment(request, appoinment_id):
     if appoinment.payment_set.exists():
         messages.error(request, "Payment for this appoinment is already complete.")
         return redirect("home")
-    order = generate_order(
+    try:
+        order = generate_order(
         appoinment.amount,
-    )
-    appoinment.razorpay_order_id = order.get("id")
-    appoinment.save()
-    context = {
-        "appoinment": appoinment,
-        "razorpay_key_id": settings.RAZORPAY_KEY_ID,
-        "order": order,
-        "callback_url": request.build_absolute_uri(reverse('verify-payment')),
-    }
-    return render(request, "payment.html", context)
+        )
+        appoinment.razorpay_order_id = order.get("id")
+        appoinment.save()
+        context = {
+             "appoinment": appoinment,
+             "razorpay_key_id": settings.RAZORPAY_KEY_ID,
+             "order": order,
+             "callback_url": request.build_absolute_uri(reverse('verify-payment')),
+             }
+        return render(request, "payment.html", context)
+    except Exception as e:
+        messages.error(request, f"Error generating order: {str(e)}")
+        return redirect("appoinment", appoinment_id=appoinment_id)
 
 @never_cache
 @login_required(login_url='login')

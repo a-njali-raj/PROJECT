@@ -27,5 +27,4 @@ def generate_order(amount):
     if response.status_code == 200:
         return json.loads(response.content)
     else:
-        print(f"Error generating Razorpay order: {response.status_code}, {response.content}")
         return None

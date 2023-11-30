@@ -140,7 +140,8 @@
         <label for="prescription" style="display: inline-block; margin-right: 10px;">Upload Prescription (PDF or Image):</label>
         <input type="file" id="prescription" name="prescription" accept=".pdf, .jpg, .jpeg, .png" style="display: inline-block;" />
       </div><br>
-      <p>Preferred Date: <input type="date" id="preferred-date" name="date" value="2023-09-29"></p>
+      <p>Preferred Date: <input type="date" id="preferred-date" name="date"  max="{{ fiveDaysLater }}" min="{{ today }}" pattern="\d{2}/\d{2}/\d{4}" title="Please enter a valid date in mm/dd/yyyy format" required></p>
+
       <span id="preferred-date-error" class="error-message"></span>
       <p>Preferred Time:
         <select id="preferred-time" name="preferred-time">
@@ -562,52 +563,58 @@ const testDropdown = document.getElementById("testname");
     form.submit();
   });
   document.addEventListener('DOMContentLoaded', function () {
-    // Function to validate the preferred date
-    function validatePreferredDate() {
-      const preferredDateInput = document.getElementById("preferred-date");
-      const currentDate = new Date();
-      const selectedDate = new Date(preferredDateInput.value);
-
-      // Check if the selected date is today or a future date
-      if (selectedDate < currentDate) {
-        document.getElementById("preferred-date-error").textContent = "Please select a date valid date";
-        
-        return false; // Prevent form submission
-      } else {
-        document.getElementById("preferred-date-error").textContent = ""; // Clear error message
-        return true; // Allow form submission
-      }
-    }
-
-    // Add an input event listener to the "Preferred Date" input field for real-time validation
+  // Function to validate the preferred date
+  function validatePreferredDate() {
     const preferredDateInput = document.getElementById("preferred-date");
-    preferredDateInput.addEventListener('input', validatePreferredDate);
+    const currentDate = new Date();
+    const selectedDate = new Date(preferredDateInput.value);
 
-    // Add an event listener to the form to trigger the date validation on submission
-    const form = document.querySelector('form');
-    const submitButton = document.getElementById('frmsubbtn');
+    // Calculate the allowed date range (today to 5 days later)
+    const allowedStartDate = new Date(currentDate);
+    const allowedEndDate = new Date(currentDate);
+    allowedEndDate.setDate(currentDate.getDate() + 5);
 
-    form.addEventListener('submit', function (event) {
-      // Prevent the default form submission
-      event.preventDefault();
+    // Check if the selected date is within the allowed range
+    if (selectedDate < currentDate || selectedDate > allowedEndDate) {
+      document.getElementById("preferred-date-error").textContent = "Please select a valid date within today and the next 5 days";
+      return false; // Prevent form submission
+    } else {
+      document.getElementById("preferred-date-error").textContent = ""; // Clear error message
+      return true; // Allow form submission
+    }
+  }
 
-      // Call the date validation function
-      if (validatePreferredDate()) {
-        // If validation passes, submit the form
-        form.submit();
-      }
-    });
+  // Add an input event listener to the "Preferred Date" input field for real-time validation
+  const preferredDateInput = document.getElementById("preferred-date");
+  preferredDateInput.addEventListener('input', validatePreferredDate);
 
-    // Alternatively, you can also handle form submission when the "Book Now" button is clicked
-    submitButton.addEventListener('click', function (event) {
-      event.preventDefault();
-      // Call the date validation function
-      if (validatePreferredDate()) {
-        // If validation passes, submit the form
-        form.submit();
-      }
-    });
+  // Add an event listener to the form to trigger the date validation on submission
+  const form = document.querySelector('form');
+  const submitButton = document.getElementById('frmsubbtn');
+
+  form.addEventListener('submit', function (event) {
+    // Prevent the default form submission
+    event.preventDefault();
+
+    // Call the date validation function
+    if (validatePreferredDate()) {
+      // If validation passes, submit the form
+      form.submit();
+    }
   });
+
+  // Alternatively, you can also handle form submission when the "Book Now" button is clicked
+  submitButton.addEventListener('click', function (event) {
+    event.preventDefault();
+    // Call the date validation function
+    if (validatePreferredDate()) {
+      // If validation passes, submit the form
+      form.submit();
+    }
+  });
+});
+
+
   
 </script>
 <script>
