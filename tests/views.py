@@ -190,7 +190,7 @@ def appoinment(request):
         if appoinment_type == "Home":
             location = Location.objects.create(
                 address=request.POST.get("location-address"),
-                distance=request.POST.get("location-distance"),
+                distance=request.POST.get("location-distance") or 0,
                 latitude=request.POST.get("location-lat"),
                 longitude=request.POST.get("location-lng"),
             )

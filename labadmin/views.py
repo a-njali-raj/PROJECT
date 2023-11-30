@@ -2,13 +2,13 @@ from django.shortcuts import render, redirect, HttpResponse,get_object_or_404
 from django.contrib.auth.decorators import login_required
 from tests.models import User 
 from django.views.decorators.cache import never_cache
-from tests.models import Test
+from tests.models import Test,Review
 from tests.models import Appoinment
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
 from django.core.mail import send_mail
 from django.contrib.auth.decorators import user_passes_test
-
+from django.db.models import Avg
 #superuser accessed condition
 def is_superuser(user):
     return user.is_superuser
@@ -28,9 +28,12 @@ def staff_dashboard(request):
 def admin_dashboard(request):
     if request.user.is_superuser:
         users = User.objects.filter(is_superuser=False)
-        return render(request, "admin_dashboard.html", {"users": users})
-    return redirect("home")
+       # Get the count of reviews and average rating
+        review_count = Review.objects.count()
+        average_rating = Review.objects.aggregate(Avg('rating'))['rating__avg']
 
+        return render(request, "admin_dashboard.html", {"users": users, "review_count": review_count, "average_rating": average_rating})
+    return redirect("home")
 @never_cache
 @login_required(login_url='login')
 @user_passes_test(is_superuser)
