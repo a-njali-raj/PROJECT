@@ -432,6 +432,35 @@ table {
             margin-left: 280px; /* Add margin to the left to accommodate the fixed navigation container */
             overflow: auto; /* Make the table container scrollable */
         }
+        .details-container {
+    max-width: 800px; /* Adjust the width as needed */
+    margin: 0 auto; /* Center the container */
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(65, 117, 109, 0.1);
+}
+
+.appointment-details {
+    /* Adjust the styles for the details inside the container */
+    text-align: left;
+    font-size: 16px; /* Adjust the font size as needed */
+    line-height: 1.6; /* Adjust the line height as needed */
+    color: #333; /* Adjust the text color as needed */
+}
+
+.appointment-details h2 {
+    font-size: 24px; /* Adjust the font size of the heading as needed */
+    color: #268d81; /* Adjust the heading color as needed */
+    margin-bottom: 15px;
+    text-align: center; /* Adjust the margin as needed */
+}
+
+.appointment-details p {
+    margin-bottom: 10px; /* Adjust the margin as needed between paragraphs */
+}
+
+/* Add more styles as needed */
 
 
     </style>
@@ -446,13 +475,6 @@ table {
                 <div class="logo">OneHealth</div>
                 
                    
-            </div>
-    
-            <div class="searchbar">
-                <input type="text" id="searchInput" placeholder="Search" oninput="searchTable()">
-                <div class="searchbtn" onclick="performSearch()">
-                    <img src="{% static '/C:/Project/PROJECT/static/assets/img/search.png' %}" class="icn srchicn" alt="search-icon">
-                </div>
             </div>
     
             <div class="message">
@@ -524,59 +546,33 @@ table {
                     </div>
                 </nav>
             </div>
-            <div class="table-container">
-            <h3>Appointment List</h3><br>
-            
-            <table border="1">
-                <thead>
-                    <tr>
-                        <th>Patient Name</th>
-                        <th>Test</th>
-                        <th>Preferred Date</th>
-                        <th>Preferred Time</th>
-                        <th>Mode of Sample Collection</th>
-                        
-                        <th>Email</th>
-                        <th>Phone Number</th>
-                        <th>Address</th>
-                        <th>Additional test</th>
-                        <th>created at</th>
-                       
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for appointment in appointments %}
-                        <tr>
-                            <td>
-                                {% for patient in appointment.patients.all %}
-                                    {{ patient.full_name }}
-                                    {% if not forloop.last %}, {% endif %}
-                                {% endfor %}
-                            </td>
-                            <td>{{ appointment.main_test.name }}</td>
-                            <td>{{ appointment.preffered_date }}</td>
-                            <td>{{ appointment.preffered_time }}</td>
-                            <td>{{ appointment.appoinment_type }}</td>
-                            <td>{{ appointment.email }}</td>
-                            <td>{{ appointment.phone_number }}</td>
-                            <td>
-                                {% if appointment.location.address %}
-                                    {{ appointment.location.address }}
-                                {% else %}
-                                    Address Not Available
-                                {% endif %}
-                            </td>
-                            
-                            <td>{{ appointment.additional_test.name }}</td>
-                            <td>{{ appointment.created_at }}</td>
-                            
-                           
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-        </div>
+
+            <!-- Display appointment details in the appdetaillist.html template -->
+            <div class="details-container">
+                <div class="appointment-details">
+                    <h2>Appointment Details</h2>
+                    <p>Patient Names: {{ appointment_details.patient_names|join:", " }}</p>
+                    <p>Main Test: {{ appointment_details.main_test }}</p>
+                    <p>Preferred Date: {{ appointment_details.preferred_date }}</p>
+                    <p>Preferred Time: {{ appointment_details.preferred_time }}</p>
+                    <p>Email: {{ appointment_details.email }}</p>
+                    <p>Phone Number: {{ appointment_details.phone_number }}</p>
+                    <p>Address: {{ appointment_details.address }}</p>
+                    
+                    <p>Additional Test: {{ appointment_details.additional_test }}</p>
+                    <p>Appointment Type: {{ appointment_details.appointment_type }}</p>
+                    
+                    <p>Prescription: {% if appointment_details.prescription_file %}<a href="{{ appointment_details.prescription_file.url }}" target="_blank">View Prescription</a>{% else %}Not available{% endif %}</p>
+
+                    <p>Locatio: {{ appointment_details.location }}</p>
+                    <p>Amount: {{ appointment_details.amount }}</p>
+                  
+                    <!-- Add more fields as needed -->
+                </div>
+            </div>
+
+
+           
         <script src="{% static '/assets/js/jquery-3.5.1.min.js'%}"></script>
 
         <script src="{% static '/assets/js/bootstrap.bundle.min.js'%}"></script>
@@ -586,30 +582,6 @@ table {
         <script src="{% static '/assets/vendor/wow/wow.min.js'%}"></script>
     
         <script src="{% static '/assets/js/theme.js'%}"></script>
-        <script>
-            function searchTable() {
-                var input, filter, table, tr, td, i, txtValue;
-                input = document.getElementById("searchInput");
-                filter = input.value.toUpperCase();
-                table = document.querySelector("table"); // Replace with the actual table ID or class
-                tr = table.getElementsByTagName("tr");
-        
-                for (i = 0; i < tr.length; i++) {
-                    td = tr[i].getElementsByTagName("td")[0]; // Change index to match the column you want to search
-                    if (td) {
-                        txtValue = td.textContent || td.innerText;
-                        if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                            tr[i].style.display = "";
-                        } else {
-                            tr[i].style.display = "none";
-                        }
-                    }
-                }
-            }
-        
-            function performSearch() {
-                searchTable(); // Call the searchTable function when the search icon is clicked
-            }
-        </script>
+       
     </body>
     </html>

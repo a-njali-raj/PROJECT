@@ -2,13 +2,13 @@ from django.shortcuts import render, redirect, HttpResponse,get_object_or_404
 from django.contrib.auth.decorators import login_required
 from tests.models import User 
 from django.views.decorators.cache import never_cache
-from tests.models import Test,Review
-from tests.models import Appoinment
+from tests.models import Appoinment, Patient, Test, User, Address, Location, Payment, Review
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
 from django.core.mail import send_mail
 from django.contrib.auth.decorators import user_passes_test
 from django.db.models import Avg
+from django.http import JsonResponse
 #superuser accessed condition
 def is_superuser(user):
     return user.is_superuser
@@ -196,9 +196,27 @@ def appoinmentlist(request):
 @never_cache
 @login_required(login_url='login')
 def appdetaillist(request):
-    # Query the database to get all appointments
-    
-    appointments = Appoinment.objects.filter(payment__status=True).order_by('-created_at')
+    appointment_id = request.GET.get('appointmentId')
 
-    return render(request, 'appdetaillist.html', {'appointments': appointments})
+    # Retrieve the appointment details or return a 404 error if not found
+    appointment = get_object_or_404(Appoinment, id=appointment_id)
 
+    # Customize this part based on your model structure
+    appointment_details = {
+        'patient_names': [patient.full_name for patient in appointment.patients.all()],
+        'object_id': appointment.object_id,
+        'main_test': appointment.main_test.name if appointment.main_test else None,
+        'preferred_date': appointment.preffered_date,
+        'preferred_time': appointment.preffered_time,
+        'email': appointment.email,
+        'phone_number': appointment.phone_number,
+        'address': appointment.address.street_address if appointment.address else None,
+        'additional_test': appointment.additional_test.name if appointment.additional_test else None,
+        'appointment_type': appointment.appoinment_type,
+        'prescription_file': appointment.prescription if appointment.prescription else None,
+
+        'location': appointment.location.address if appointment.location else None,
+        'amount': appointment.amount,
+        
+    }
+    return render(request, 'appdetaillist.html', {'appointment_details': appointment_details})
