@@ -324,10 +324,15 @@ def verify_payment(request):
     order_id = data.get("razorpay_order_id")
     payment_id = data.get("razorpay_payment_id")
     signature = data.get("razorpay_signature")
+
     if not order_id:
         messages.error(request, "Invalid request.")
         return redirect("home")
-    appoinment = Appoinment.objects.get(razorpay_order_id=order_id)
+
+    # Retrieve the corresponding appointment based on the razorpay_order_id
+    appoinment = get_object_or_404(Appoinment, razorpay_order_id=order_id)
+
+    # Create Payment
     Payment.objects.create(
         user=appoinment.user,
         appoinment=appoinment,
@@ -336,7 +341,10 @@ def verify_payment(request):
         razorpay_payment_id=payment_id,
         razorpay_signature=signature,
     )
-    return render(request, "payment_success.html")
+
+    # Pass the appoinment details to the template context
+    context = {'appoinment': appoinment}
+    return render(request, "payment_success.html", context)
 
 
 @never_cache
@@ -367,3 +375,9 @@ def myappoinment(request):
     context["user_appoinments"] = user_appoinments # Add this line
 
     return render(request, "myappoinment.html", context)
+@never_cache
+@login_required()
+def payment_success(request,appoinment_id):
+    appoinment = get_object_or_404(Appoinment, id=appoinment_id)
+
+    return render(request, 'payment_successful.html', {'appoinment': appoinment})

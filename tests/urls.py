@@ -31,4 +31,5 @@ urlpatterns = [
     path('verify-payment/',views.verify_payment, name="verify-payment"),
     path('review/',views.Review_rate,name="review"),
     path('myappoinment',views.myappoinment,name="myappoinment") ,
+    path('payment_success',views.payment_success,name="payment_success") ,
 ]

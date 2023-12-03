@@ -7,6 +7,7 @@ admin.site.register(Test)
 admin.site.register(Patient)
 admin.site.register(Address)
 admin.site.register(Appoinment)
+admin.site.register(User)
 
 
 class MyUserChangeForm(UserChangeForm):
