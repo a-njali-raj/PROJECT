@@ -317,7 +317,7 @@ def get_test_price(request):
 
     data = {'price': test_price}
     return JsonResponse(data)
-
+@never_cache
 @csrf_exempt
 def verify_payment(request):
     data = request.POST
