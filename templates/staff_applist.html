@@ -136,7 +136,7 @@ body {
     display: flex;
     width: 100vw;
     position: relative;
-    top: 40px;
+    top: 70px;
     z-index: 1;
     }
     .dpicn {
@@ -184,13 +184,13 @@ body {
     padding: 30px 0 20px 10px;
     }
     .navcontainer {
-    height: calc(100vh - 70px);
-    width: 260px;
-    position: relative;
-    overflow-y: scroll;
-    overflow-x: hidden;
-    transition: all 0.5s ease-in-out;
-    }
+            height: calc(100vh - 70px);
+            width: 260px;
+            position: fixed; /* Set the navigation container as fixed */
+            top: 70px;
+            left: 0;
+            box-shadow: 1px 1px 10px rgba(189, 245, 234, 0.825);
+        }
     .navcontainer::-webkit-scrollbar {
     display: none;
     }
@@ -322,71 +322,43 @@ body {
 }
 
 table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(168, 236, 226, 0.1);
-}
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(168, 236, 226, 0.1);
+    }
 
-/* Style the table header */
-th {
-    background-color: #a5c4bd;
-    color: #fff;
-    font-weight: bold;
-    padding: 10px;
-    text-align: left;
-}
+    /* Style the table header */
+    th {
+        background-color: #a5c4bd;
+        color: #fff;
+        font-weight: bold;
+        padding: 10px;
+        text-align: left;
+    }
 
-/* Style the table rows */
-tr {
-    transition: background-color 0.3s;
-}
+    /* Style the table rows */
+    tr {
+        transition: background-color 0.3s;
+    }
 
-tr:nth-child(even) {
-    background-color: #f2f2f2;
-}
+    tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
 
-/* Style the table cells (columns) */
-th, td {
-    padding: 10px;
-    border-bottom: 1px solid #ddd;
-    text-align: left;
-}
+    /* Style the table cells (columns) */
+    th, td {
+        padding: 10px;
+        border-bottom: 1px solid #ddd;
+        text-align: left;
+    }
 
-/* Extend the Action header cell */
-th.action-header {
-    width: 100px;
-}
-
-/* Style the action buttons in the table */
-.btn-edit, .btn-delete {
-    padding: 5px 9px;
-    margin-right: 5px;
-    border: none;
-    border-radius: 3px;
-    cursor: pointer;
-    font-size: 12px;
-    color: #fff;
-    transition: background-color 0.3s;
-}
-
-.btn-edit {
-    background-color: #76c676;
-}
-
-.btn-delete {
-    background-color: #f44336;
-}
-
-.btn-edit:hover {
-    background-color: #5aaf5a;
-}
-
-.btn-delete:hover {
-    background-color: #d63737;
-}
+    /* Extend the Action header cell */
+    th.action-header {
+        width: 100px;
+    }
 .dropdown .btn-secondary {
     background-color: #09ae96;
     color: #fff;
@@ -426,75 +398,54 @@ th.action-header {
 
 .dropdown-item:hover {
     background-color: #042f2d; /* Change background color on hover */
-    color: #fff; /* Change text color on hover */
+    color: #fff; 
+    .button-link {
+    display: inline-block;
+    padding: 10px 10px;
+    background-color: rgb(4, 48, 48);
+    color: white;
+    text-decoration: none;
+    border: none;
+    border-radius: 6px;
 }
-.delete-button {
-            color: red;
-            cursor: pointer;
-        }
-        .delete-button:hover {
-            text-decoration: underline;
-        }
-        form {
-            display: flex;
-            flex-direction: column;
-        }
-        input[type="text"] {
-            padding: 10px;
-            margin-bottom: 10px;
-            border: 1px solid #ccc;
-            border-radius: 3px;
-            font-size: 16px;
-        }
-        input[type="submit"] {
-            background-color: #007BFF;
-            color: #fff;
-            border: none;
-            border-radius: 3px;
-            padding: 10px 20px;
-            cursor: pointer;
-            font-size: 18px;
-            transition: background-color 0.3s;
-        }
-        input[type="submit"]:hover {
-            background-color: #0056b3;
-        }
-        .availability-checkbox {
-    display: flex;
-    align-items: center;
-    margin-top: 10px;
+}
+.button-link {
+    display: inline-block;
+    padding: 10px 10px;
+    background-color: rgb(9, 131, 133);
+    color: white;
+    text-decoration: none;
+    border: none;
+    border-radius: 6px;
 }
 
-.availability-checkbox input[type="checkbox"] {
-    margin-right: 10px; /* Add some spacing between the checkbox and label */
+.button-link:hover {
+    background-color: #0a6d66; /* Darken the color on hover */
 }
+.table-container {
+            max-width: 1000px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(65, 117, 109, 0.1);
+            margin-left: 280px; /* Add margin to the left to accommodate the fixed navigation container */
+            overflow: auto; /* Make the table container scrollable */
+        }
 
-.availability-checkbox label {
-    font-size: 16px;
-    color: #333; /* You can adjust the color as needed */
-}
-.error {
-    color: #ff0000; /* Red color for the error message */
-    font-size: 14px; /* Adjust the font size as needed */
-    margin-top: 5px; /* Add some spacing between the input field and the error message */
-    display: none; /* Initially hide the error message */
-}
-
-/* Style for a success message (e.g., availability message) */
-.success {
-    color: #008000; /* Green color for success messages */
-    font-size: 14px; /* Adjust the font size as needed */
-    margin-top: 5px; /* Add some spacing between the input field and the success message */
-    display: none; /* Initially hide the success message */
-}
 
     </style>
     </head>
+    
     <body>
+    
         <!-- for header part -->
         <header>
+    
             <div class="logosec">
-                <div class="logo">OneHealth</div>  
+                <div class="logo">OneHealth</div>
+                
+                   
             </div>
     
             <div class="searchbar">
@@ -518,10 +469,10 @@ th.action-header {
                     </div>
                         </button>
             <div class="dropdown-menu" aria-labelledby="userProfileDropdown">
-              
+                <a class="dropdown-item" href="userprofile.html">My Profile</a>
                 <a class="dropdown-item" href="logout">Logout</a>
             </div>
-            </div>
+        </div>
             </div>
     
         </header>
@@ -530,22 +481,13 @@ th.action-header {
             <div class="navcontainer">
                 <nav class="nav">
                     <div class="nav-upper-options">
-                        <a href="admin-dashboard">
+                        <a href="staff-dashboard">
                             <div class="nav-option option1">
                                 
                                 <h3 style="font-size: 17px;"> Dashboard</h3>
                             </div>
                             </a>
-                        <a href="userdetails.html">
-                        <div class="option2 nav-option">
-                            <img src=
-    "https://media.geeksforgeeks.org/wp-content/uploads/20221210183322/9.png"
-                                class="nav-img"
-                                alt="articles">
-                            <h3 style="font-size: 17px;"> Registered Users</h3>
-                        </div>
-                        </a>
-                        <a href="appoinmentlist.html">
+                        
                         <div class="nav-option option3">
                             <img src=
     "https://media.geeksforgeeks.org/wp-content/uploads/20221210183320/5.png"
@@ -553,8 +495,7 @@ th.action-header {
                                 alt="report">
                             <h3 style="font-size: 17px;"> Appointments</h3>
                         </div>
-                        </a>
-                        <a href="admintest.html">
+                        <a href="stafftest.html">
                         <div class="nav-option option3">
                             <img src=
     "https://media.geeksforgeeks.org/wp-content/uploads/20221210183320/5.png"
@@ -563,67 +504,53 @@ th.action-header {
                             <h3 style="font-size: 17px;"> Test</h3>
                         </div>
                     </a>
-                    <a href="adminstaff.html">
-                        <div class="nav-option option4">
-                            <img src=
-    "https://media.geeksforgeeks.org/wp-content/uploads/20221210183321/6.png"
-                                class="nav-img"
-                                alt="institution">
-                            <h3 style="font-size: 17px;"> Staffs</h3>
-                        </div>
-                    </a>
-    
                     </div>
                 </nav>
             </div>
-        <div class="main">
-            <!-- Your existing content here -->
-
-            <!-- Add this form within the "main" div -->
+            <div class="table-container">
+            <h3>Appointment List</h3>
             <div class="report-container">
-                <div class="report-header">
-                    <h3>Add New Staff</h3>
-                </div>
-                <div class="report-body">
-                    <form method="post" >
-                        {% csrf_token %}
-                        <!-- Full Name -->
-                        <div class="form-row">
-                            <label for="first-name">Full Name:</label>
-                            <input type="text" id="first-name" name="first-name" required autocomplete="off">
-                            <span class="error" id="full-name-error"></span>
-                        </div>
-            
-                        <!-- Username -->
-                        <div class="form-row">
-                            <label for="username">Username:</label>
-                            <input type="text" id="username" name="username" required autocomplete="off">
-                   
-                            <span class="error" id="username-error"></span>
-                            <span class="success" id="username-availability"></span>
-                        </div>
-                        <div class="form-row">
-                            <label for="email">Email:</label>
-                            <input type="email" id="email" name="email" required autocomplete="off">
-                            <span class="error" id="email-error"></span>
-                        </div>
-            <br>
-                        <!-- Password -->
-                        <div class="form-row">
-                            <label for="password">Password:</label>
-                            <input type="password" id="password" name="password" required autocomplete="off">
-                            <span id="password-error" class="error"></span>
-                        </div>
-            
-                        <br><!-- Submit Button -->
-                        <div class="form-row">
-                            <input type="submit" value="Add Staff"id="submit-button" >
-                        </div>
-                    </form>
-                </div>
-            </div>  
-            
-       
+                
+            <table border="1">
+                <thead>
+                    <tr>
+                        <th>Patient Name</th>
+                        <th>Test</th>
+                        <th>Preferred Date</th>
+                        <th>Preferred Time</th>
+                        <th>Mode of Sample Collection</th>
+                        <th>Appoinment status</th> <!-- New column -->
+                        <th>Edit more</th>
+                        <th>Show more</th>
+                        
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for appointment in appointments %}
+                        <tr>
+                            <td>
+                                {% for patient in appointment.patients.all %}
+                                    {{ patient.full_name }}
+                                    {% if not forloop.last %}, {% endif %}
+                                {% endfor %}
+                            </td>
+                            <td>{{ appointment.main_test.name }}</td>
+                            <td>{{ appointment.preffered_date }}</td>
+                            <td>{{ appointment.preffered_time }}</td>
+                            <td>{{ appointment.appoinment_type }}</td>
+                            <td>{{ appointment.confirm_sample_collection }}</td> <!-- Display the status -->
+                            <td>
+                                <button onclick="editMoreDetails('{{ appointment.id }}')"> Edit More</button>
+                            </td>
+                            <td>
+                                <button onclick="showMoreDetails('{{ appointment.id }}')">Show More</button>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        </div>
         <script src="{% static '/assets/js/jquery-3.5.1.min.js'%}"></script>
 
         <script src="{% static '/assets/js/bootstrap.bundle.min.js'%}"></script>
@@ -653,123 +580,23 @@ th.action-header {
                     }
                 }
             }
-        
+            function showMoreDetails(appointmentId) {
+        // Construct the URL for appdetaillist.html with the appointment ID as a parameter
+        var url = "appdetaillist.html?appointmentId=" + appointmentId;
+
+        // Navigate to the new URL
+        window.location.href = url;
+    }
+    function editMoreDetails(appointmentId) {
+        // Construct the URL for appdetaillist.html with the appointment ID as a parameter
+        var url = "staff_edit.html?appointmentId=" + appointmentId;
+
+        // Navigate to the new URL
+        window.location.href = url;
+    }
             function performSearch() {
                 searchTable(); // Call the searchTable function when the search icon is clicked
             }
         </script>
-       <!-- Your existing HTML content -->
-
-<script>
-    $(document).ready(function () {
-        // Full Name validation
-        $('#first-name').on('input', function () {
-            var fullName = $(this).val();
-            var validFullName = /^[A-Za-z\s]{3,}$/.test(fullName); // Minimum 3 letters
-
-            var errorContainer = $('#full-name-error');
-
-            if (!validFullName) {
-                errorContainer.text('Full Name must start with letters, contain only letters and spaces, and have a minimum of 3 letters.');
-                errorContainer.show();
-            } else {
-                errorContainer.text('');
-                errorContainer.hide();
-            }
-        });
-
-        // Username validation
-        $('#username').on('input', function () {
-            var username = $(this).val();
-            var validUsername = /^[A-Za-z0-9]+$/.test(username); // Letters and digits allowed
-            var errorContainer = $('#username-error');
-            var availabilityContainer = $('#username-availability');
-
-            if (!validUsername || username.length < 3) {
-                errorContainer.text('Username must start with letters, contain only letters and digits, and have a minimum length of 3 characters.');
-                errorContainer.show();
-                availabilityContainer.hide();
-            } else {
-                // Send an AJAX request to check username availability
-                $.ajax({
-                    type: "GET",
-                    url: "/check_username_availability/",
-                    data: {
-                        username: username
-                    },
-                    success: function (response) {
-                        if (response.available) {
-                            errorContainer.text('');
-                            errorContainer.hide();
-                            availabilityContainer.text('Username is available.');
-                            availabilityContainer.show();
-                        } else {
-                            errorContainer.text('Username is already taken.');
-                            errorContainer.show();
-                            availabilityContainer.text('');
-                            availabilityContainer.hide();
-                        }
-                    }
-                });
-            }
-        });
-    });
-    $(document).ready(function () {
-        // Function to check if the password is valid
-        function isPasswordValid(password) {
-            return /^(?=.*[A-Z])(?=.*[!@#$%^&*])[A-Za-z0-9!@#$%^&*]{6,}$/.test(password);
-        }
-
-        // Password validation on input
-        $('#password').on('input', function () {
-            var password = $(this).val();
-            var errorContainer = $('#password-error');
-
-            if (!password) {
-                errorContainer.text('Password is required.');
-                errorContainer.show();
-            } else if (password.length < 6) {
-                errorContainer.text('Password must have at least 6 characters.');
-                errorContainer.show();
-            } else if (!isPasswordValid(password)) {
-                errorContainer.text('Password must contain at least one capital letter and one special character (!@#$%^&*).');
-                errorContainer.show();
-            } else {
-                errorContainer.text('');
-                errorContainer.hide();
-            }
-
-            updateSubmitButton(); // Update the button state
-        });
-    });
-</script>
-<script>
-    function validateForm() {
-        var firstName = document.getElementById('first-name').value;
-        var username = document.getElementById('username').value;
-        var password = document.getElementById('password').value;
-        
-        var fullNameValid = /^[A-Za-z\s]{3,}$/.test(firstName);
-        var usernameValid = /^[A-Za-z0-9]+$/.test(username) && username.length >= 3;
-        var passwordValid = /^(?=.*[A-Z])(?=.*[!@#$%^&*])[A-Za-z0-9!@#$%^&*]{6,}$/.test(password);
-
-        var addButton = document.getElementById('submit-button');
-        if (fullNameValid && usernameValid && passwordValid) {
-            addButton.disabled = false;
-        } else {
-            addButton.disabled = true;
-        }
-    }
-
-    document.addEventListener('input', function () {
-        validateForm();
-    });
-
-    // Initial state check
-    validateForm();
-</script>
-
-<!-- Your existing HTML content -->
-
     </body>
     </html>

@@ -318,6 +318,7 @@ def get_test_price(request):
     data = {'price': test_price}
     return JsonResponse(data)
 @never_cache
+@login_required()
 @csrf_exempt
 def verify_payment(request):
     data = request.POST
@@ -381,3 +382,4 @@ def payment_success(request,appoinment_id):
     appoinment = get_object_or_404(Appoinment, id=appoinment_id)
 
     return render(request, 'payment_successful.html', {'appoinment': appoinment})
+

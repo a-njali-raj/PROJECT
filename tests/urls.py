@@ -32,4 +32,5 @@ urlpatterns = [
     path('review/',views.Review_rate,name="review"),
     path('myappoinment',views.myappoinment,name="myappoinment") ,
     path('payment_success',views.payment_success,name="payment_success") ,
+    
 ]

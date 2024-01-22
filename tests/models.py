@@ -147,3 +147,14 @@ class Review(models.Model):
     comment = models.TextField(max_length=250)
     rating = models.IntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
+    
+class Result(models.Model):
+    object_id = models.UUIDField(default=uuid.uuid4, unique=True)
+    appoinment = models.ForeignKey(Appoinment,on_delete=models.CASCADE,)
+    uploaded_by = models.ForeignKey(User,on_delete=models.SET_NULL,null=True,blank=True,)
+    uploaded_at = models.DateTimeField(default=timezone.now)
+    result_file = models.FileField(
+        upload_to="media/results/",
+        null=True,
+        blank=True,
+    )

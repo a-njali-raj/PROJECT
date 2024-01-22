@@ -9,6 +9,7 @@ from django.core.mail import send_mail
 from django.contrib.auth.decorators import user_passes_test
 from django.db.models import Avg
 from django.http import JsonResponse
+
 #superuser accessed condition
 def is_superuser(user):
     return user.is_superuser
@@ -34,6 +35,8 @@ def admin_dashboard(request):
 
         return render(request, "admin_dashboard.html", {"users": users, "review_count": review_count, "average_rating": average_rating})
     return redirect("home")
+
+
 @never_cache
 @login_required(login_url='login')
 @user_passes_test(is_superuser)
@@ -42,6 +45,7 @@ def userdetails(request):
         users = User.objects.filter(is_superuser=False, is_staff=False, is_active=True)
         return render(request, "userdetails.html", {"users": users})
     return redirect("home")
+
    
 @never_cache
 @login_required(login_url='login')
@@ -49,6 +53,7 @@ def userdetails(request):
 def admintest(request):
     tests = Test.objects.all() 
     return render(request, "admintest.html", {'tests': tests}) # Retrieve all Test objects from the database
+
 
 @never_cache
 @login_required(login_url='login')
@@ -71,6 +76,7 @@ def addtest(request):
             return redirect("admintest")  # Redirect to a success page or any other page
     return render(request, "addtest.html")
 
+
 @never_cache
 @login_required(login_url='login')
 @user_passes_test(is_superuser)
@@ -82,6 +88,7 @@ def delete_test(request,test_id):
     test.save()
     messages.success(request, "test deleted successfully.")
     return redirect("admintest")
+
 
 @never_cache
 @login_required(login_url='login')
@@ -120,6 +127,7 @@ def updatetest(request):
         }
         return render(request, "updatetest.html", context)
 
+
 @never_cache
 @login_required(login_url='login')
 @user_passes_test(is_superuser)
@@ -127,6 +135,7 @@ def adminstaff(request):
     staff_users = User.objects.filter(is_staff=True,is_superuser=False)
     context = {'staff_users': staff_users}
     return render(request, 'adminstaff.html', context)
+
 
 
 @never_cache
@@ -164,15 +173,12 @@ def addstaff(request):
 def delete_staff(request, user_id):
     # Get the user object to delete
     user = get_object_or_404(User, id=user_id)
-
     # Set is_staff status to 0
     user.is_staff = False
     user.is_active = False
     user.save()
-
     # You can add a confirmation message if needed
     messages.success(request, "staff is removed successfully.")
-
     # Redirect to a staff list page or wherever you need to go
     return redirect('admin_dashboard')  # Replace 'staff_list' with the actual URL name for your staff list page
 
@@ -181,6 +187,8 @@ def delete_staff(request, user_id):
 def stafftest(request):
     tests = Test.objects.all() 
     return render(request, "stafftest.html", {'tests': tests}) # Retrieve all Test objects from the database
+
+
 @never_cache
 @login_required(login_url='login')
 def appoinmentlist(request):
@@ -191,8 +199,9 @@ def appoinmentlist(request):
     context = {
         'appointments': appointments,
     }
-    
     return render(request, 'appoinmentlist.html', context)
+
+
 @never_cache
 @login_required(login_url='login')
 def appdetaillist(request):
@@ -220,3 +229,19 @@ def appdetaillist(request):
         
     }
     return render(request, 'appdetaillist.html', {'appointment_details': appointment_details})
+
+@never_cache
+@login_required(login_url='login')
+def staff_applist(request):
+    # Query the database to get all appointments
+    appointments = Appoinment.objects.filter(payment__status=True).order_by('-created_at')
+    
+    # Pass the appointments to the template
+    context = {
+        'appointments': appointments,
+    }
+    return render(request, 'staff_applist.html', context)
+
+@never_cache
+def staff_edit(request):
+    return render(request, "staff_edit.html")
