@@ -126,7 +126,14 @@ class Appoinment(models.Model):
     )
     amount = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     razorpay_order_id = models.CharField(max_length=100, null=True, blank=True)
-
+    appointment_status = models.CharField(max_length=20,default='pending')
+    report = models.ForeignKey(
+        "Report",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="appoinment_report",
+    )
 class Location(models.Model):
     address = models.TextField()
     distance = models.DecimalField(max_digits=10, decimal_places=2)
@@ -147,10 +154,10 @@ class Review(models.Model):
     comment = models.TextField(max_length=250)
     rating = models.IntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
-    
-class Result(models.Model):
+
+class Report(models.Model):
     object_id = models.UUIDField(default=uuid.uuid4, unique=True)
-    appoinment = models.ForeignKey(Appoinment,on_delete=models.CASCADE,)
+    appoinment = models.ForeignKey(Appoinment,on_delete=models.CASCADE,related_name="report_appoinments")
     uploaded_by = models.ForeignKey(User,on_delete=models.SET_NULL,null=True,blank=True,)
     uploaded_at = models.DateTimeField(default=timezone.now)
     result_file = models.FileField(
