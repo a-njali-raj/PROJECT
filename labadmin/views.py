@@ -283,8 +283,10 @@ def update_appointment(request):
                 # Create or update the report
                 report, created = Report.objects.get_or_create(appoinment=appointment)
                 report.result_file = result_file
+                report.uploaded_by = request.user
                 report.save()
-            
+               
+                appointment.report = report
             # Save changes
             appointment.save()
             messages.success(request, "Appointment updated successfully.")
