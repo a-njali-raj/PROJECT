@@ -503,44 +503,30 @@ table {
                     <!-- Existing report content here -->
     
                     <!-- Form for updating appointment details -->
-                    <form action="" method="post" enctype="multipart/form-data">
+                    <form action="{% url 'update_appointment' %}" method="post" enctype="multipart/form-data">
                         {% csrf_token %}
-    
-                        <!-- Booking Acceptance -->
+                        
+                        <!-- Appointment Status -->
                         <div class="form-group">
-                            <label for="booking-acceptance">Booking Acceptance:</label>
-                            <select class="form-control" name="booking_acceptance" id="booking-acceptance">
-                                
-                                <option value="accepted">pending</option>
-                                <option value="accepted">confirmed</option>
-                                <option value="rejected">cancelled</option>
+                            <label for="appointment_status">Appointment Status:</label>
+                            <select class="form-control" name="appointment_status" id="appointment-status">
+                                <option value="pending" {% if appointment.appointment_status == 'pending' %}selected{% endif %}>Pending</option>
+                                <option value="accepted" {% if appointment.appointment_status == 'accepted' %}selected{% endif %}>Accepted</option>
+                                <option value="cancelled" {% if appointment.appointment_status == 'cancelled' %}selected{% endif %}>Cancelled</option>
+                                <option value="sample collected" {% if appointment.appointment_status == 'sample collected' %}selected{% endif %}>Sample Collected</option>
+                                <option value="completed" {% if appointment.appointment_status == 'completed' %}selected{% endif %}>Completed</option>
                             </select>
                         </div>
-    
-                        <!-- Sample Collection -->
-                        <div class="form-group">
-                            <label for="sample-collection">Sample Collection:</label>
-                            <select class="form-control" name="sample_collection" id="sample-collection">
-                                <option value="" selected disabled></option>
-                                <option value="collected">Collected</option>
-                                <option value="not_collected">Not Collected</option>
-                            </select>
-                        </div>
-    
+                        
                         <!-- File Upload for Result -->
                         <div class="form-group">
-                            <label for="result-upload">Result Upload:</label>
+                            <label for="result_upload">Result Upload:</label>
                             <input type="file" class="form-control-file" name="result_upload" id="result-upload">
                         </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="appointment_status" id="appointment-status" value="completed" {% if appointment.appointment_status == 'completed' %}checked{% endif %}>
-                            <label class="form-check-label" for="appointment-status">
-                                Appointment Status (Completed)
-                            </label>
-                        </div>
+                        
                         <!-- Hidden field for appointment ID -->
-                        <input type="hidden" name="appointment_id" value="{{ appointment.id }}">
-    
+                        <input type="hidden" name="appoinment_id" value="{{ appointment.id }}">
+                
                         <!-- Submit Button -->
                         <br>
                         <button type="submit" class="btn btn-primary">Update Appointment</button>

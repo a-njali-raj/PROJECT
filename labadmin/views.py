@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, HttpResponse,get_object_or_404
 from django.contrib.auth.decorators import login_required
 from tests.models import User 
 from django.views.decorators.cache import never_cache
-from tests.models import Appoinment, Patient, Test, User, Address, Location, Payment, Review
+from tests.models import Appoinment, Patient, Test, User, Address, Location, Payment, Review,Report
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
 from django.core.mail import send_mail
@@ -244,4 +244,56 @@ def staff_applist(request):
 
 @never_cache
 def staff_edit(request):
-    return render(request, "staff_edit.html")
+    appointment_id = request.GET.get("appointmentId")
+    appointment = get_object_or_404(Appoinment, id=appointment_id)
+
+    if request.method == "POST":
+        # Assuming you have an 'update_appointment' function to handle the form submission
+        update_appointment(request)
+
+        # Add a success message
+        messages.success(request, "Appointment updated successfully.")
+
+        # Redirect back to the staff_edit page with the updated information
+        return redirect('staff_edit', appointmentId=appointment_id)
+
+    context = {
+        "appointment": appointment,
+    }
+
+    return render(request, "staff_edit.html", context)
+
+def update_appointment(request):
+    if request.method == "POST":
+        appoinment_id = request.POST.get("appoinment_id")
+        appointment_status = request.POST.get("appointment_status")
+        result_file = request.FILES.get("result_upload")  # Corrected spelling
+        print(f"Appointment ID: {appoinment_id}")
+        print(f"Appointment Status: {appointment_status}")
+        print(f"Result File: {result_file}")
+        try:
+            # Get the appointment instance
+            appointment = Appoinment.objects.get(id=appoinment_id)
+
+            # Update appointment status
+            appointment.appointment_status = appointment_status
+
+            # Update report if a file is uploaded
+            if result_file:
+                # Create or update the report
+                report, created = Report.objects.get_or_create(appoinment=appointment)
+                report.result_file = result_file
+                report.save()
+            
+            # Save changes
+            appointment.save()
+            messages.success(request, "Appointment updated successfully.")
+        except Appoinment.DoesNotExist:
+            messages.error(request, "Appointment not found.")
+        except Exception as e:
+            messages.error(request, f"Error updating appointment: {str(e)}")
+
+        return redirect("staff_applist")  # Replace with the actual URL you want to redirect to
+
+    # Handle the case when the request method is not POST
+    return HttpResponse("Invalid request method")

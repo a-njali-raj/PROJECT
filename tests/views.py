@@ -19,6 +19,7 @@ from tests.models import (
     Location,
     Payment,
     Review,
+    Report,
 )
 from .razorpay import generate_order
 
@@ -209,6 +210,7 @@ def appoinment(request):
             location=location,
             amount=amount,
             user=request.user,
+            
         )
 
         # Setting patients to appoinment instance
@@ -219,7 +221,7 @@ def appoinment(request):
             print(request.FILES)
             file = request.FILES["prescription"]
             _appoinment.prescription = file
-        
+
         _appoinment.save()
 
         # messages.success(request, "Appoinment created successfully.")

@@ -2,7 +2,7 @@
 from django.contrib import admin
 from django.urls import path
 from .import views
-
+from .views import update_appointment
 
 urlpatterns = [
     path('staff-dashboard',views.staff_dashboard, name="staff_dashboard"),
@@ -20,6 +20,6 @@ urlpatterns = [
     path('appdetaillist.html',views.appdetaillist,name="appdetaillist"),
     path('staff_applist.html',views.staff_applist,name="staff_applist"),
     path('staff_edit.html',views.staff_edit,name="staff_edit"),
-    
+    path('update_appointment/', update_appointment, name='update_appointment'),
 ]
 
