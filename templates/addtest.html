@@ -494,12 +494,6 @@ th.action-header {
                 </div>
             </div>
     
-            <div class="message">
-                <div class="circle"></div>
-                <img src=
-    "https://media.geeksforgeeks.org/wp-content/uploads/20221210183322/8.png"
-                    class="icn"
-                    alt="">
                    <div class="dropdown">
                         <button class="btn btn-secondary dropdown-toggle" type="button" id="userProfileDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <div class="user-profile">
@@ -562,7 +556,17 @@ th.action-header {
                             <h3 style="font-size: 17px;"> Staffs</h3>
                         </div>
                     </a>
-    
+                    {% if user.is_superuser %}
+                        <a href="adminproduct.html">
+                        <div class="nav-option option3">
+                            <img src=
+    "https://media.geeksforgeeks.org/wp-content/uploads/20221210183320/5.png"
+                                class="nav-img"
+                                alt="report">
+                            <h3 style="font-size: 17px;"> Products</h3>
+                        </div>
+                        </a>
+                        {% endif %}
                     </div>
                 </nav>
             </div>

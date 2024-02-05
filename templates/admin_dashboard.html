@@ -469,13 +469,13 @@ th.action-header {
 }
 
 .dropdown-item:hover {
-    background-color: #042f2d; /* Change background color on hover */
+    background-color: #214644; /* Change background color on hover */
     color: #fff; /* Change text color on hover */
 }
 .button-link {
     display: inline-block;
     padding: 10px 10px;
-    background-color: rgb(4, 48, 48);
+    background-color: rgb(32, 77, 77);
     color: white;
     text-decoration: none;
     border: none;
@@ -520,13 +520,9 @@ th.action-header {
             <div class="button-row">
                 <b><a href="{% url 'addtest' %}" id="addTestLink"class="button-link">Add a Test</a></b>
                 <b><a href="{% url 'addstaff' %}"id="addStaffLink" class="button-link">Add Staff</a></b>
+                <b><a href="{% url 'addproduct' %}"id="addproductLink" class="button-link">Add product</a></b>
             </div>
-            <div class="message">
-                <div class="circle"></div>
-                <img src=
-    "https://media.geeksforgeeks.org/wp-content/uploads/20221210183322/8.png"
-                    class="icn"
-                    alt="">
+            
                    <div class="dropdown">
                         <button class="btn btn-secondary dropdown-toggle" type="button" id="userProfileDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <div class="user-profile">
@@ -595,6 +591,17 @@ th.action-header {
                             <h3 style="font-size: 17px;"> Staffs</h3>
                         </div>
                     </a>
+                    {% if user.is_superuser %}
+                        <a href="adminproduct.html">
+                        <div class="nav-option option3">
+                            <img src=
+    "https://media.geeksforgeeks.org/wp-content/uploads/20221210183320/5.png"
+                                class="nav-img"
+                                alt="report">
+                            <h3 style="font-size: 17px;"> Products</h3>
+                        </div>
+                        </a>
+                        {% endif %}
     
 
     

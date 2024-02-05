@@ -21,5 +21,7 @@ urlpatterns = [
     path('staff_applist.html',views.staff_applist,name="staff_applist"),
     path('staff_edit.html',views.staff_edit,name="staff_edit"),
     path('update_appointment/', update_appointment, name='update_appointment'),
+    path('addproduct.html', views.addproduct, name="addproduct"),
+    path('adminproduct.html', views.adminproduct, name="adminproduct"),
 ]
 

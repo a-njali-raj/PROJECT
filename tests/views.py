@@ -20,6 +20,7 @@ from tests.models import (
     Payment,
     Review,
     Report,
+    Product
 )
 from .razorpay import generate_order
 
@@ -387,3 +388,15 @@ def payment_success(request,appoinment_id):
 
     return render(request, 'payment_successful.html', {'appoinment': appoinment})
 
+
+@never_cache
+def product(request):
+    # Fetch all products from the database
+    products = Product.objects.all()
+
+    # Pass the products to the template context
+    context = {
+        'products': products,
+    }
+
+    return render(request, "product.html", context)

@@ -644,21 +644,33 @@ th.action-header {
       
         <script>
             function searchTable() {
-                var input, filter, table, tr, td, i, txtValue;
+                var input, filter, table, tr, td, i, j, txtValue;
                 input = document.getElementById("searchInput");
                 filter = input.value.toUpperCase();
                 table = document.querySelector("table"); // Replace with the actual table ID or class
                 tr = table.getElementsByTagName("tr");
         
                 for (i = 0; i < tr.length; i++) {
-                    td = tr[i].getElementsByTagName("td")[0]; // Change index to match the column you want to search
-                    if (td) {
-                        txtValue = td.textContent || td.innerText;
-                        if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                            tr[i].style.display = "";
-                        } else {
-                            tr[i].style.display = "none";
+                    // Skip the first row (heading row)
+                    if (i === 0) {
+                        continue;
+                    }
+        
+                    var found = false;
+                    for (j = 0; j < tr[i].cells.length; j++) {
+                        td = tr[i].cells[j];
+                        if (td) {
+                            txtValue = td.textContent || td.innerText;
+                            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                                found = true;
+                                break;  // Break the inner loop if a match is found in any column
+                            }
                         }
+                    }
+                    if (found) {
+                        tr[i].style.display = "";
+                    } else {
+                        tr[i].style.display = "none";
                     }
                 }
             }

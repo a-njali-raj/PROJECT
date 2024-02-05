@@ -165,3 +165,13 @@ class Report(models.Model):
         null=True,
         blank=True,
     )
+
+class Product(models.Model):
+    product_name = models.CharField(max_length=50)
+    product_price = models.DecimalField(max_digits=10, decimal_places=2)
+    brand = models.CharField(max_length=100)
+    is_available = models.BooleanField(default=True)
+    product_image = models.ImageField(upload_to='product_images/',null=True,blank=True)
+    discount = models.DecimalField(max_digits=5, decimal_places=2)
+    product_sale_price = models.DecimalField(max_digits=10, decimal_places=2)
+    stock = models.IntegerField(default=0)

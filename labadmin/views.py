@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, HttpResponse,get_object_or_404
 from django.contrib.auth.decorators import login_required
 from tests.models import User 
 from django.views.decorators.cache import never_cache
-from tests.models import Appoinment, Patient, Test, User, Address, Location, Payment, Review,Report
+from tests.models import Appoinment, Patient, Test, User, Address, Location, Payment, Review,Report,Product
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
 from django.core.mail import send_mail
@@ -10,6 +10,7 @@ from django.contrib.auth.decorators import user_passes_test
 from django.db.models import Avg
 from django.http import JsonResponse
 from django.db.models import Q
+from decimal import Decimal
 
 #superuser accessed condition
 def is_superuser(user):
@@ -308,3 +309,56 @@ def update_appointment(request):
 
     # Handle the case when the request method is not POST
     return HttpResponse("Invalid request method")
+
+
+@never_cache
+def addproduct(request):
+    if request.method == 'POST':
+        product_name = request.POST['product_name']
+        product_price = Decimal(request.POST['product_price'])
+        brand = request.POST['brand']
+        is_available = request.POST.get('is_available')  # Get the checkbox value
+
+        # If the checkbox is not checked, set is_available to False
+        if is_available is None:
+            is_available = False
+        else:
+            is_available = True
+
+        product_image = request.FILES['product_image'] if 'product_image' in request.FILES else None
+        discount = Decimal(request.POST['discount'])
+        
+        # Ensure product_sale_price is a Decimal for precise calculations
+        product_sale_price = product_price - (product_price * (discount / 100))
+
+        stock = int(request.POST['stock'])
+
+        # Save the product to the database
+        product = Product(
+            product_name=product_name,
+            product_price=product_price,
+            brand=brand,
+            is_available=is_available,
+            product_image=product_image,
+            discount=discount,
+            product_sale_price=product_sale_price,
+            stock=stock
+        )
+        product.save()
+
+        messages.success(request, 'Health product added successfully.')
+        return redirect('adminproduct.html')  # Adjust the URL as needed
+
+    return render(request, "addproduct.html")
+
+@never_cache
+def adminproduct(request):
+    # Fetch all products from the database
+    products = Product.objects.all()
+
+    # Pass the products to the template context
+    context = {
+        'products': products,
+    }
+
+    return render(request, "adminproduct.html", context)
