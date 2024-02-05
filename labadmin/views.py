@@ -9,6 +9,7 @@ from django.core.mail import send_mail
 from django.contrib.auth.decorators import user_passes_test
 from django.db.models import Avg
 from django.http import JsonResponse
+from django.db.models import Q
 
 #superuser accessed condition
 def is_superuser(user):
@@ -18,9 +19,17 @@ def is_superuser(user):
 @never_cache
 @login_required(login_url='login')
 def staff_dashboard(request):
+    context = {}  # Create an empty context
+
     if request.user.is_staff and not request.user.is_superuser:
-        
-        return render(request, "staff_dashboard.html")
+        # Fetch recent appointments edited by the logged staff
+        recent_appointments = Appoinment.objects.filter(
+            Q(user=request.user) | Q(report__uploaded_by=request.user)
+        ).order_by('-updated_at')[:5]  # Adjust the number of appointments as needed
+
+        context["recent_appointments"] = recent_appointments
+
+        return render(request, "staff_dashboard.html", context)
     return redirect("home")
 
 @never_cache

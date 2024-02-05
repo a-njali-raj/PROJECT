@@ -585,14 +585,52 @@ th.action-header {
                     </div>
                 </nav>
             </div>
-           
             <div class="main">
-                <div class="welcome-message">
-                    <h2>WELCOME!!!!!</h2>
-                    <p>Check your appoinments</p>
-                </div>
-                <!-- ... Your existing content ... -->
+            <div class="recent-appointments">
+                <h3>Recent Appointments</h3>
+                <table class="appointment-table">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Time</th>
+                            <th>Patient</th>
+                            <th>Test Name</th>
+                            <th>Result Uploaded</th>
+                            <th>Mode of Sample Collection</th>
+                            <th>Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for appointment in recent_appointments %}
+                            <tr>
+                                <td>{{ appointment.preffered_date }}</td>
+                                <td>{{ appointment.preffered_time }}</td>
+                                <td>{{ appointment.patients.first.full_name }}</td>
+                                <td>
+                                    {% if appointment.main_test %}
+                                        {{ appointment.main_test.name }}
+                                    {% else %}
+                                        No Test Name
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if appointment.report %}
+                                        Yes
+                                    {% else %}
+                                        No
+                                    {% endif %}
+                                </td>
+                                <td>{{ appointment.appoinment_type }}</td>
+                                <td>{{ appointment.amount }}</td>
+                                <!-- Add more details as needed -->
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
             </div>
+        
+            </div>
+        </div>
                 
         <script src="{% static '/assets/js/jquery-3.5.1.min.js'%}"></script>
 

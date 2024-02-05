@@ -372,12 +372,14 @@ def myappoinment(request):
         "locations": Location.objects.all(),
     }
 
-    # Fetch the user's appointments
-    user_appoinments = Appoinment.objects.filter(user=request.user).order_by('-created_at')
+    # Fetch the user's appointments with a report
+    user_appointments = Appoinment.objects.filter(user=request.user, report__isnull=False).order_by('-created_at')
 
-    context["user_appoinments"] = user_appoinments # Add this line
+    context["user_appointments"] = user_appointments
 
     return render(request, "myappoinment.html", context)
+
+
 @never_cache
 @login_required()
 def payment_success(request,appoinment_id):

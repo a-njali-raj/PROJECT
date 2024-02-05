@@ -5,16 +5,24 @@
 <div class="container mt-4">
   <h3><center>Appointment history</center></h3>
   <ul class="list-group">
-    {% for appointment in user_appoinments %}
+    {% for appointment in user_appointments %}
       <li class="list-group-item">
         <div class="d-flex justify-content-between">
           <div>
             <p class="mb-1"><strong>Test:</strong> {{ appointment.main_test.name }}</p>
-            <p class="mb-1"><strong> Date:</strong> {{ appointment.preffered_date }}</p>
-            <p class="mb-1"><strong> Time:</strong> {{ appointment.preffered_time }}</p>
+            <p class="mb-1"><strong>Date:</strong> {{ appointment.preffered_date }}</p>
+            <p class="mb-1"><strong>Time:</strong> {{ appointment.preffered_time }}</p>
             <p><strong>Sample Collection Type:</strong> <span style="text-transform: capitalize;">{{ appointment.appoinment_type }}</span> Collection</p>
           </div>
-         
+          <div>
+            <p><strong>Staff Uploaded:</strong> {{ appointment.report.uploaded_by.username|default:"N/A" }}</p>
+            <p><strong>Amount:</strong> {{ appointment.amount }}</p>
+            {% if appointment.report.result_file %}
+              <a href="{{ appointment.report.result_file.url }}" target="_blank">View Result</a>
+            {% else %}
+              <p>No Result File</p>
+            {% endif %}
+          </div>
         </div>
       </li>
     {% endfor %}
