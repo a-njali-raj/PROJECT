@@ -538,7 +538,7 @@ th.action-header {
                 <nav class="nav">
                     <div class="nav-upper-options">
                         {% if user.is_superuser %}
-                        <a href="admin-dashboard">
+                        <a href="{% url 'admin_dashboard' %}">
                         <div class="nav-option option1">
                             
                             <h3 style="font-size: 17px;"> Dashboard</h3>
@@ -546,7 +546,7 @@ th.action-header {
                         </a>
                         {% endif %}
                         {% if user.is_superuser %}
-                    <a href="userdetails.html">
+                    <a href="{% url 'userdetails' %}">
                         <div class="option2 nav-option">
                             <img src=
     "https://media.geeksforgeeks.org/wp-content/uploads/20221210183322/9.png"
@@ -556,7 +556,7 @@ th.action-header {
                         </div>
                     </a>
                     {% endif %}
-                    <a href="appoinmentlist.html">
+                    <a href="{% url 'appoinmentlist' %}">
                         <div class="nav-option option3">
                             <img src=
     "https://media.geeksforgeeks.org/wp-content/uploads/20221210183320/5.png"
@@ -566,7 +566,7 @@ th.action-header {
                         </div>
                     </a>
                     {% if user.is_superuser %}
-                        <a href="admintest.html">
+                        <a href="{% url 'admintest' %}">
                         <div class="nav-option option3">
                             <img src=
     "https://media.geeksforgeeks.org/wp-content/uploads/20221210183320/5.png"
@@ -576,7 +576,7 @@ th.action-header {
                         </div>
                         </a>
                         {% endif %}
-                        <a href="adminstaff.html">
+                        <a href="{% url 'adminstaff' %}">
                         <div class="nav-option option4">
                             <img src=
     "https://media.geeksforgeeks.org/wp-content/uploads/20221210183321/6.png"
@@ -586,7 +586,7 @@ th.action-header {
                         </div>
                     </a>
                     {% if user.is_superuser %}
-                        <a href="adminproduct.html">
+                        <a href="{% url 'adminproduct' %}">
                         <div class="nav-option option3">
                             <img src=
     "https://media.geeksforgeeks.org/wp-content/uploads/20221210183320/5.png"
@@ -600,59 +600,37 @@ th.action-header {
                     </div>
                 </nav>
             </div>
-            <div class="main">
-                <div class="report-container">
-                    <div class="report-header">
-                        <div class="button-row">
-                            <b><a href="{% url 'addproduct' %}" class="button-link">Add a Product</a></b>
-                            
-                        </div>
-                    </div>
-                    <div class="report-body">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Product Name</th>
-                                    <th>Product Price</th>
-                                    <th>Brand</th>
-                                    <th>Is Available</th>
-                                    <th>Product Image</th>
-                                    <th>Discount</th>
-                                    <th>Sale Price</th>
-                                    <th>Stock</th>
-                                    <!-- Add other fields as needed -->
-                                    <th class="action-header">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for product in products %}
-                                    <tr>
-                                        <td>{{ product.product_name }}</td>
-                                        <td>{{ product.product_price }}</td>
-                                        <td>{{ product.brand }}</td>
-                                        <td>{{ product.is_available }}</td>
-                                        <td>
-                                            {% if product.product_image %}
-                                                <img src="{{ product.product_image.url }}" alt="Product Image" style="max-width: 100px; max-height: 100px;">
-                                            {% else %}
-                                                No Image
-                                            {% endif %}
-                                        </td>
-                                        <td>{{ product.discount }}</td>
-                                        <td>{{ product.product_sale_price }}</td>
-                                        <td>{{ product.stock }}</td>
-                                        <!-- Add other fields as needed -->
-                                        <td class="action-header">
-                                            <a href="{% url 'edit_product' product.id %}" class="btn-edit">Edit</a>
-                                        </td>
-                                        
-                                    </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
+            <form method="POST">
+                {% csrf_token %}
+                <label for="product_name">Product Name:</label>
+                <input type="text" id="product_name" name="product_name" value="{{ product.product_name }}"><br><br>
+                
+                <label for="product_price">Product Price:</label>
+                <input type="text" id="product_price" name="product_price" value="{{ product.product_price }}"><br><br>
+                
+                <label for="brand">Brand:</label>
+                <input type="text" id="brand" name="brand" value="{{ product.brand }}"><br><br>
+                
+                <label for="is_available">Is Available:</label>
+                <input type="checkbox" id="is_available" name="is_available" {% if product.is_available %} checked {% endif %}><br><br>
+                
+                <label for="product_image">Product Image:</label>
+                <input type="file" id="product_image" name="product_image"><br><br>
+                
+                <label for="discount">Discount:</label>
+                <input type="text" id="discount" name="discount" value="{{ product.discount }}"><br><br>
+                
+                <label for="product_sale_price">Sale Price:</label>
+                <input type="text" id="product_sale_price" name="product_sale_price" value="{{ product.product_sale_price }}"><br><br>
+                
+                <label for="stock">Stock:</label>
+                <input type="text" id="stock" name="stock" value="{{ product.stock }}"><br><br>
+                
+                <!-- Add other input fields for additional product attributes -->
+        
+                <button type="submit">Save Changes</button>
+            </form>
+            
             <script src="{% static '/assets/js/jquery-3.5.1.min.js'%}"></script>
 
         <script src="{% static '/assets/js/bootstrap.bundle.min.js'%}"></script>
@@ -663,31 +641,7 @@ th.action-header {
     
         <script src="{% static '/assets/js/theme.js'%}"></script>
       
-        <script>
-            function searchTable() {
-                var input, filter, table, tr, td, i, txtValue;
-                input = document.getElementById("searchInput");
-                filter = input.value.toUpperCase();
-                table = document.querySelector("table"); // Replace with the actual table ID or class
-                tr = table.getElementsByTagName("tr");
-        
-                for (i = 0; i < tr.length; i++) {
-                    td = tr[i].getElementsByTagName("td")[0]; // Change index to match the column you want to search
-                    if (td) {
-                        txtValue = td.textContent || td.innerText;
-                        if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                            tr[i].style.display = "";
-                        } else {
-                            tr[i].style.display = "none";
-                        }
-                    }
-                }
-            }
-        
-            function performSearch() {
-                searchTable(); // Call the searchTable function when the search icon is clicked
-            }
-        </script>
+       
         
         
     </body>

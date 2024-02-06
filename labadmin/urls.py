@@ -3,6 +3,7 @@ from django.contrib import admin
 from django.urls import path
 from .import views
 from .views import update_appointment
+from .views import edit_product
 
 urlpatterns = [
     path('staff-dashboard',views.staff_dashboard, name="staff_dashboard"),
@@ -23,5 +24,7 @@ urlpatterns = [
     path('update_appointment/', update_appointment, name='update_appointment'),
     path('addproduct.html', views.addproduct, name="addproduct"),
     path('adminproduct.html', views.adminproduct, name="adminproduct"),
+    path('edit_product/<int:product_id>/', edit_product, name='edit_product')
+
 ]
 

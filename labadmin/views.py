@@ -362,3 +362,33 @@ def adminproduct(request):
     }
 
     return render(request, "adminproduct.html", context)
+
+def edit_product(request, product_id):
+    product = get_object_or_404(Product, id=product_id)
+    
+    if request.method == 'POST':
+        product_name = request.POST.get('product_name')
+        product_price = request.POST.get('product_price')
+        brand = request.POST.get('brand')
+        is_available = request.POST.get('is_available')
+        product_image = request.FILES.get('product_image') if 'product_image' in request.FILES else None
+        discount = request.POST.get('discount')
+        product_sale_price = request.POST.get('product_sale_price')
+        stock = request.POST.get('stock')
+        
+        # Update the product attributes
+        product.product_name = product_name
+        product.product_price = product_price
+        product.brand = brand
+        product.is_available = True if is_available == 'on' else False
+        if product_image:
+            product.product_image = product_image
+        product.discount = discount
+        product.product_sale_price = product_sale_price
+        product.stock = stock
+        
+        product.save()
+        
+        return redirect('adminproduct')  # Redirect to the product list page after saving changes
+    
+    return render(request, 'updateproduct.html', {'product': product})
