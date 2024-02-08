@@ -495,6 +495,30 @@ th.action-header {
             transform: translateX(-50%);
             padding: 30px 0;
         }
+        .action-header {
+    white-space: nowrap; /* Prevent line break */
+}
+
+.btn-edit, .btn-delete {
+    display: inline-block;
+    padding: 8px 12px;
+    margin-right: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    text-decoration: none;
+}
+
+.btn-delete {
+    background-color: #ff6666; /* Red background color */
+    color: white; /* White text color */
+}
+
+.btn-delete:hover {
+    background-color: #ff4d4d; /* Darker red on hover */
+}
+
+/* Add any other styling as needed */
+
     </style>
     </head>
     
@@ -644,6 +668,7 @@ th.action-header {
                                         <!-- Add other fields as needed -->
                                         <td class="action-header">
                                             <a href="{% url 'edit_product' product.id %}" class="btn-edit">Edit</a>
+                                            <a href="{% url 'delete_product' product.id %}" class="btn-delete">Delete</a>
                                         </td>
                                         
                                     </tr>

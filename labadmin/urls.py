@@ -24,7 +24,8 @@ urlpatterns = [
     path('update_appointment/', update_appointment, name='update_appointment'),
     path('addproduct.html', views.addproduct, name="addproduct"),
     path('adminproduct.html', views.adminproduct, name="adminproduct"),
-    path('edit_product/<int:product_id>/', edit_product, name='edit_product')
+    path('edit_product/<int:product_id>/', edit_product, name='edit_product'),
+    path('delete/<int:product_id>/', views.delete_product, name='delete_product'),
 
 ]
 

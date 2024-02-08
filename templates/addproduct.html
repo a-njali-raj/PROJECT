@@ -659,13 +659,15 @@ th.action-header {
                     {% csrf_token %}
                     <label for="product_name">Product Name:</label>
                     <input type="text" id="product_name" name="product_name" required>
-        
+                    <span class="error-message" id="productNameError"></span>
+
                     <label for="product_price">Product Price:</label>
                     <input type="number" id="product_price" name="product_price" step="0.01" min="1" required>
         
                     <label for="brand">Brand:</label>
                     <input type="text" id="brand" name="brand" required>
-        
+                    <span class="error-message" id="brandError"></span>
+
                     <label for="is_available">Is Available:</label>
                     <input type="checkbox" id="is_available" name="is_available" checked>
         
@@ -758,5 +760,193 @@ th.action-header {
                 }
             });
         </script>
+
+        <script>
+    function validateForm() {
+        return validateProductName() && validateBrand() && validateDiscount() && validateStock() && validatePrice();
+    }
+
+    function validateProductName() {
+        var productName = document.getElementById("product_name").value.trim();
+        var productNameError = document.getElementById("productNameError");
+        if (!/^[A-Za-z]{3,}$/.test(productName)) {
+            productNameError.textContent = "Product name must start with alphabets, have a minimum of 3 alphabets, and contain no numbers.";
+            return false;
+        } else {
+            productNameError.textContent = "";
+            return true;
+        }
+    }
+
+    function validateBrand() {
+        var brand = document.getElementById("brand").value.trim();
+        var brandError = document.getElementById("brandError");
+        if (!/^[A-Za-z]{3,}$/.test(brand)) {
+            brandError.textContent = "Brand must start with alphabets, have a minimum of 3 alphabets, and contain no numbers.";
+            return false;
+        } else {
+            brandError.textContent = "";
+            return true;
+        }
+    }
+
+    function validateDiscount() {
+        var discount = parseFloat(document.getElementById("discount").value);
+        var discountError = document.getElementById("discountError");
+        if (isNaN(discount) || discount < 0 || discount > 100) {
+            discountError.textContent = "Discount should be a number between 0 and 100.";
+            return false;
+        } else {
+            discountError.textContent = "";
+            return true;
+        }
+    }
+
+    function validateStock() {
+        var stock = parseInt(document.getElementById("stock").value);
+        var stockError = document.getElementById("stockError");
+        if (isNaN(stock) || stock < 1) {
+            stockError.textContent = "Stock should be a non-negative integer greater than 0.";
+            return false;
+        } else {
+            stockError.textContent = "";
+            return true;
+        }
+    }
+
+    function validatePrice() {
+        var price = parseFloat(document.getElementById("product_price").value);
+        var salePrice = parseFloat(document.getElementById("product_sale_price").value);
+        var priceError = document.getElementById("priceError");
+        if (isNaN(price) || price < 0) {
+            priceError.textContent = "Price should be a non-negative number.";
+            return false;
+        } else if (salePrice < 0) {
+            priceError.textContent = "Sale price should be a non-negative number.";
+            return false;
+        } else {
+            priceError.textContent = "";
+            return true;
+        }
+    }
+
+    // Update sale price based on product price and discount
+    document.getElementById("discount").addEventListener("input", function () {
+        var productPrice = parseFloat(document.getElementById("product_price").value);
+        var discountPercentage = parseFloat(this.value);
+        var productSalePrice = productPrice - (productPrice * (discountPercentage / 100));
+        document.getElementById("product_sale_price").value = productSalePrice.toFixed(2);
+        validateDiscount(); // Validate discount after each input change
+    });
+
+    // Validate stock input
+    document.getElementById("stock").addEventListener("input", function () {
+        validateStock(); // Validate stock after each input change
+    });
+</script>
+<script>
+    // Function to validate the form
+    function validateForm() {
+        return validateProductName() && validateBrand() && validateDiscount() && validateStock() && validatePrice();
+    }
+
+    // Function to validate the product name
+    function validateProductName() {
+        var productName = document.getElementById("product_name").value.trim();
+        var productNameError = document.getElementById("productNameError");
+        
+        if (!/^[A-Za-z][A-Za-z\s]{2,}$/.test(productName)) {
+            productNameError.textContent = "Product name must start with an alphabet, have a minimum of 3 characters, and contain no numbers.";
+            return false;
+        } else {
+            productNameError.textContent = "";
+            return true;
+        }
+    }
+
+    // Function to validate the brand
+    function validateBrand() {
+        var brand = document.getElementById("brand").value.trim();
+        var brandError = document.getElementById("brandError");
+        
+        if (!/^[A-Za-z][A-Za-z\s]{2,}$/.test(brand)) {
+            brandError.textContent = "Brand must start with an alphabet, have a minimum of 3 characters, and contain no numbers.";
+            return false;
+        } else {
+            brandError.textContent = "";
+            return true;
+        }
+    }
+
+    // Function to validate the discount
+    function validateDiscount() {
+        var discount = parseFloat(document.getElementById("discount").value);
+        var discountError = document.getElementById("discountError");
+        
+        if (isNaN(discount) || discount < 0 || discount > 100) {
+            discountError.textContent = "Discount should be a number between 0 and 100.";
+            return false;
+        } else {
+            discountError.textContent = "";
+            return true;
+        }
+    }
+
+    // Function to validate the stock
+    function validateStock() {
+        var stock = parseInt(document.getElementById("stock").value);
+        var stockError = document.getElementById("stockError");
+        
+        if (isNaN(stock) || stock < 1) {
+            stockError.textContent = "Stock should be a non-negative integer greater than 0.";
+            return false;
+        } else {
+            stockError.textContent = "";
+            return true;
+        }
+    }
+
+    // Function to validate the price
+    function validatePrice() {
+        var price = parseFloat(document.getElementById("product_price").value);
+        var salePrice = parseFloat(document.getElementById("product_sale_price").value);
+        var priceError = document.getElementById("priceError");
+        
+        if (isNaN(price) || price < 0) {
+            priceError.textContent = "Price should be a non-negative number.";
+            return false;
+        } else if (salePrice < 0) {
+            priceError.textContent = "Sale price should be a non-negative number.";
+            return false;
+        } else {
+            priceError.textContent = "";
+            return true;
+        }
+    }
+
+    // Update sale price based on product price and discount
+    document.getElementById("discount").addEventListener("input", function () {
+        var productPrice = parseFloat(document.getElementById("product_price").value);
+        var discountPercentage = parseFloat(this.value);
+        var productSalePrice = productPrice - (productPrice * (discountPercentage / 100));
+        document.getElementById("product_sale_price").value = productSalePrice.toFixed(2);
+        validateDiscount(); // Validate discount after each input change
+    });
+
+    // Validate stock input
+    document.getElementById("stock").addEventListener("input", function () {
+        validateStock(); // Validate stock after each input change
+    });
+
+    // Validate product name on keyup event
+    document.getElementById("product_name").addEventListener("keyup", function () {
+        validateProductName();
+    });
+
+    // Validate brand on keyup event
+    document.getElementById("brand").addEventListener("keyup", function () {
+        validateBrand();
+    });
+</script>
     </body>
     </html>

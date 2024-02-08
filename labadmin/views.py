@@ -11,7 +11,8 @@ from django.db.models import Avg
 from django.http import JsonResponse
 from django.db.models import Q
 from decimal import Decimal
-
+from django.http import HttpResponseRedirect
+from django.urls import reverse
 #superuser accessed condition
 def is_superuser(user):
     return user.is_superuser
@@ -298,6 +299,7 @@ def update_appointment(request):
                
                 appointment.report = report
             # Save changes
+                
             appointment.save()
             messages.success(request, "Appointment updated successfully.")
         except Appoinment.DoesNotExist:
@@ -309,7 +311,6 @@ def update_appointment(request):
 
     # Handle the case when the request method is not POST
     return HttpResponse("Invalid request method")
-
 
 @never_cache
 def addproduct(request):
@@ -386,9 +387,20 @@ def edit_product(request, product_id):
         product.discount = discount
         product.product_sale_price = product_sale_price
         product.stock = stock
-        
         product.save()
-        
+        messages.success(request, 'product details updated successfully.')
         return redirect('adminproduct')  # Redirect to the product list page after saving changes
     
     return render(request, 'updateproduct.html', {'product': product})
+
+def delete_product(request, product_id):
+    if request.method == 'GET':
+        try:
+            product = Product.objects.get(pk=product_id)
+            product.is_available = False
+            product.save()
+            messages.success(request, 'Product deleted successfully.')
+        except Product.DoesNotExist:
+            messages.error(request, 'Product not found.')
+        
+    return redirect('adminproduct')  # Redirect to the product list page after deletion
