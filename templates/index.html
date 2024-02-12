@@ -126,7 +126,7 @@
             {% endfor %}
           </div>
           <p class="card-text">{{ review.comment }}</p>
-          <p class="card-text text-muted">Created at: {{ review.created_at|date:"F j, Y" }}</p>
+          <p class="card-text text-muted">{{ review.created_at|date:"F j, Y" }}</p>
         </div>
       </div>
     {% endfor %}
@@ -143,18 +143,12 @@
       const $hiddenInput = $('#rating-value');
       
       // Toggle selection for the clicked star
-      if ($(this).hasClass('selected')) {
-        // If the clicked star is already selected, deselect it
-        $(this).removeClass('selected');
-      } else {
-        // If the clicked star is not selected, select it and deselect all higher stars
-        $('.rating .star:gt(' + (value - 1) + ')').removeClass('selected');
-        $(this).addClass('selected');
-      }
-
+      $(this).toggleClass('selected');
+      
       // Update the hidden input with the overall rating based on the number of selected stars
       $hiddenInput.val($('.rating .star.selected').length);
     });
   });
 </script>
+
 {% endblock %}

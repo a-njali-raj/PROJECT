@@ -639,7 +639,7 @@ th.action-header {
                                     <th>Product Name</th>
                                     <th>Product Price</th>
                                     <th>Brand</th>
-                                    <th>Is Available</th>
+                                    <th>Status</th>
                                     <th>Product Image</th>
                                     <th>Discount</th>
                                     <th>Sale Price</th>
@@ -654,7 +654,11 @@ th.action-header {
                                         <td>{{ product.product_name }}</td>
                                         <td>{{ product.product_price }}</td>
                                         <td>{{ product.brand }}</td>
-                                        <td>{{ product.is_available }}</td>
+                                        <td>
+                                            <span class="badge badge-pill badge-{% if product.is_available and product.stock >= 1 %}success{% else %}danger{% endif %}">
+                                                {% if product.is_available and product.stock >= 1 %}Available{% else %}Not Available{% endif %}
+                                            </span>
+                                        </td>
                                         <td>
                                             {% if product.product_image %}
                                                 <img src="{{ product.product_image.url }}" alt="Product Image" style="max-width: 100px; max-height: 100px;">
@@ -662,7 +666,7 @@ th.action-header {
                                                 No Image
                                             {% endif %}
                                         </td>
-                                        <td>{{ product.discount }}</td>
+                                        <td>{{ product.discount }}%</td>
                                         <td>{{ product.product_sale_price }}</td>
                                         <td>{{ product.stock }}</td>
                                         <!-- Add other fields as needed -->

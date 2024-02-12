@@ -1,0 +1,37 @@
+{% extends "layout/base.html" %}
+
+{% block content %}
+<div class="container my-5">
+  <div class="row">
+      <div class="col-lg-4">
+          <!-- Adjust image size by adding styles directly -->
+          <img src="{{ product.product_image.url }}" class="img-fluid rounded" style="max-height: 300px;" alt="Product Image">
+      </div>
+      <div class="col-lg-8">
+          <h2>{{ product.product_name }}</h2>
+          <p class="text-muted">{{ product.brand }}</p>
+          <!-- <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p> -->
+          <p><strong>Price:</strong> ₹{{ product.product_sale_price|floatformat:"2" }}</p>
+          <p>Non-returnable</p>
+          <div class="row">
+              <div class="col-md-6">
+                  <label for="quantity">Quantity:</label>
+                  <input type="number" id="quantity" class="form-control" value="1" min="1" max="{{product.stock}}">
+              </div>
+              <div class="col-md-6">
+                  <button class="btn btn-primary btn-block" onclick="addToCart()">Add to Cart</button>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function addToCart(){
+    const quantity = document.querySelector("#quantity").value;
+    window.location.href = `{% url 'add_to_cart' %}?product_id={{ product.id }}&quantity=${quantity}`;
+}
+</script>
+{% endblock %}

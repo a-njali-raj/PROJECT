@@ -146,7 +146,7 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'anjaliraj2024a@mca.ajce.in'
-EMAIL_HOST_PASSWORD = 'Successmca@2024'
+EMAIL_HOST_PASSWORD = 'lzplmhjvybuaepfr'
 
 SESSION_ENGINE = "django.contrib.sessions.backends.db"
 SESSION_COOKIE_NAME = "sessionid"

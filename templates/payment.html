@@ -3,17 +3,20 @@
 {% block content %}
 <div class="container" id="app">
     <h1>Payment Confirmation</h1>
-
+    {% if order_type == "appoinment" %}
     <p>Thank you for booking your appointment! Please choose your method of payment and enter the required details:</p>
 
     <!-- Display appointment details here -->
-    <p><strong>Test:</strong> {{ appoinment.main_test.name }}</p>
-    <p><strong>Preferred Date:</strong> {{ appoinment.preffered_date }}</p>
-    <p><strong>Preferred Time:</strong> {{ appoinment.preffered_time }}</p>
-    <p><strong>Full Name:</strong> {{ appoinment.user.first_name }}</p>
-    <p><strong>Email:</strong> {{ appoinment.user.email }}</p>
-    <p><strong>Phone:</strong> {{ appoinment.user.phone_number }}</p>
-    <p><strong>Sample Collection Type:</strong> <span style="text-transform: capitalize;">{{ appoinment.appoinment_type }}</span> Collection</p>
+    <p><strong>Test:</strong> {{ order.main_test.name }}</p>
+    <p><strong>Preferred Date:</strong> {{ order.preffered_date }}</p>
+    <p><strong>Preferred Time:</strong> {{ order.preffered_time }}</p>
+    <p><strong>Full Name:</strong> {{ order.user.first_name }}</p>
+    <p><strong>Email:</strong> {{ order.user.email }}</p>
+    <p><strong>Phone:</strong> {{ order.user.phone_number }}</p>
+    <p><strong>Sample Collection Type:</strong> <span style="text-transform: capitalize;">{{ order.appoinment_type }}</span> Collection</p>
+    {% else %}
+    <p><strong>Total amount:</strong> ₹{{ order.total_amount }}</p>
+    {% endif %}
 
     <!-- Payment Method Form -->
     <button type="submit" class="btn btn-primary my-3" @click="proceedToPayment">Proceed to Payment</button>
@@ -31,17 +34,17 @@
             proceedToPayment(){
                 var options = {
                     "key": "{{ razorpay_key_id }}", // Enter the Key ID generated from the Dashboard
-                    "amount": "{{ appoinment.amount }}", // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+                    "amount": "{{ raz_order.amount }}", // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
                     "currency": "INR",
                     "name": "E-Diagnostic Lab Management System", //your business name
                     "description": "Lab Appoinment",
                     // "image": "https://example.com/your_logo",
-                    "order_id": "{{ order.id }}", //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+                    "order_id": "{{ raz_order.id }}", //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
                     "callback_url": "{{ callback_url }}",
                     "prefill": { //We recommend using the prefill parameter to auto-fill customer's contact information especially their phone number
-                        "name": "{{ appoinment.patients.1.full_name }}", //your customer's name
-                        "email": "{{ appoinment.user.email }}",
-                        "contact": "{{ appoinment.user.phone_number }}" //Provide the customer's phone number for better conversion rates 
+                        "name": "{{ order.user.first_name }}", //your customer's name
+                        "email": "{{ order.user.email }}",
+                        "contact": "9846026265" //Provide the customer's phone number for better conversion rates 
                     },
                 };
                 var rzp1 = new Razorpay(options);

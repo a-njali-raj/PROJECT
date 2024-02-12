@@ -274,6 +274,7 @@ def staff_edit(request):
 
     return render(request, "staff_edit.html", context)
 
+@never_cache
 def update_appointment(request):
     if request.method == "POST":
         appoinment_id = request.POST.get("appoinment_id")
@@ -330,7 +331,7 @@ def addproduct(request):
         discount = Decimal(request.POST['discount'])
         
         # Ensure product_sale_price is a Decimal for precise calculations
-        product_sale_price = product_price - (product_price * (discount / 100))
+        # product_sale_price = product_price - (product_price * (discount / 100))
 
         stock = int(request.POST['stock'])
 
@@ -342,7 +343,6 @@ def addproduct(request):
             is_available=is_available,
             product_image=product_image,
             discount=discount,
-            product_sale_price=product_sale_price,
             stock=stock
         )
         product.save()
@@ -364,6 +364,7 @@ def adminproduct(request):
 
     return render(request, "adminproduct.html", context)
 
+@never_cache
 def edit_product(request, product_id):
     product = get_object_or_404(Product, id=product_id)
     
@@ -374,7 +375,6 @@ def edit_product(request, product_id):
         is_available = request.POST.get('is_available')
         product_image = request.FILES.get('product_image') if 'product_image' in request.FILES else None
         discount = request.POST.get('discount')
-        product_sale_price = request.POST.get('product_sale_price')
         stock = request.POST.get('stock')
         
         # Update the product attributes
@@ -385,7 +385,6 @@ def edit_product(request, product_id):
         if product_image:
             product.product_image = product_image
         product.discount = discount
-        product.product_sale_price = product_sale_price
         product.stock = stock
         product.save()
         messages.success(request, 'product details updated successfully.')
@@ -393,6 +392,7 @@ def edit_product(request, product_id):
     
     return render(request, 'updateproduct.html', {'product': product})
 
+@never_cache
 def delete_product(request, product_id):
     if request.method == 'GET':
         try:

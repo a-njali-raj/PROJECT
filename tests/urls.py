@@ -1,7 +1,7 @@
 
 from django.contrib import admin
 from django.urls import path
-from.import views
+from . import views
 from django.contrib.auth import views as auth_views
 
 
@@ -14,7 +14,7 @@ urlpatterns = [
     path('login.html',views.loginn,name="login"),
     path('signup.html',views.signup,name="signup"),
     path('appoinment.html',views.appoinment,name="appoinment"),
-    path('payment/<str:appoinment_id>/',views.payment,name="payment"),
+    path('payment/<str:order_id>/',views.payment,name="payment"),
     path('user.html',views.user,name="user"),
     path('logout/',views.logout,name="logout"),
     path('services1.html',views.services1,name="services1"),
@@ -32,6 +32,11 @@ urlpatterns = [
     path('review/',views.Review_rate,name="review"),
     path('myappoinment',views.myappoinment,name="myappoinment") ,
     path('payment_success',views.payment_success,name="payment_success") ,
-    path('product.html',views.product,name="product"),
-    
+    path('product.html',views.product_list,name="product"),
+    path('product/<int:product_id>/',views.product_detail,name="product_detail"),
+    path('add-to-cart/', views.add_to_cart, name="add_to_cart"),
+    path('checkout/', views.checkout, name="checkout"),
+    path('order/', views.order, name="order"),
+    path('cart.html', views.cart, name='cart'),
+    path('remove_from_cart/', views.remove_from_cart, name='remove_from_cart'),
 ]

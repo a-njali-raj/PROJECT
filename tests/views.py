@@ -10,6 +10,8 @@ from django.views.decorators.cache import never_cache
 from django.shortcuts import get_object_or_404
 from django.conf import settings
 from django.urls import reverse
+from datetime import datetime 
+from django.db import transaction
 from django.views.decorators.csrf import csrf_exempt
 from tests.models import (
     Address,
@@ -20,7 +22,9 @@ from tests.models import (
     Payment,
     Review,
     Report,
-    Product
+    Product,
+    CartItem,
+    Order,
 )
 from .razorpay import generate_order
 
@@ -227,33 +231,45 @@ def appoinment(request):
 
         # messages.success(request, "Appoinment created successfully.")
 
-        return redirect("payment", appoinment_id=_appoinment.object_id)
+        return redirect("payment", order_id=_appoinment.object_id)
 
     return render(request, "appoinment.html", context)
 
 @never_cache
 @login_required
-def payment(request, appoinment_id):
-    appoinment = get_object_or_404(Appoinment, object_id=appoinment_id)
-    if appoinment.payment_set.exists():
-        messages.error(request, "Payment for this appoinment is already complete.")
-        return redirect("home")
+def payment(request, order_id):
+    order = None
+    order_type = request.GET.get("order_type") or "appoinment"
+    if order_type == "ecommerce":
+        order = get_object_or_404(Order, pk=order_id)
+        if order.payment_set.exists():
+            messages.error(request, "Payment for this order is already complete.")
+            return redirect("home")
+    else:
+        order = get_object_or_404(Appoinment, object_id=order_id)
+        if order.payment_set.exists():
+            messages.error(request, "Payment for this appoinment is already complete.")
+            return redirect("home")
     try:
-        order = generate_order(
-        appoinment.amount,
+        raz_order = generate_order(
+            order.total_amount if hasattr(order, "total_amount") else order.amount
         )
-        appoinment.razorpay_order_id = order.get("id")
-        appoinment.save()
+        order.razorpay_order_id = raz_order.get("id")
+        order.save()
         context = {
-             "appoinment": appoinment,
-             "razorpay_key_id": settings.RAZORPAY_KEY_ID,
-             "order": order,
-             "callback_url": request.build_absolute_uri(reverse('verify-payment')),
-             }
+            "order": order,
+            "order_type": order_type,
+            "razorpay_key_id": settings.RAZORPAY_KEY_ID,
+            "raz_order": raz_order,
+            "callback_url": request.build_absolute_uri(reverse('verify-payment')),
+        }
         return render(request, "payment.html", context)
     except Exception as e:
         messages.error(request, f"Error generating order: {str(e)}")
-        return redirect("appoinment", appoinment_id=appoinment_id)
+        if order_type == "appoinment":
+            return redirect("appoinment", order_id=order_id)
+        else:
+            return redirect("checkout")
 
 @never_cache
 @login_required(login_url='login')
@@ -320,8 +336,8 @@ def get_test_price(request):
 
     data = {'price': test_price}
     return JsonResponse(data)
+
 @never_cache
-@login_required()
 @csrf_exempt
 def verify_payment(request):
     data = request.POST
@@ -334,20 +350,22 @@ def verify_payment(request):
         return redirect("home")
 
     # Retrieve the corresponding appointment based on the razorpay_order_id
-    appoinment = get_object_or_404(Appoinment, razorpay_order_id=order_id)
-
+    appoinment = Appoinment.objects.filter(razorpay_order_id=order_id).first()
+    order = Order.objects.filter(razorpay_order_id=order_id).first()
+    order_type = "ecommerce" if order else "appoinment"
     # Create Payment
     Payment.objects.create(
-        user=appoinment.user,
+        user=(order or appoinment).user,
         appoinment=appoinment,
-        amount=appoinment.amount,
+        order=order,
+        amount=order.total_amount if order_type == "ecommerce" else appoinment.amount,
         status=True,
         razorpay_payment_id=payment_id,
         razorpay_signature=signature,
     )
 
     # Pass the appoinment details to the template context
-    context = {'appoinment': appoinment}
+    context = {'order': appoinment or order, "order_type": order_type}
     return render(request, "payment_success.html", context)
 
 
@@ -390,13 +408,141 @@ def payment_success(request,appoinment_id):
 
 
 @never_cache
-def product(request):
-    # Fetch all products from the database
-    products = Product.objects.all()
-
+def product_list(request):
+    products = Product.objects.filter(is_available=True, stock__gt=0)
     # Pass the products to the template context
     context = {
         'products': products,
     }
 
     return render(request, "product.html", context)
+@never_cache
+def product_detail(request, product_id):
+    product = Product.objects.get(pk=product_id)
+    return render(request, "product-detail.html", {"product": product})
+
+@never_cache
+@login_required
+def add_to_cart(request):
+    product_id = request.GET.get("product_id")
+    quantity = request.GET.get("quantity")
+    if not product_id or not quantity:
+        messages.error(request, "Product ID & Quantity are mandatory.")
+        return redirect("product")
+    product = Product.objects.get(pk=product_id)
+    quantity = int(quantity)
+    cart_item = CartItem.objects.filter(product=product, order__isnull=True).first()
+    if cart_item is not None:
+        cart_item.quantity += quantity
+    else:
+        cart_item = CartItem(
+            product=product,
+            quantity=quantity,
+            user=request.user,
+        )
+    if cart_item.quantity > product.stock:
+        messages.error(request, "Cannot add more quantity than available stock.")
+        return redirect("product")
+    cart_item.save()
+    messages.success(request, f"{product.product_name} added to cart.")
+    return redirect("cart")
+
+@never_cache
+@login_required
+def cart(request):
+    cart_items = CartItem.objects.filter(
+        user=request.user,
+        order__isnull=True,
+    )
+    return render(request, "cart.html", {"cart_items": cart_items})
+
+@never_cache
+@login_required
+def checkout(request):
+    cart_items = CartItem.objects.filter(
+        user=request.user,
+        order__isnull=True,
+    )
+    total_amount = 0
+    for item in cart_items:
+        total_amount += item.total_price
+    context = {
+        "total_amount": total_amount,
+        "cart_items": cart_items,
+    }
+    return render(request, "checkout.html", context)
+
+
+@never_cache
+@login_required
+def order(request):
+    full_name = request.POST.get("full_name")
+    address = request.POST.get("address")
+    city = request.POST.get("city")
+    pincode = request.POST.get("pincode")
+    product_id = request.POST.get("product_id", None)
+    
+    # Retrieve the product
+    product = None
+    if product_id:
+        product = Product.objects.get(id=product_id)
+        # Check if the requested quantity is available
+        if product.stock < 1:
+            return HttpResponse("Product out of stock")
+
+    # Create an address
+    address = Address.objects.create(
+        full_name=full_name,
+        street_address=address,
+        city=city,
+        pincode=pincode,
+    )
+
+    # Perform the order creation inside a transaction
+    with transaction.atomic():
+        if product:
+            # Create a cart item for the product
+            cart_item = CartItem.objects.create(
+                product=product,
+                quantity=1,
+                user=request.user,
+            )
+            cart_items = [cart_item]
+            # Reduce the stock of the product by the quantity ordered
+            product.stock -= cart_item.quantity
+            product.save()
+        else:
+            # Fetch cart items for the current user
+            cart_items = CartItem.objects.filter(
+                user=request.user,
+                order__isnull=True,
+            )
+
+            # Reduce stock for each product ordered
+            for item in cart_items:
+                item.product.stock -= item.quantity
+                item.product.save()
+
+        # Calculate total amount
+        total_amount = sum(item.total_price for item in cart_items)
+
+        # Create an order
+        order = Order.objects.create(
+            user=request.user,
+            address=address,
+            total_amount=total_amount,
+        )
+
+        # Update cart items with the order
+        cart_items.update(order=order)
+
+    # Redirect to payment page
+    return redirect(f"{reverse('payment', kwargs={'order_id': order.id})}?order_type=ecommerce")
+
+def remove_from_cart(request):
+    if request.method == 'POST':
+        item_id = request.POST.get('item_id')
+        cart_item = get_object_or_404(CartItem, pk=item_id)
+        cart_item.delete()
+        messages.success(request, f"{cart_item.product.product_name} removed from cart.")
+    return redirect('cart')

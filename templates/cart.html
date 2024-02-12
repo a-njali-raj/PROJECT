@@ -1,0 +1,63 @@
+{% extends "layout/base.html" %}
+{% load static %}
+{% block content %}
+<style>
+    .cart-item {
+    margin-bottom: 20px;
+}
+
+.product-container {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ccc;
+    padding: 5px;
+}
+
+.product-image {
+    width: 60px; /* Adjust the size as needed */
+    height: auto;
+    margin-right: 10px;
+}
+
+.product-details {
+    flex: 1;
+}
+
+    .btn-custom-height {
+        height: 40px; /* Adjust the height as needed */
+    }
+
+</style>
+
+<div class="cart-items">
+    {% for item in cart_items %}
+    <div class="cart-item">
+        <div class="product-container">
+            {% if item.product.product_image %}
+            <img class="product-image" src="{{ item.product.product_image.url }}" alt="{{ item.product.product_name }}">
+            {% endif %}
+            <div class="product-details">
+                <h2>{{ item.product.product_name }}</h2>
+                <p>Price: {{ item.product.product_price }}</p>
+                <p>Brand: {{ item.product.brand }}</p>
+                <p>Quantity: {{ item.quantity }}</p>
+                <!-- Add other fields as needed -->
+                <form action="{% url 'remove_from_cart' %}" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="item_id" value="{{ item.id }}">
+                    <button type="submit" class="btn btn-danger btn-sm">Remove</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-3">
+            <a href="{% url 'checkout' %}" class="btn btn-primary btn-block btn-sm btn-custom-height">Proceed to Checkout</a>
+        </div>
+    </div>
+</div>
+<!-- Add your JavaScript code here if needed -->
+{% endblock %}

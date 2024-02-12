@@ -73,6 +73,7 @@ class Patient(models.Model):
 
 
 class Address(models.Model):
+    full_name = models.CharField(max_length=255, blank=True, null=True)
     street_address = models.TextField(blank=True, null=True)
     city = models.CharField(max_length=100,blank=True, null=True)
     pincode = models.CharField(max_length=6,blank=True, null=True)
@@ -142,7 +143,8 @@ class Location(models.Model):
 
 class Payment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    appoinment = models.ForeignKey(Appoinment, on_delete=models.CASCADE)
+    appoinment = models.ForeignKey(Appoinment, on_delete=models.CASCADE, null=True, blank=True)
+    order = models.ForeignKey("Order", on_delete=models.CASCADE, null=True, blank=True)
     payment_date = models.DateTimeField(auto_now_add=True)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     status = models.BooleanField(default=False)
@@ -173,5 +175,28 @@ class Product(models.Model):
     is_available = models.BooleanField(default=True)
     product_image = models.ImageField(upload_to='product_images/',null=True,blank=True)
     discount = models.DecimalField(max_digits=5, decimal_places=2)
-    product_sale_price = models.DecimalField(max_digits=10, decimal_places=2)
     stock = models.IntegerField(default=0)
+    #description = models.TextField()
+
+    @property
+    def product_sale_price(self):
+        return self.product_price - (self.product_price * (self.discount / 100))
+
+class CartItem(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField(default=1)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    date_added = models.DateTimeField(auto_now_add=True)
+    order = models.ForeignKey("Order", null=True, blank=True, on_delete=models.CASCADE)
+
+    @property
+    def total_price(self):
+        return self.product.product_price * self.quantity
+
+class Order(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    address = models.ForeignKey(Address, on_delete=models.CASCADE)
+    total_amount = models.DecimalField(max_digits=10, decimal_places=2)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    razorpay_order_id = models.CharField(max_length=100, null=True, blank=True)

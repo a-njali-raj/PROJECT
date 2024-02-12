@@ -15,7 +15,7 @@
             <p><strong>Sample Collection Type:</strong> <span style="text-transform: capitalize;">{{ appointment.appoinment_type }}</span> Collection</p>
           </div>
           <div>
-            <p><strong>Staff Uploaded:</strong> {{ appointment.report.uploaded_by.username|default:"N/A" }}</p>
+            <p><strong>Result uploaded by:</strong> {{ appointment.report.uploaded_by.username|default:"N/A" }}</p>
             <p><strong>Amount:</strong> {{ appointment.amount }}</p>
             {% if appointment.report.result_file %}
               <a href="{{ appointment.report.result_file.url }}" target="_blank">View Result</a>
