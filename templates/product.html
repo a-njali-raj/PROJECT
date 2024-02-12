@@ -84,9 +84,13 @@
             {% for product in products %}
             <div class="col-md-4">
                 <div class="card card-body my-3">
+                    {% if user.is_authenticated %}
                     <a href="{% url 'product_detail' product_id=product.id %}">
-                        <h5 class="text-center"><strong>{{ product.product_name }}</strong></h5>
-                    </a>
+                    {% else %}
+                    <a href="#" onclick="showLoginPopup()">
+                    {% endif %}
+                    <h5 class="text-center"><strong>{{ product.product_name }}</strong></h5>
+                </a>
                     <p><strong>Product Price:</strong> {{ product.product_price }}</p>
                     <p><strong>Brand:</strong> {{ product.brand }}</p>
                     <p class="text-center">
@@ -117,7 +121,7 @@
 <!-- Login popup -->
 <div id="loginPopup">
     <div id="loginPopupContent">
-        <p>Please <a href="{% url 'login' %}">login</a> to add this item to your cart.</p>
+        <p>Please <a href="{% url 'login' %}">login</a> for access</p>
     </div>
 </div>
 {% endblock %}
