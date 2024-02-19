@@ -9,7 +9,7 @@ admin.site.register(Address)
 admin.site.register(Appoinment)
 admin.site.register(User)
 admin.site.register(Review)
-
+admin.site.register(Product)
 
 class MyUserChangeForm(UserChangeForm):
     class Meta(UserChangeForm.Meta):

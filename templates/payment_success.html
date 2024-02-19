@@ -15,6 +15,33 @@
     <button onclick="window.print()">Print</button>
 {% else %}
     <!-- Details of ecommerce order -->
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Product Name</th>
+                    <th>Price</th>
+                    <th>Brand</th>
+                    <th>Quantity</th>
+                    <th>Total Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for cart_item in order.cartitem_set.all %}
+                <tr>
+                    <td>{{ cart_item.product.product_name }}</td>
+                    <td>₹{{ cart_item.product.product_price }}</td>
+                    <td>{{ cart_item.product.brand }}</td>
+                    <td>{{ cart_item.quantity }}</td>
+                    <td>₹{{ cart_item.total_price }}</td>
+                </tr>
+                
+                {% endfor %}
+            </tbody>
+        </table>
+        <p><strong>Total amount:</strong> ₹{{ order.total_amount }}</p>
+    </div>
+    <button onclick="window.print()">Print</button>
 {% endif %}
 </div>
 {% endblock %}

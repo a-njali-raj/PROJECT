@@ -11,6 +11,7 @@ from django.shortcuts import get_object_or_404
 from django.conf import settings
 from django.urls import reverse
 from datetime import datetime 
+from django.db.models import Q
 from django.db import transaction
 from django.views.decorators.csrf import csrf_exempt
 from tests.models import (
@@ -546,3 +547,13 @@ def remove_from_cart(request):
         cart_item.delete()
         messages.success(request, f"{cart_item.product.product_name} removed from cart.")
     return redirect('cart')
+
+
+def product_search(request):
+    query = request.GET.get('query')
+    products = Product.objects.filter(
+        Q(product_name__icontains=query) | 
+        Q(brand__icontains=query),
+        is_available=True  # Filter products with is_available=True
+    ) if query else Product.objects.filter(is_available=True)
+    return render(request, 'product.html', {'products': products})

@@ -2,26 +2,64 @@
 
 {% block content %}
 <div class="container" id="app">
-    <h1>Payment Confirmation</h1>
+    <h4>Payment Confirmation</h4>
     {% if order_type == "appoinment" %}
     <p>Thank you for booking your appointment! Please choose your method of payment and enter the required details:</p>
 
     <!-- Display appointment details here -->
-    <p><strong>Test:</strong> {{ order.main_test.name }}</p>
-    <p><strong>Preferred Date:</strong> {{ order.preffered_date }}</p>
-    <p><strong>Preferred Time:</strong> {{ order.preffered_time }}</p>
-    <p><strong>Full Name:</strong> {{ order.user.first_name }}</p>
-    <p><strong>Email:</strong> {{ order.user.email }}</p>
-    <p><strong>Phone:</strong> {{ order.user.phone_number }}</p>
-    <p><strong>Sample Collection Type:</strong> <span style="text-transform: capitalize;">{{ order.appoinment_type }}</span> Collection</p>
+    <div class="row">
+        <div class="col-sm-6">
+            <p><strong>Test:</strong> {{ order.main_test.name }}</p>
+            <p><strong>Preferred Date:</strong> {{ order.preferred_date }}</p>
+            <p><strong>Preferred Time:</strong> {{ order.preferred_time }}</p>
+        </div>
+        <div class="col-sm-6">
+            <p><strong>Full Name:</strong> {{ order.user.first_name }}</p>
+            <p><strong>Email:</strong> {{ order.user.email }}</p>
+            <p><strong>Phone:</strong> {{ order.user.phone_number }}</p>
+            <p><strong>Sample Collection Type:</strong> <span style="text-transform: capitalize;">{{ order.appointment_type }}</span> Collection</p>
+        </div>
+    </div>
     {% else %}
-    <p><strong>Total amount:</strong> ₹{{ order.total_amount }}</p>
+    
+    
+    
+    <!-- Display ordered product details in a responsive table -->
+    
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Product Name</th>
+                    <th>Price</th>
+                    <th>Brand</th>
+                    <th>Quantity</th>
+                    <th>Total Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for cart_item in order.cartitem_set.all %}
+                <tr>
+                    <td>{{ cart_item.product.product_name }}</td>
+                    <td>₹{{ cart_item.product.product_price }}</td>
+                    <td>{{ cart_item.product.brand }}</td>
+                    <td>{{ cart_item.quantity }}</td>
+                    <td>₹{{ cart_item.total_price }}</td>
+                </tr>
+                
+                {% endfor %}
+            </tbody>
+        </table>
+        <p><strong>Total amount:</strong> ₹{{ order.total_amount }}</p>
+    </div>
+    
     {% endif %}
 
     <!-- Payment Method Form -->
     <button type="submit" class="btn btn-primary my-3" @click="proceedToPayment">Proceed to Payment</button>
 </div>
 {% endblock %}
+
 
 {% block extra_js %}
 <!-- Add JavaScript to show/hide payment details -->

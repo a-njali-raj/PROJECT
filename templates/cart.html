@@ -1,63 +1,102 @@
 {% extends "layout/base.html" %}
 {% load static %}
+
 {% block content %}
 <style>
-    .cart-item {
-    margin-bottom: 20px;
-}
+    /* Custom CSS styles */
+    .product-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Adjusted width */
+        gap: 20px;
+        margin-top: 20px;
+    }
 
-.product-container {
-    display: flex;
-    align-items: center;
-    border: 1px solid #ccc;
-    padding: 5px;
-}
+    .product-card {
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease-in-out;
+    }
 
-.product-image {
-    width: 60px; /* Adjust the size as needed */
-    height: auto;
-    margin-right: 10px;
-}
+    .product-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    }
 
-.product-details {
-    flex: 1;
-}
+    .product-image {
+        max-width: 100px;
+        max-height: 100px;
+        display: block;
+        margin: 0 auto 10px;
+        border-radius: 10px;
+    }
 
-    .btn-custom-height {
-        height: 40px; /* Adjust the height as needed */
+    .product-details {
+        text-align: center;
+    }
+
+    .product-name {
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+
+    .product-price {
+        color: #007bff;
+        font-size: 16px;
+    }
+
+    .btn-remove {
+        background-color: #dc3545;
+        color: white;
+        border: none;
+        padding: 5px 10px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    .btn-remove:hover {
+        background-color: #c82333;
     }
 
 </style>
 
-<div class="cart-items">
-    {% for item in cart_items %}
-    <div class="cart-item">
-        <div class="product-container">
-            {% if item.product.product_image %}
-            <img class="product-image" src="{{ item.product.product_image.url }}" alt="{{ item.product.product_name }}">
-            {% endif %}
-            <div class="product-details">
-                <h2>{{ item.product.product_name }}</h2>
-                <p>Price: {{ item.product.product_price }}</p>
-                <p>Brand: {{ item.product.brand }}</p>
-                <p>Quantity: {{ item.quantity }}</p>
-                <!-- Add other fields as needed -->
-                <form action="{% url 'remove_from_cart' %}" method="post">
-                    {% csrf_token %}
-                    <input type="hidden" name="item_id" value="{{ item.id }}">
-                    <button type="submit" class="btn btn-danger btn-sm">Remove</button>
-                </form>
+<div class="container mt-2">
+    <div class="card">
+        <div class="card-body">
+            <div class="product-container">
+                {% for item in cart_items %}
+                <div class="product-card">
+                    <div class="product-details">
+                        <h5 class="product-name">{{ item.product.product_name }}</h5>
+                        {% if item.product.product_image %}
+                        <img class="product-image" src="{{ item.product.product_image.url }}" alt="{{ item.product.product_name }}">
+                        {% endif %}
+                        <p class="product-price">Price: ₹{{ item.product.product_price }}</p>
+                        <p>Brand: {{ item.product.brand }}</p>
+                        <p>Quantity: {{ item.quantity }}</p>
+                        <!-- Add other fields as needed -->
+                        <form action="{% url 'remove_from_cart' %}" method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="item_id" value="{{ item.id }}">
+                            <button type="submit" class="btn-remove">Remove</button>
+                        </form>
+                    </div>
+                </div>
+                {% endfor %}
             </div>
         </div>
     </div>
-    {% endfor %}
 </div>
-<div class="container">
+
+<div class="container mt-3">
     <div class="row justify-content-center">
-        <div class="col-md-3">
-            <a href="{% url 'checkout' %}" class="btn btn-primary btn-block btn-sm btn-custom-height">Proceed to Checkout</a>
+        <div class="col-md-4">
+            <a href="{% url 'checkout' %}" class="btn btn-primary btn-block">Proceed to Checkout</a>
         </div>
     </div>
 </div>
-<!-- Add your JavaScript code here if needed -->
+
 {% endblock %}
