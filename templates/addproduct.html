@@ -660,6 +660,11 @@ th.action-header {
                     <label for="product_name">Product Name:</label>
                     <input type="text" id="product_name" name="product_name" required>
                     <span class="error-message" id="productNameError"></span>
+                    
+                    <label for="description">Description:</label>
+                    <textarea id="description" name="description" rows="4" required></textarea>
+                    <span class="error-message" id="descriptionError"></span>
+
 
                     <label for="product_price">Product Price:</label>
                     <input type="number" id="product_price" name="product_price" step="0.01" min="1" required>
@@ -672,7 +677,7 @@ th.action-header {
                     <input type="checkbox" id="is_available" name="is_available" checked>
         
                     <label for="product_image">Product Image:</label>
-                    <input type="file" id="product_image" name="product_image" accept=".jpg, .jpeg, .png">
+                    <input type="file" id="product_image" name="product_image" accept=".jpg, .jpeg, .png" required>
         
                     <label for="discount">Discount Percentage:</label>
                     <input type="number" id="discount" name="discount" step="0.01" min="0" max="100" required>
@@ -814,21 +819,30 @@ th.action-header {
         }
     }
 
-    function validatePrice() {
-        var price = parseFloat(document.getElementById("product_price").value);
-        var salePrice = parseFloat(document.getElementById("product_sale_price").value);
-        var priceError = document.getElementById("priceError");
-        if (isNaN(price) || price < 0) {
-            priceError.textContent = "Price should be a non-negative number.";
-            return false;
-        } else if (salePrice < 0) {
-            priceError.textContent = "Sale price should be a non-negative number.";
-            return false;
-        } else {
-            priceError.textContent = "";
-            return true;
-        }
+    // Function to validate the price
+function validatePrice() {
+    var price = parseFloat(document.getElementById("product_price").value);
+    var salePrice = parseFloat(document.getElementById("product_sale_price").value);
+    var priceError = document.getElementById("priceError");
+
+    // Round the price to two decimal places
+    var roundedPrice = price.toFixed(2);
+
+    // Update the value of the price input field with the rounded price
+    document.getElementById("product_price").value = roundedPrice;
+
+    if (isNaN(price) || price < 0) {
+        priceError.textContent = "Price should be a non-negative number.";
+        return false;
+    } else if (salePrice < 0) {
+        priceError.textContent = "Sale price should be a non-negative number.";
+        return false;
+    } else {
+        priceError.textContent = "";
+        return true;
     }
+}
+
 
     // Update sale price based on product price and discount
     document.getElementById("discount").addEventListener("input", function () {
@@ -948,5 +962,32 @@ th.action-header {
         validateBrand();
     });
 </script>
+<script>
+    // Function to validate the form
+    function validateForm() {
+        return validateProductName() && validateDescription() && validateBrand() && validateDiscount() && validateStock() && validatePrice();
+    }
+
+    // Function to validate the description
+    function validateDescription() {
+        var description = document.getElementById("description").value.trim();
+        var descriptionError = document.getElementById("descriptionError");
+        
+        if (description.length < 10) {
+            descriptionError.textContent = "Description should be at least 10 characters long.";
+            return false;
+        } else {
+            descriptionError.textContent = "";
+            return true;
+        }
+    }
+    
+    // Update description validation on input change
+    document.getElementById("description").addEventListener("input", function () {
+        validateDescription();
+    });
+</script>
+
+
     </body>
     </html>

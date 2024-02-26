@@ -186,7 +186,7 @@ body {
     .navcontainer {
     height: calc(100vh - 70px);
     width: 350px;
-    position: relative;
+    position: fixed;
     overflow-y: scroll;
     overflow-x: hidden;
     transition: all 0.5s ease-in-out;
@@ -495,7 +495,68 @@ th.action-header {
             transform: translateX(-50%);
             padding: 30px 0;
         }
-        
+
+        .container {
+        max-width: 600px;
+        margin: 20px auto;
+        padding: 40px;
+        background-color: #ffffff;
+        border-radius: 10px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .container form {
+        display: flex;
+        flex-direction: column;
+    }
+
+     .container label {
+        font-size: 16px;
+        margin-bottom:0; /* Adjust this value to change space between labels */
+        color: #333333;
+    }
+
+
+    .container input[type="text"],
+    .container textarea {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 0;
+        border: 1px solid #cccccc;
+        border-radius: 5px;
+        font-size: 16px;
+        transition: border-color 0.3s;
+    }
+
+    .container input[type="checkbox"] {
+        margin-left: 10px; /* Adjust this value to control space between label and checkbox */
+        vertical-align: middle; /* Align checkbox vertically */
+    }
+
+    .container input[type="file"] {
+        margin-top: 10px;
+    }
+
+    .container button[type="submit"] {
+        width: 150px;
+        padding: 12px;
+        background-color: #009688;
+        color: #ffffff;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    .container button[type="submit"]:hover {
+        background-color: #00796b;
+    }
+    .error {
+    color: red;
+    font-size: 14px;
+    margin-top: 5px; /* Add some space between error messages */
+}
     </style>
     </head>
     
@@ -595,36 +656,46 @@ th.action-header {
                     </div>
                 </nav>
             </div>
+            <div class="container">
             <form method="POST">
                 {% csrf_token %}
                 <label for="product_name">Product Name:</label>
                 <input type="text" id="product_name" name="product_name" value="{{ product.product_name }}"><br><br>
-                
+                <div id="productNameError" class="error"></div>
+
+                <label for="description">Description:</label>
+                <textarea id="description" name="description" rows="4" cols="50">{{ product.description }}</textarea><br><br>
+                <div id="descriptionError" class="error"></div>
+
                 <label for="product_price">Product Price:</label>
                 <input type="text" id="product_price" name="product_price" value="{{ product.product_price }}"><br><br>
-                
+                <div id="priceError" class="error"></div>
+
                 <label for="brand">Brand:</label>
                 <input type="text" id="brand" name="brand" value="{{ product.brand }}"><br><br>
-                
+                <div id="brandError" class="error"></div>
+
                 <label for="is_available">Is Available:</label>
                 <input type="checkbox" id="is_available" name="is_available" {% if product.is_available %} checked {% endif %}><br><br>
                 
                 <label for="product_image">Product Image:</label>
-                <input type="file" id="product_image" name="product_image"><br><br>
+                <input type="file" id="product_image" name="product_image" accept=".jpg, .jpeg, .png" required><br><br>
                 
                 <label for="discount">Discount:</label>
                 <input type="text" id="discount" name="discount" value="{{ product.discount }}"><br><br>
-                
+                <div id="discountError" class="error"></div>
                 <!-- <label for="product_sale_price">Sale Price:</label>
                 <input type="text" id="product_sale_price" name="product_sale_price" value="{{ product.product_sale_price }}"><br><br> -->
                 
                 <label for="stock">Stock:</label>
                 <input type="text" id="stock" name="stock" value="{{ product.stock }}"><br><br>
-                
+                <div id="stockError" class="error"></div>
                 <!-- Add other input fields for additional product attributes -->
         
-                <button type="submit">Save Changes</button>
+                <button type="submit" id="submitButton" disabled>Save Changes</button>
+
             </form>
+            </div>
             
             <script src="{% static '/assets/js/jquery-3.5.1.min.js'%}"></script>
 
@@ -637,7 +708,162 @@ th.action-header {
         <script src="{% static '/assets/js/theme.js'%}"></script>
       
        
+        <script>
+            // Function to validate the form
+            function validateForm() {
+                return validateProductName() && validateDescription() && validateBrand() && validateDiscount() && validateStock() && validatePrice();
+            }
         
+            // Function to validate the product name
+            function validateProductName() {
+                var productName = document.getElementById("product_name").value.trim();
+                var productNameError = document.getElementById("productNameError");
+                
+                if (!/^[A-Za-z][A-Za-z\s]{2,}$/.test(productName)) {
+                    productNameError.textContent = "Product name must start with an alphabet, have a minimum of 3 characters, and contain no numbers.";
+                    return false;
+                } else {
+                    productNameError.textContent = "";
+                    return true;
+                }
+            }
+        
+            // Function to validate the description
+            function validateDescription() {
+                var description = document.getElementById("description").value.trim();
+                var descriptionError = document.getElementById("descriptionError");
+                
+                if (description.length < 10) {
+                    descriptionError.textContent = "Description should be at least 10 characters long.";
+                    return false;
+                } else {
+                    descriptionError.textContent = "";
+                    return true;
+                }
+            }
+        
+            // Function to validate the brand
+            function validateBrand() {
+                var brand = document.getElementById("brand").value.trim();
+                var brandError = document.getElementById("brandError");
+                
+                if (!/^[A-Za-z][A-Za-z\s]{2,}$/.test(brand)) {
+                    brandError.textContent = "Brand must start with an alphabet, have a minimum of 3 characters, and contain no numbers.";
+                    return false;
+                } else {
+                    brandError.textContent = "";
+                    return true;
+                }
+            }
+        
+            // Function to validate the discount
+            function validateDiscount() {
+                var discount = parseFloat(document.getElementById("discount").value);
+                var discountError = document.getElementById("discountError");
+                
+                if (isNaN(discount) || discount < 0 || discount > 100) {
+                    discountError.textContent = "Discount should be a number between 0 and 100.";
+                    return false;
+                } else {
+                    discountError.textContent = "";
+                    return true;
+                }
+            }
+        
+            // Function to validate the stock
+            function validateStock() {
+        var stock = document.getElementById("stock").value.trim();
+        var stockError = document.getElementById("stockError");
+        
+        if (!/^\d+$/.test(stock)) {
+            stockError.textContent = "Stock should be a positive integer.";
+            return false;
+        } else {
+            stockError.textContent = "";
+            return true;
+        }
+    }
+
+    // Validate stock input
+    document.getElementById("stock").addEventListener("input", function () {
+        validateStock(); // Validate stock after each input change
+    });
+    function validatePrice() {
+        var price = document.getElementById("product_price").value.trim();
+        var priceError = document.getElementById("priceError");
+
+        if (!/^\d*\.?\d+$/.test(price)) {
+            priceError.textContent = "Price should be a positive number.";
+            return false;
+        } else {
+            priceError.textContent = "";
+            return true;
+        }
+    }
+
+    // Validate price input
+    document.getElementById("product_price").addEventListener("input", function () {
+        validatePrice(); // Validate price after each input change
+    });
+
+    // Update sale price based on product price and discount
+    document.getElementById("discount").addEventListener("input", function () {
+        var productPrice = parseFloat(document.getElementById("product_price").value);
+        var discountPercentage = parseFloat(this.value);
+        var productSalePrice = productPrice - (productPrice * (discountPercentage / 100));
+        // document.getElementById("product_sale_price").value = productSalePrice.toFixed(2);
+        validateDiscount(); // Validate discount after each input change
+    });
+
+            // Validate stock input
+            document.getElementById("stock").addEventListener("input", function () {
+                validateStock(); // Validate stock after each input change
+            });
+        
+            // Validate product name on keyup event
+            document.getElementById("product_name").addEventListener("keyup", function () {
+                validateProductName();
+            });
+        
+            // Validate description on input event
+            document.getElementById("description").addEventListener("input", function () {
+                validateDescription();
+            });
+        
+            // Validate brand on keyup event
+            document.getElementById("brand").addEventListener("keyup", function () {
+                validateBrand();
+            });
+        </script>
+        
+        <script>
+            // Function to enable/disable submit button based on validation status
+            function enableSubmitButton() {
+                var productNameValid = validateProductName();
+                var descriptionValid = validateDescription();
+                var brandValid = validateBrand();
+                var discountValid = validateDiscount();
+                var stockValid = validateStock();
+                var priceValid = validatePrice();
+        
+                var submitButton = document.getElementById("submitButton");
+                var allFieldsValid = productNameValid && descriptionValid && brandValid && discountValid && stockValid && priceValid;
+                submitButton.disabled = !allFieldsValid;
+                return allFieldsValid;
+            }
+        
+            // Validate all fields and enable/disable submit button accordingly
+            document.querySelectorAll("input, textarea").forEach(function (element) {
+                element.addEventListener("input", function () {
+                    enableSubmitButton();
+                });
+            });
+        
+            // Update submit button status on page load
+            window.addEventListener("load", function () {
+                enableSubmitButton();
+            });
+        </script>
         
     </body>
     </html>

@@ -1,5 +1,18 @@
 {% extends "layout/base.html" %}
 
+{% block extra_css %}
+<style>
+    @media print {
+        .shipping-information-section {
+            display: none;
+        }
+        footer {
+            display: none !important;
+        }
+    }
+</style>
+{% endblock %}
+
 {% block content %}
 <div class="container my-5">
     <div class="row">
@@ -9,14 +22,20 @@
                 <div class="card-body">
                     <!-- Order summary details here -->
                     {% for item in cart_items %}
-                    <p class="m-0">{{ item.product.product_name }} <span class="text-muted small">x {{ item.quantity }}</span> - ₹{{ item.total_price }}</p>
+                    <p class="m-0">ID: {{ item.id }} - {{ item.product.product_name }} <span class="text-muted small">x {{ item.quantity }}</span> - ₹{{ item.total_price }}</p>
                     {% endfor %}
                     <hr>
                     <p class="m-0">Total: ₹{{ total_amount }}</p>
+                    <p>Ordered by: {{ user.username }}</p>
+                    <p>Date/Time of Order: {{ cart_items.0.date_added }}</p> 
                 </div>
             </div>
+            <div class="text-right mb-3">
+                <button class="btn btn-primary" onclick="window.print()">Print</button>
+            </div>
         </div>
-        <div class="col-lg-4">
+       
+        <div class="col-lg-4 shipping-information-section">
             <h2>Shipping Information</h2>
             <form action="{% url 'order' %}" method="post">
                 {% csrf_token %}
@@ -40,12 +59,13 @@
                     <input type="text" name="pincode" id="zipCode" class="form-control">
                     <span id="pincodeError" class="text-danger"></span>
                 </div>
-                <button type="submit"  id="placeOrderBtn" class="btn btn-primary btn-block">Place Order</button>
+                <button type="submit" id="placeOrderBtn" class="btn btn-primary btn-block">Place Order</button>
             </form>
         </div>
     </div>
 </div>
 {% endblock %}
+
 {% block extra_js %}
 <script>
     document.addEventListener("DOMContentLoaded", function() {
@@ -116,5 +136,4 @@
         });
     });
 </script>
-
 {% endblock %}

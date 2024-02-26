@@ -176,7 +176,7 @@ class Product(models.Model):
     product_image = models.ImageField(upload_to='product_images/',null=True,blank=True)
     discount = models.DecimalField(max_digits=5, decimal_places=2)
     stock = models.IntegerField(default=0)
-    #description = models.TextField()
+    description = models.TextField(null=True, blank=True) 
 
     @property
     def product_sale_price(self):

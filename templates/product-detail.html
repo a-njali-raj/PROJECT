@@ -10,7 +10,7 @@
       <div class="col-lg-8">
           <h2>{{ product.product_name }}</h2>
           <p class="text-muted">{{ product.brand }}</p>
-          <!-- <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p> -->
+          <p class="text-justify px-3">{{ product.description }}</p>
           <p><strong>Price:</strong> ₹{{ product.product_sale_price|floatformat:"2" }}</p>
           <p>Non-returnable</p>
           <div class="row">

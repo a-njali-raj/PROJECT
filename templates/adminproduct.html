@@ -637,6 +637,7 @@ th.action-header {
                             <thead>
                                 <tr>
                                     <th>Product Name</th>
+                                    
                                     <th>Product Price</th>
                                     <th>Brand</th>
                                     <th>Status</th>
@@ -652,7 +653,10 @@ th.action-header {
                                 {% for product in products %}
                                     <tr>
                                         <td>{{ product.product_name }}</td>
-                                        <td>{{ product.product_price }}</td>
+                                        
+                                        <td>{{ product.product_price|default_if_none:"0"|floatformat:"2" }}</td>
+
+
                                         <td>{{ product.brand }}</td>
                                         <td>
                                             <span class="badge badge-pill badge-{% if product.is_available and product.stock >= 1 %}success{% else %}danger{% endif %}">

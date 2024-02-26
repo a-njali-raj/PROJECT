@@ -254,6 +254,7 @@ def staff_applist(request):
     return render(request, 'staff_applist.html', context)
 
 @never_cache
+@login_required(login_url='login')
 def staff_edit(request):
     appointment_id = request.GET.get("appointmentId")
     appointment = get_object_or_404(Appoinment, id=appointment_id)
@@ -275,6 +276,7 @@ def staff_edit(request):
     return render(request, "staff_edit.html", context)
 
 @never_cache
+@login_required(login_url='login')
 def update_appointment(request):
     if request.method == "POST":
         appoinment_id = request.POST.get("appoinment_id")
@@ -314,6 +316,7 @@ def update_appointment(request):
     return HttpResponse("Invalid request method")
 
 @never_cache
+@login_required(login_url='login')
 def addproduct(request):
     if request.method == 'POST':
         product_name = request.POST['product_name']
@@ -334,6 +337,7 @@ def addproduct(request):
         # product_sale_price = product_price - (product_price * (discount / 100))
 
         stock = int(request.POST['stock'])
+        description = request.POST['description'] 
 
         # Save the product to the database
         product = Product(
@@ -343,7 +347,8 @@ def addproduct(request):
             is_available=is_available,
             product_image=product_image,
             discount=discount,
-            stock=stock
+            stock=stock,
+            description=description,  
         )
         product.save()
 
@@ -353,6 +358,7 @@ def addproduct(request):
     return render(request, "addproduct.html")
 
 @never_cache
+@login_required(login_url='login')
 def adminproduct(request):
     # Fetch all products from the database
     products = Product.objects.all()
@@ -365,6 +371,7 @@ def adminproduct(request):
     return render(request, "adminproduct.html", context)
 
 @never_cache
+@login_required(login_url='login')
 def edit_product(request, product_id):
     product = get_object_or_404(Product, id=product_id)
     
@@ -376,7 +383,7 @@ def edit_product(request, product_id):
         product_image = request.FILES.get('product_image') if 'product_image' in request.FILES else None
         discount = request.POST.get('discount')
         stock = request.POST.get('stock')
-        
+        description = request.POST.get('description')
         # Update the product attributes
         product.product_name = product_name
         product.product_price = product_price
@@ -386,6 +393,7 @@ def edit_product(request, product_id):
             product.product_image = product_image
         product.discount = discount
         product.stock = stock
+        product.description = description 
         product.save()
         messages.success(request, 'product details updated successfully.')
         return redirect('adminproduct')  # Redirect to the product list page after saving changes
@@ -393,6 +401,7 @@ def edit_product(request, product_id):
     return render(request, 'updateproduct.html', {'product': product})
 
 @never_cache
+@login_required(login_url='login')
 def delete_product(request, product_id):
     if request.method == 'GET':
         try:
