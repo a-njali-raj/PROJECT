@@ -74,9 +74,15 @@
                         {% if item.product.product_image %}
                         <img class="product-image" src="{{ item.product.product_image.url }}" alt="{{ item.product.product_name }}">
                         {% endif %}
-                        <p class="product-price">Price: ₹{{ item.product.product_price }}</p>
+                        <p class="product-price">Price: ₹{{ item.product.product_sale_price }}</p> <!-- Changed to sale price -->
                         <p>Brand: {{ item.product.brand }}</p>
-                        <p>Quantity: {{ item.quantity }}</p>
+                        <p>Quantity: 
+                            <form action="{% url 'update_cart_item' %}" method="post" class="quantity-form">
+                                {% csrf_token %}
+                                <input type="hidden" name="item_id" value="{{ item.id }}">
+                                <input type="number" name="quantity" class="quantity-input" value="{{ item.quantity }}">
+                            </form>
+                        </p>
                         <!-- Add other fields as needed -->
                         <form action="{% url 'remove_from_cart' %}" method="post">
                             {% csrf_token %}
@@ -98,5 +104,14 @@
         </div>
     </div>
 </div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('.quantity-input').change(function() {
+            $(this).closest('.quantity-form').submit();
+        });
+    });
+</script>
 
 {% endblock %}

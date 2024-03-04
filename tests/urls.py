@@ -40,5 +40,6 @@ urlpatterns = [
     path('cart.html', views.cart, name='cart'),
     path('remove_from_cart/', views.remove_from_cart, name='remove_from_cart'),
     path('product/search/', views.product_search, name='product_search'),
-
+    path('update_cart_item/', views.update_cart_item, name='update_cart_item'),
+    path('myorder/',views.myorder,name="myorder"),
 ]

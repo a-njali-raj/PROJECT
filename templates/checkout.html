@@ -1,7 +1,26 @@
 {% extends "layout/base.html" %}
 
 {% block extra_css %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+crossorigin=""/>
 <style>
+    .order-summary {
+        background-color: #f8f9fa;
+        border-radius: 10px;
+        padding: 10px; /* Reduce padding */
+    }
+
+    .order-summary p {
+        font-size: 14px; /* Reduce font size */
+    }
+    .shipping-information-section {
+        background-color: #f8f9fa;
+        border-radius: 10px;
+        padding: 20px;
+        border: 1px solid #ced4da; /* Add border */
+    }
+
     @media print {
         .shipping-information-section {
             display: none;
@@ -10,63 +29,201 @@
             display: none !important;
         }
     }
+   
+   
 </style>
 {% endblock %}
 
 {% block content %}
 <div class="container my-5">
-    <div class="row">
-        <div class="col-lg-8">
-            <h2>Order Summary</h2>
-            <div class="card">
-                <div class="card-body">
-                    <!-- Order summary details here -->
-                    {% for item in cart_items %}
-                    <p class="m-0">ID: {{ item.id }} - {{ item.product.product_name }} <span class="text-muted small">x {{ item.quantity }}</span> - ₹{{ item.total_price }}</p>
-                    {% endfor %}
-                    <hr>
-                    <p class="m-0">Total: ₹{{ total_amount }}</p>
-                    <p>Ordered by: {{ user.username }}</p>
-                    <p>Date/Time of Order: {{ cart_items.0.date_added }}</p> 
-                </div>
-            </div>
-            <div class="text-right mb-3">
-                <button class="btn btn-primary" onclick="window.print()">Print</button>
-            </div>
-        </div>
-       
-        <div class="col-lg-4 shipping-information-section">
-            <h2>Shipping Information</h2>
-            <form action="{% url 'order' %}" method="post">
-                {% csrf_token %}
-                <div class="form-group">
-                    <label for="fullName">Full Name:</label>
-                    <input type="text" name="full_name" id="fullName" class="form-control">
-                    <span id="fullNameError" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label for="address">Address:</label>
-                    <input type="text" name="address" id="address" class="form-control">
-                    <span id="addressError" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label for="city">City:</label>
-                    <input type="text" name="city" id="city" class="form-control">
-                    <span id="cityError" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label for="zipCode">Pin Code:</label>
-                    <input type="text" name="pincode" id="zipCode" class="form-control">
-                    <span id="pincodeError" class="text-danger"></span>
-                </div>
-                <button type="submit" id="placeOrderBtn" class="btn btn-primary btn-block">Place Order</button>
-            </form>
-        </div>
-    </div>
+  <div class="row">
+      <div class="col-lg-7">
+          <h5><B>ORDER SUMMARY</B></h5>
+          <br>
+          <div class="card">
+              <div class="card-body">
+                  <!-- Order summary details here -->
+                  {% for item in cart_items %} 
+                  <p class="m-0">ID: {{ item.id }} - {{ item.product.product_name }} <span class="text-muted small">x {{ item.quantity }}</span> - ₹{{ item.product.product_sale_price|floatformat:"2" }}</p>
+
+                  {% endfor %}
+                  <hr>
+                  <p class="m-0" id="totalAmount">Total: ₹{{ total_amount|floatformat:"2" }}</p>
+
+                  <p>Ordered by: {{ user.username }}</p>
+                  <p>Date/Time of Order: {{ cart_items.0.date_added }}</p> 
+              </div>
+          </div>
+          <div class="text-right mb-3">
+              <button class="btn btn-primary" onclick="window.print()">Print</button>
+          </div>
+      </div>
+     
+      <div class="col-lg-4 shipping-information-section">
+          <h5><B>SHIPPING INFORMATION</B></h5>
+          <form id="orderForm" action="{% url 'order' %}" method="post">
+              {% csrf_token %}
+              <div class="form-group">
+                  <label for="fullName">Full Name:</label>
+                  <input type="text" name="full_name" id="fullName" class="form-control">
+                  <span id="fullNameError" class="text-danger"></span>
+              </div>
+              <div class="form-group">
+                  <label for="address">Address:</label>
+                  <input type="text" name="address" id="address" class="form-control">
+                  <span id="addressError" class="text-danger"></span>
+              </div>
+              <div class="form-group">
+                  <label for="city">City:</label>
+                  <input type="text" name="city" id="city" class="form-control">
+                  <span id="cityError" class="text-danger"></span>
+              </div>
+              <div class="form-group">
+                  <label for="zipCode">Pin Code:</label>
+                  <input type="text" name="pincode" id="zipCode" class="form-control">
+                  <span id="pincodeError" class="text-danger"></span>
+              </div>
+            
+              <input type="hidden" name="location-address" id="location-address">
+              <input type="hidden" name="location-distance" id="location-distance">
+              <input type="hidden" name="location-lat" id="location-lat">
+              <input type="hidden" name="location-lng" id="location-lng">
+              <button type="button" class="btn btn-primary btn-sm mt-3" data-toggle="modal" data-target="#mapModal" id="select-location">
+                  Select Location
+              </button>
+              <br><br>
+              <button type="submit" id="placeOrderBtn" class="btn btn-primary btn-block">Place Order</button>
+          </form>
+      </div>
+  </div>
 </div>
+<div class="modal fade" id="mapModal" tabindex="-1" role="dialog" aria-labelledby="mapModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Select Location</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div id="map" style="height: 240px;"></div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary btn-sm" id="confirm-location">Confirm Location</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
 {% endblock %}
 
 {% block extra_js %}
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+     crossorigin=""></script>
+
+<script>
+  var marker, map, kilometer;
+  const SOURCE = [9.0827879, 76.5650678];
+  const RADIUS = 5;
+
+  function haversineDistance(lat1, lon1, lat2, lon2) {
+    // Convert latitude and longitude from degrees to radians
+    const toRadians = (angle) => angle * (Math.PI / 180);
+    lat1 = toRadians(lat1);
+    lon1 = toRadians(lon1);
+    lat2 = toRadians(lat2);
+    lon2 = toRadians(lon2);
+
+    // Haversine formula
+    const dLat = lat2 - lat1;
+    const dLon = lon2 - lon1;
+    const a =
+        Math.sin(dLat / 2) ** 2 +
+        Math.cos(lat1) * Math.cos(lat2) * Math.sin(dLon / 2) ** 2;
+    const c = 2 * Math.asin(Math.sqrt(a));
+
+    // Radius of the Earth in kilometers (mean value)
+    const radiusOfEarth = 6371;
+
+    // Calculate the distance
+    const distance = radiusOfEarth * c;
+
+    return distance;
+  }
+
+  $('#mapModal').on('shown.bs.modal', function (e) {
+    if (!map){
+      map = L.map('map').setView([9.0827879, 76.5650678], 15);
+
+      L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '&copy; Anjali Raj'
+      }).addTo(map);
+
+      L.circle(SOURCE, {
+        color: 'blue',
+        fillColor: '#FFFFFF00',
+        // fillOpacity: 0.5,
+        radius: RADIUS * 1000,
+      }).addTo(map);
+
+      var location = navigator.geolocation.getCurrentPosition(
+        function success(pos){
+          marker = L.marker(
+            [pos.coords.latitude, pos.coords.longitude],
+            // {draggable:true}
+          ).addTo(map);
+        }
+      );
+
+      map.on('click', function onMapClick(e){
+        kilometer = haversineDistance(SOURCE[0], SOURCE[1], e.latlng.lat, e.latlng.lng);
+        if (kilometer > RADIUS){
+          alert(`Select a radius within ${RADIUS} Kilometers.`);
+          return;
+        }
+        if (marker){
+          map.removeLayer(marker);
+        }
+        marker = L.marker(e.latlng).addTo(map);
+      });
+
+      $('#confirm-location').on('click', function onConfirmation(e){
+    if (!marker) {
+        // Handle the case where marker is not initialized
+        alert("Please select a location on the map.");
+        return;
+    }
+    
+    destination = marker.getLatLng();
+    kilometer = haversineDistance(SOURCE[0], SOURCE[1], destination.lat, destination.lng);
+    $('#mapModal').modal('hide');
+    
+    // Update the form fields with location details
+    $('#location-address').val('');
+    $('#location-distance').val('');
+    $('#location-lat').val('');
+    $('#location-lng').val('');
+    
+    $.get(
+        `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${destination.lat}&lon=${destination.lng}`,
+        function (data){
+            console.log(data)
+            $('#location-address').val(data.display_name);
+            $('#location-distance').val(kilometer);
+            $('#location-lat').val(destination.lat);
+            $('#location-lng').val(destination.lng);
+
+            // Proceed with form submission
+           // $('#orderForm').submit();
+        }
+    );
+});
+    }
+  })
+</script>
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         // Full Name validation
@@ -135,5 +292,59 @@
             // document.getElementById("shippingForm").submit();
         });
     });
+    $('#confirm-location').on('click', function onConfirmation(e){
+    destination = marker.getLatLng();
+    kilometer = haversineDistance(SOURCE[0], SOURCE[1], destination.lat, destination.lng);
+    $('#mapModal').modal('hide');
+    
+    // Update the total amount including distance charge
+    updateTotalAmount(kilometer); // Pass 'kilometer' instead of 'distance'
+});
+
+function updateTotalAmount(distance) {
+    // Calculate the additional amount based on the distance
+    const ratePerKm = 5; // Rate per kilometer
+    const additionalAmount = distance * ratePerKm; // Additional amount based on distance
+
+    // Get the initial total amount from the server
+    const initialTotalAmount = parseFloat('{{ total_amount }}');
+
+    // Calculate the updated total amount
+    const updatedTotalAmount = initialTotalAmount + additionalAmount;
+
+    // Display the updated total amount
+    $('#totalAmount').text('Total: ₹' + updatedTotalAmount.toFixed(2));
+
+    // Update the hidden input field for total amount
+    $('#totalAmountInput').val(updatedTotalAmount.toFixed(2));
+}
+$('#placeOrderBtn').on('click', function() {
+    var fullNameError = document.getElementById("fullNameError").textContent;
+    var addressError = document.getElementById("addressError").textContent;
+    var cityError = document.getElementById("cityError").textContent;
+    var pincodeError = document.getElementById("pincodeError").textContent;
+
+    if (fullNameError || addressError || cityError || pincodeError) {
+        alert("Please fix the errors in the form.");
+        return false; // Prevent form submission
+    }
+
+    // Get the selected location details
+    var locationAddress = $('#location-address').val();
+    var locationDistance = $('#location-distance').val();
+    var locationLat = $('#location-lat').val();
+    var locationLng = $('#location-lng').val();
+
+    // Check if all location details are available
+    if (locationAddress && locationDistance && locationLat && locationLng) {
+        // If all details are available, proceed with form submission
+        return true;
+    } else {
+        // If any detail is missing, prevent form submission and show an error message
+        alert("Please select a location on the map.");
+        return false;
+    }
+});
+
 </script>
 {% endblock %}

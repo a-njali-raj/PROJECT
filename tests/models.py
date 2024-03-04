@@ -136,10 +136,10 @@ class Appoinment(models.Model):
         related_name="appoinment_report",
     )
 class Location(models.Model):
-    address = models.TextField()
-    distance = models.DecimalField(max_digits=10, decimal_places=2)
-    latitude = models.CharField(max_length=50)
-    longitude = models.CharField(max_length=50)
+    address = models.TextField(null=True,blank=True)
+    distance = models.DecimalField(max_digits=10, decimal_places=2,null=True,blank=True)
+    latitude = models.CharField(max_length=50,null=True,blank=True)
+    longitude = models.CharField(max_length=50,null=True,blank=True)
 
 class Payment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -200,3 +200,4 @@ class Order(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     razorpay_order_id = models.CharField(max_length=100, null=True, blank=True)
+    location = models.ForeignKey(Location, on_delete=models.CASCADE, related_name='orders',null=True, blank=True)

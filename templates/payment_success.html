@@ -37,9 +37,10 @@
                 </tr>
                 
                 {% endfor %}
+               
             </tbody>
         </table>
-        <p><strong>Total amount:</strong> ₹{{ order.total_amount }}</p>
+        <p><strong>Total amount (including shipping charge):</strong> ₹{{ order.total_amount }}</p>
     </div>
     <button onclick="window.print()">Print</button>
 {% endif %}
