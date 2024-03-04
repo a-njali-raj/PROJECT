@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, HttpResponse,get_object_or_404
 from django.contrib.auth.decorators import login_required
-from tests.models import User 
+from tests.models import Order, User 
 from django.views.decorators.cache import never_cache
 from tests.models import Appoinment, Patient, Test, User, Address, Location, Payment, Review,Report,Product
 from django.contrib.auth import authenticate, login
@@ -413,3 +413,60 @@ def delete_product(request, product_id):
             messages.error(request, 'Product not found.')
         
     return redirect('adminproduct')  # Redirect to the product list page after deletion
+
+@never_cache
+@login_required(login_url='login')
+def adddeliveryboy(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        first_name = request.POST["first-name"]
+        email = request.POST['email']
+        # Create the user and set is_staff to True
+        user = User.objects.create_user(username=username, password=password)
+        user.is_deliveryboy = True
+        user.first_name = first_name
+        user.email=email
+        user.save()
+
+        # Log in the new staff member
+        send_mail(
+            'Welcome to OneHealth',
+            f'Dear {first_name},\n\nYou have been added as a staff member.Your username is {username} and your password is {password}.\n\nPlease keep your credentials secure.',
+            'your_email@example.com',  # Replace with your email address
+            [email],  # Use the staff member's email address
+            fail_silently=False,
+        )
+        messages.success(request, "Delivery Boy is added successfully.")
+        return redirect('admin_dashboard')  # Redirect to staff_dashboard
+
+    return render(request, 'add_deliveryboy.html')
+
+@never_cache
+@login_required(login_url='login')
+def deliveryboy_dashboard(request):
+    return render(request, "deliveryboy_dashboard.html")
+
+@never_cache
+@login_required(login_url='login')
+def order_deliverboy(request):
+    orders = Order.objects.order_by('-id')[:5]
+    return render(request, 'order_deliverboy.html', {'orders': orders})
+
+@never_cache
+@login_required(login_url='login')
+def admindeliveryboy(request):
+    staff_users = User.objects.filter(is_deliveryboy=True,is_staff=False,is_superuser=False)
+    context = {'staff_users': staff_users}
+    return render(request, 'admindeliveryboy.html', context)
+
+@never_cache
+@login_required(login_url='login')
+@user_passes_test(is_superuser)
+def delete_deliveryboy(request, user_id):
+    user = get_object_or_404(User, id=user_id)
+    user.is_deliveryboy = False
+    user.is_active = False
+    user.save()
+    messages.success(request, "Delivery boy is removed successfully.")
+    return redirect('admin_dashboard') 

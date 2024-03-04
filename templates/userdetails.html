@@ -524,6 +524,17 @@ th.action-header {
                     </div>
                     </a>
                     {% endif %}
+                    {% if user.is_superuser %}
+                        <a href="admindeliveryboy.html">
+                        <div class="nav-option option3">
+                            <img src=
+    "https://media.geeksforgeeks.org/wp-content/uploads/20221210183320/5.png"
+                                class="nav-img"
+                                alt="report">
+                            <h3 style="font-size: 17px;"> Delivery Boys</h3>
+                        </div>
+                        </a>
+                        {% endif %}
                     </div>
                 </nav>
             </div>

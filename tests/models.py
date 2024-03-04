@@ -48,7 +48,11 @@ class User(AbstractBaseUser):
     )
     phone_number = models.CharField(max_length=10, null=True, blank=True)
     profile_pic = models.ImageField(upload_to="media/profile-pics/", null=True, blank=True,)
-    
+    is_deliveryboy = models.BooleanField(
+        "Delivery Boy Status",
+        default=False,
+        help_text="Designates whether the user is a delivery boy.",
+    )
     objects = UserManager()
 
     EMAIL_FIELD = "email"
@@ -201,3 +205,4 @@ class Order(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     razorpay_order_id = models.CharField(max_length=100, null=True, blank=True)
     location = models.ForeignKey(Location, on_delete=models.CASCADE, related_name='orders',null=True, blank=True)
+    

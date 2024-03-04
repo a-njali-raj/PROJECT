@@ -26,6 +26,10 @@ urlpatterns = [
     path('adminproduct.html', views.adminproduct, name="adminproduct"),
     path('edit_product/<int:product_id>/', edit_product, name='edit_product'),
     path('delete/<int:product_id>/', views.delete_product, name='delete_product'),
-
+    path('add_deliveryboy.html', views.adddeliveryboy, name="adddeliveryboy"),\
+    path('deliveryboy_dashboard.html', views.deliveryboy_dashboard, name="deliveryboy_dashboard"),
+    path('order_deliverboy', views.order_deliverboy, name="order_deliverboy"),
+    path('admindeliveryboy.html',views.admindeliveryboy,name='admindeliveryboy'),
+    path('delete_deliveryboy/<int:user_id>/', views.delete_deliveryboy, name='delete_deliveryboy'),
 ]
 

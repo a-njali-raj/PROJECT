@@ -184,13 +184,13 @@ body {
     padding: 30px 0 20px 10px;
     }
     .navcontainer {
-            height: calc(100vh - 70px);
-            width: 260px;
-            position: fixed; /* Set the navigation container as fixed */
-            top: 70px;
-            left: 0;
-            box-shadow: 1px 1px 10px rgba(189, 245, 234, 0.825);
-        }
+    height: calc(100vh - 70px);
+    width: 350px;
+    position: relative;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    transition: all 0.5s ease-in-out;
+    }
     .navcontainer::-webkit-scrollbar {
     display: none;
     }
@@ -236,7 +236,51 @@ body {
     border-left: 5px solid #40d0a0af;
     background-color: var(--Border-color);
     }
+    .box {
+    height: 130px;
+    width: 230px;
+    border-radius: 20px;
+    box-shadow: 3px 3px 10px rgba(90, 238, 194, 0.751);
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    cursor: pointer;
+    transition: transform 0.3s ease-in-out;
+    }
+    .box:hover {
+    transform: scale(1.08);
+    }
     
+    .box:nth-child(1) {
+    background-color: var(--one-use-color);
+    }
+    .box:nth-child(2) {
+    background-color: var(--two-use-color);
+    }
+    .box:nth-child(3) {
+    background-color: var(--one-use-color);
+    }
+    .box:nth-child(4) {
+    background-color: var(--two-use-color);
+    }
+    
+    .box img {
+    height: 50px;
+    }
+    .box .text {
+    color: white;
+    }
+    .topic {
+    font-size: 13px;
+    font-weight: 400;
+    letter-spacing: 1px;
+    }
+    
+    .topic-heading {
+    font-size: 30px;
+    letter-spacing: 3px;
+    }
     
     .report-container {
     min-height: 300px;
@@ -322,43 +366,71 @@ body {
 }
 
 table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 20px;
-        background-color: #fff;
-        border-radius: 10px;
-        box-shadow: 0 0 10px rgba(168, 236, 226, 0.1);
-    }
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(168, 236, 226, 0.1);
+}
 
-    /* Style the table header */
-    th {
-        background-color: #a5c4bd;
-        color: #fff;
-        font-weight: bold;
-        padding: 10px;
-        text-align: left;
-    }
+/* Style the table header */
+th {
+    background-color: #a5c4bd;
+    color: #fff;
+    font-weight: bold;
+    padding: 10px;
+    text-align: left;
+}
 
-    /* Style the table rows */
-    tr {
-        transition: background-color 0.3s;
-    }
+/* Style the table rows */
+tr {
+    transition: background-color 0.3s;
+}
 
-    tr:nth-child(even) {
-        background-color: #f2f2f2;
-    }
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
 
-    /* Style the table cells (columns) */
-    th, td {
-        padding: 10px;
-        border-bottom: 1px solid #ddd;
-        text-align: left;
-    }
+/* Style the table cells (columns) */
+th, td {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    text-align: left;
+}
 
-    /* Extend the Action header cell */
-    th.action-header {
-        width: 100px;
-    }
+/* Extend the Action header cell */
+th.action-header {
+    width: 100px;
+}
+
+/* Style the action buttons in the table */
+.btn-edit, .btn-delete {
+    padding: 5px 9px;
+    margin-right: 5px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 12px;
+    color: #fff;
+    transition: background-color 0.3s;
+}
+
+.btn-edit {
+    background-color: #76c676;
+}
+
+.btn-delete {
+    background-color: #f44336;
+}
+
+.btn-edit:hover {
+    background-color: #5aaf5a;
+}
+
+.btn-delete:hover {
+    background-color: #d63737;
+}
 .dropdown .btn-secondary {
     background-color: #09ae96;
     color: #fff;
@@ -398,8 +470,9 @@ table {
 
 .dropdown-item:hover {
     background-color: #042f2d; /* Change background color on hover */
-    color: #fff; 
-    .button-link {
+    color: #fff; /* Change text color on hover */
+}
+.button-link {
     display: inline-block;
     padding: 10px 10px;
     background-color: rgb(4, 48, 48);
@@ -408,31 +481,30 @@ table {
     border: none;
     border-radius: 6px;
 }
-}
-.button-link {
-    display: inline-block;
-    padding: 10px 10px;
-    background-color: rgb(9, 131, 133);
-    color: white;
-    text-decoration: none;
-    border: none;
-    border-radius: 6px;
-}
 
 .button-link:hover {
-    background-color: #0a6d66; /* Darken the color on hover */
+    background-color: #072f2c; /* Darken the color on hover */
 }
-.table-container {
-            max-width: 1000px;
-            margin: 20px auto;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(65, 117, 109, 0.1);
-            margin-left: 280px; /* Add margin to the left to accommodate the fixed navigation container */
-            overflow: auto; /* Make the table container scrollable */
-        }
 
+.message-toaster {
+            position: fixed;
+            top: 0;
+            left: 50%;
+            text-align: center;
+            z-index: 9999;
+            transform: translateX(-50%);
+            padding: 30px 0;
+        }
+        /* Add this CSS code to center the welcome message */
+.main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.welcome-message {
+    margin-top: 50px; /* Adjust the margin as needed */
+}
 
     </style>
     </head>
@@ -454,8 +526,15 @@ table {
                     <img src="{% static '/C:/Project/PROJECT/static/assets/img/search.png' %}" class="icn srchicn" alt="search-icon">
                 </div>
             </div>
-    
-        
+            
+            
+           
+            <div class="message">
+                <div class="circle"></div>
+                <img src=
+    "https://media.geeksforgeeks.org/wp-content/uploads/20221210183322/8.png"
+                    class="icn"
+                    alt="">
                    <div class="dropdown">
                         <button class="btn btn-secondary dropdown-toggle" type="button" id="userProfileDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <div class="user-profile">
@@ -464,122 +543,42 @@ table {
                     </div>
                         </button>
             <div class="dropdown-menu" aria-labelledby="userProfileDropdown">
-              
+                <a class="dropdown-item" href="userprofile.html">My Profile</a>
                 <a class="dropdown-item" href="logout">Logout</a>
             </div>
         </div>
             </div>
     
         </header>
-    
+        {% include "layout/messages.html" %}
         <div class="main-container">
             <div class="navcontainer">
                 <nav class="nav">
                     <div class="nav-upper-options">
-                        <a href="admin-dashboard">
-                            <div class="nav-option option1">
-                                
-                                <h3 style="font-size: 17px;"> Dashboard</h3>
-                            </div>
-                            </a>
-                        <a href="userdetails.html">
-                        <div class="option2 nav-option">
-                            <img src=
-    "https://media.geeksforgeeks.org/wp-content/uploads/20221210183322/9.png"
-                                class="nav-img"
-                                alt="articles">
-                            <h3 style="font-size: 17px;"> Registered Users</h3>
+                        <a href="deliveryboy_dashboard.html">
+                        <div class="nav-option option1">
+                            
+                            <h3 style="font-size: 17px;"> Dashboard</h3>
                         </div>
                         </a>
+                    
+                    <a href="order_deliverboy">
                         <div class="nav-option option3">
                             <img src=
     "https://media.geeksforgeeks.org/wp-content/uploads/20221210183320/5.png"
                                 class="nav-img"
                                 alt="report">
-                            <h3 style="font-size: 17px;"> Appointments</h3>
-                        </div>
-                        <a href="admintest.html">
-                        <div class="nav-option option3">
-                            <img src=
-    "https://media.geeksforgeeks.org/wp-content/uploads/20221210183320/5.png"
-                                class="nav-img"
-                                alt="report">
-                            <h3 style="font-size: 17px;"> Test</h3>
+                            <h3 style="font-size: 17px;"> Orders</h3>
                         </div>
                     </a>
-                    <a href="adminstaff.html">
-                        <div class="nav-option option4">
-                            <img src=
-    "https://media.geeksforgeeks.org/wp-content/uploads/20221210183321/6.png"
-                                class="nav-img"
-                                alt="institution">
-                            <h3 style="font-size: 17px;"> Staffs</h3>
-                        </div>
-                    </a>
-                    {% if user.is_superuser %}
-                        <a href="adminproduct.html">
-                        <div class="nav-option option3">
-                            <img src=
-    "https://media.geeksforgeeks.org/wp-content/uploads/20221210183320/5.png"
-                                class="nav-img"
-                                alt="report">
-                            <h3 style="font-size: 17px;"> Products</h3>
-                        </div>
-                        </a>
-                        {% endif %}
                        
-                        {% if user.is_superuser %}
-                        <a href="admindeliveryboy.html">
-                        <div class="nav-option option3">
-                            <img src=
-    "https://media.geeksforgeeks.org/wp-content/uploads/20221210183320/5.png"
-                                class="nav-img"
-                                alt="report">
-                            <h3 style="font-size: 17px;"> Delivery Boys</h3>
-                        </div>
-                        </a>
-                        {% endif %}
+                       
+
                     </div>
                 </nav>
             </div>
-            <div class="table-container">
-            <h3>Appointment List</h3>
-            <div class="report-container">
+           
                 
-            <table border="1">
-                <thead>
-                    <tr>
-                        <th>Patient Name</th>
-                        <th>Test</th>
-                        <th>Preferred Date</th>
-                        <th>Preferred Time</th>
-                        <th>Mode of Sample Collection</th>
-                        <th>Show more</th>
-                        
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for appointment in appointments %}
-                        <tr>
-                            <td>
-                                {% for patient in appointment.patients.all %}
-                                    {{ patient.full_name }}
-                                    {% if not forloop.last %}, {% endif %}
-                                {% endfor %}
-                            </td>
-                            <td>{{ appointment.main_test.name }}</td>
-                            <td>{{ appointment.preffered_date }}</td>
-                            <td>{{ appointment.preffered_time }}</td>
-                            <td>{{ appointment.appoinment_type }}</td>
-                            <td>
-                                <button onclick="showMoreDetails('{{ appointment.id }}')">Show More</button>
-                            </td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-        </div>
         <script src="{% static '/assets/js/jquery-3.5.1.min.js'%}"></script>
 
         <script src="{% static '/assets/js/bootstrap.bundle.min.js'%}"></script>
@@ -589,36 +588,45 @@ table {
         <script src="{% static '/assets/vendor/wow/wow.min.js'%}"></script>
     
         <script src="{% static '/assets/js/theme.js'%}"></script>
+      
         <script>
             function searchTable() {
-                var input, filter, table, tr, td, i, txtValue;
+                var input, filter, table, tr, td, i, j, txtValue;
                 input = document.getElementById("searchInput");
                 filter = input.value.toUpperCase();
                 table = document.querySelector("table"); // Replace with the actual table ID or class
                 tr = table.getElementsByTagName("tr");
         
                 for (i = 0; i < tr.length; i++) {
-                    td = tr[i].getElementsByTagName("td")[0]; // Change index to match the column you want to search
-                    if (td) {
-                        txtValue = td.textContent || td.innerText;
-                        if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                            tr[i].style.display = "";
-                        } else {
-                            tr[i].style.display = "none";
+                    // Skip the first row (heading row)
+                    if (i === 0) {
+                        continue;
+                    }
+        
+                    var found = false;
+                    for (j = 0; j < tr[i].cells.length; j++) {
+                        td = tr[i].cells[j];
+                        if (td) {
+                            txtValue = td.textContent || td.innerText;
+                            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                                found = true;
+                                break;  // Break the inner loop if a match is found in any column
+                            }
                         }
+                    }
+                    if (found) {
+                        tr[i].style.display = "";
+                    } else {
+                        tr[i].style.display = "none";
                     }
                 }
             }
-            function showMoreDetails(appointmentId) {
-        // Construct the URL for appdetaillist.html with the appointment ID as a parameter
-        var url = "appdetaillist.html?appointmentId=" + appointmentId;
-
-        // Navigate to the new URL
-        window.location.href = url;
-    }
+        
             function performSearch() {
                 searchTable(); // Call the searchTable function when the search icon is clicked
             }
         </script>
+        
+        
     </body>
     </html>

@@ -521,6 +521,7 @@ th.action-header {
                 <b><a href="{% url 'addtest' %}" id="addTestLink"class="button-link">Add a Test</a></b>
                 <b><a href="{% url 'addstaff' %}"id="addStaffLink" class="button-link">Add Staff</a></b>
                 <b><a href="{% url 'addproduct' %}"id="addproductLink" class="button-link">Add product</a></b>
+                <b><a href="{% url 'adddeliveryboy' %}"id="adddeliveryboyLink" class="button-link">Add Delivery boy</a></b>
             </div>
             
                    <div class="dropdown">
@@ -599,6 +600,17 @@ th.action-header {
                                 class="nav-img"
                                 alt="report">
                             <h3 style="font-size: 17px;"> Products</h3>
+                        </div>
+                        </a>
+                        {% endif %}
+                        {% if user.is_superuser %}
+                        <a href="admindeliveryboy.html">
+                        <div class="nav-option option3">
+                            <img src=
+    "https://media.geeksforgeeks.org/wp-content/uploads/20221210183320/5.png"
+                                class="nav-img"
+                                alt="report">
+                            <h3 style="font-size: 17px;"> Delivery Boys</h3>
                         </div>
                         </a>
                         {% endif %}

@@ -70,6 +70,8 @@ def loginn(request):
                 return redirect("admin_dashboard")
             elif user.is_staff:
                 return redirect("staff_dashboard")
+            elif user.is_deliveryboy:
+                return redirect("deliveryboy_dashboard")
             messages.success(request, "Login successful.")
             return redirect("user")
             

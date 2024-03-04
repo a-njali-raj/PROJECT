@@ -184,13 +184,13 @@ body {
     padding: 30px 0 20px 10px;
     }
     .navcontainer {
-            height: calc(100vh - 70px);
-            width: 260px;
-            position: fixed; /* Set the navigation container as fixed */
-            top: 70px;
-            left: 0;
-            box-shadow: 1px 1px 10px rgba(189, 245, 234, 0.825);
-        }
+    height: calc(100vh - 70px);
+    width: 260px;
+    position: relative;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    transition: all 0.5s ease-in-out;
+    }
     .navcontainer::-webkit-scrollbar {
     display: none;
     }
@@ -322,43 +322,71 @@ body {
 }
 
 table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 20px;
-        background-color: #fff;
-        border-radius: 10px;
-        box-shadow: 0 0 10px rgba(168, 236, 226, 0.1);
-    }
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(168, 236, 226, 0.1);
+}
 
-    /* Style the table header */
-    th {
-        background-color: #a5c4bd;
-        color: #fff;
-        font-weight: bold;
-        padding: 10px;
-        text-align: left;
-    }
+/* Style the table header */
+th {
+    background-color: #a5c4bd;
+    color: #fff;
+    font-weight: bold;
+    padding: 10px;
+    text-align: left;
+}
 
-    /* Style the table rows */
-    tr {
-        transition: background-color 0.3s;
-    }
+/* Style the table rows */
+tr {
+    transition: background-color 0.3s;
+}
 
-    tr:nth-child(even) {
-        background-color: #f2f2f2;
-    }
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
 
-    /* Style the table cells (columns) */
-    th, td {
-        padding: 10px;
-        border-bottom: 1px solid #ddd;
-        text-align: left;
-    }
+/* Style the table cells (columns) */
+th, td {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    text-align: left;
+}
 
-    /* Extend the Action header cell */
-    th.action-header {
-        width: 100px;
-    }
+/* Extend the Action header cell */
+th.action-header {
+    width: 100px;
+}
+
+/* Style the action buttons in the table */
+.btn-edit, .btn-delete {
+    padding: 5px 9px;
+    margin-right: 5px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 12px;
+    color: #fff;
+    transition: background-color 0.3s;
+}
+
+.btn-edit {
+    background-color: #76c676;
+}
+
+.btn-delete {
+    background-color: #f44336;
+}
+
+.btn-edit:hover {
+    background-color: #5aaf5a;
+}
+
+.btn-delete:hover {
+    background-color: #d63737;
+}
 .dropdown .btn-secondary {
     background-color: #09ae96;
     color: #fff;
@@ -422,16 +450,6 @@ table {
 .button-link:hover {
     background-color: #0a6d66; /* Darken the color on hover */
 }
-.table-container {
-            max-width: 1000px;
-            margin: 20px auto;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(65, 117, 109, 0.1);
-            margin-left: 280px; /* Add margin to the left to accommodate the fixed navigation container */
-            overflow: auto; /* Make the table container scrollable */
-        }
 
 
     </style>
@@ -455,7 +473,7 @@ table {
                 </div>
             </div>
     
-        
+            
                    <div class="dropdown">
                         <button class="btn btn-secondary dropdown-toggle" type="button" id="userProfileDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <div class="user-profile">
@@ -491,6 +509,7 @@ table {
                             <h3 style="font-size: 17px;"> Registered Users</h3>
                         </div>
                         </a>
+                        <a href="appoinmentlist.html">
                         <div class="nav-option option3">
                             <img src=
     "https://media.geeksforgeeks.org/wp-content/uploads/20221210183320/5.png"
@@ -498,6 +517,7 @@ table {
                                 alt="report">
                             <h3 style="font-size: 17px;"> Appointments</h3>
                         </div>
+                    </a>
                         <a href="admintest.html">
                         <div class="nav-option option3">
                             <img src=
@@ -527,7 +547,6 @@ table {
                         </div>
                         </a>
                         {% endif %}
-                       
                         {% if user.is_superuser %}
                         <a href="admindeliveryboy.html">
                         <div class="nav-option option3">
@@ -535,50 +554,44 @@ table {
     "https://media.geeksforgeeks.org/wp-content/uploads/20221210183320/5.png"
                                 class="nav-img"
                                 alt="report">
-                            <h3 style="font-size: 17px;"> Delivery Boys</h3>
+                            <h3 style="font-size: 17px;"> Delivery boys</h3>
                         </div>
                         </a>
                         {% endif %}
                     </div>
                 </nav>
             </div>
-            <div class="table-container">
-            <h3>Appointment List</h3>
-            <div class="report-container">
-                
-            <table border="1">
-                <thead>
-                    <tr>
-                        <th>Patient Name</th>
-                        <th>Test</th>
-                        <th>Preferred Date</th>
-                        <th>Preferred Time</th>
-                        <th>Mode of Sample Collection</th>
-                        <th>Show more</th>
-                        
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for appointment in appointments %}
-                        <tr>
-                            <td>
-                                {% for patient in appointment.patients.all %}
-                                    {{ patient.full_name }}
-                                    {% if not forloop.last %}, {% endif %}
-                                {% endfor %}
-                            </td>
-                            <td>{{ appointment.main_test.name }}</td>
-                            <td>{{ appointment.preffered_date }}</td>
-                            <td>{{ appointment.preffered_time }}</td>
-                            <td>{{ appointment.appoinment_type }}</td>
-                            <td>
-                                <button onclick="showMoreDetails('{{ appointment.id }}')">Show More</button>
-                            </td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
+            <div class="main">
+    
+               
+    
+                <div class="container" style="max-width: 100%;">
+                 <b><a href="{% url 'adddeliveryboy' %}" class="button-link">Add Delivery boy</a></b>
+                    <table style="max-width: 100%;">
+                        <thead>
+                            <tr>
+                                <th>Username</th>
+                                <th>Full Name</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Replace the following rows with actual user data from your database -->
+                            {% for user in staff_users %}
+                            <tr>
+                                <td>{{ user.username }}</td>
+                                <td>{{ user.first_name }}</td>
+                                <td>
+                                  
+                                    <a href="{% url 'delete_deliveryboy' user.id %}" class="btn-delete" onclick="return confirm('Are you sure you want to delete this deliveryboy?')">Delete</a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                            <!-- Add more rows for other users as needed -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
         <script src="{% static '/assets/js/jquery-3.5.1.min.js'%}"></script>
 
@@ -609,13 +622,7 @@ table {
                     }
                 }
             }
-            function showMoreDetails(appointmentId) {
-        // Construct the URL for appdetaillist.html with the appointment ID as a parameter
-        var url = "appdetaillist.html?appointmentId=" + appointmentId;
-
-        // Navigate to the new URL
-        window.location.href = url;
-    }
+        
             function performSearch() {
                 searchTable(); // Call the searchTable function when the search icon is clicked
             }
