@@ -434,7 +434,7 @@ def adddeliveryboy(request):
             'Welcome to OneHealth',
             f'Dear {first_name},\n\nYou have been added as a staff member.Your username is {username} and your password is {password}.\n\nPlease keep your credentials secure.',
             'your_email@example.com',  # Replace with your email address
-            [email],  # Use the staff member's email address
+            [email], 
             fail_silently=False,
         )
         messages.success(request, "Delivery Boy is added successfully.")
@@ -470,3 +470,8 @@ def delete_deliveryboy(request, user_id):
     user.save()
     messages.success(request, "Delivery boy is removed successfully.")
     return redirect('admin_dashboard') 
+
+@never_cache
+@login_required(login_url='login')
+def deliveryboy_edit(request):
+    return render(request, "deliveryboy_edit.html")

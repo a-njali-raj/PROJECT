@@ -205,4 +205,4 @@ class Order(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     razorpay_order_id = models.CharField(max_length=100, null=True, blank=True)
     location = models.ForeignKey(Location, on_delete=models.CASCADE, related_name='orders',null=True, blank=True)
-    
+    delivery_status = models.CharField(max_length=20,default='pending')

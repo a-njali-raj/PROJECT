@@ -122,16 +122,7 @@ body {
     left: 19px;
     top: 8px;
     }
-    .dp {
-    height: 40px;
-    width: 40px;
-    background-color: #626262;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    }
+    
     .main-container {
     display: flex;
     width: 100vw;
@@ -149,7 +140,8 @@ body {
     overflow-y: scroll;
     overflow-x: hidden;
     padding: 40px 30px 30px 30px;
-    }
+    margin-left: 260px; /* Adjust this value based on the width of your navigation container */
+}
     
     .main::-webkit-scrollbar-thumb {
     background-image: 
@@ -184,13 +176,13 @@ body {
     padding: 30px 0 20px 10px;
     }
     .navcontainer {
-    height: calc(100vh - 70px);
-    width: 350px;
-    position: relative;
-    overflow-y: scroll;
-    overflow-x: hidden;
-    transition: all 0.5s ease-in-out;
-    }
+            height: calc(100vh - 70px);
+            width: 260px;
+            position: fixed; /* Set the navigation container as fixed */
+            top: 70px;
+            left: 0;
+            box-shadow: 1px 1px 10px rgba(189, 245, 234, 0.825);
+        }
     .navcontainer::-webkit-scrollbar {
     display: none;
     }
@@ -236,55 +228,20 @@ body {
     border-left: 5px solid #40d0a0af;
     background-color: var(--Border-color);
     }
-    .box {
-    height: 130px;
-    width: 230px;
-    border-radius: 20px;
-    box-shadow: 3px 3px 10px rgba(90, 238, 194, 0.751);
-    padding: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
-    cursor: pointer;
-    transition: transform 0.3s ease-in-out;
-    }
-    .box:hover {
-    transform: scale(1.08);
-    }
-    
-    .box:nth-child(1) {
-    background-color: var(--one-use-color);
-    }
-    .box:nth-child(2) {
-    background-color: var(--two-use-color);
-    }
-    .box:nth-child(3) {
-    background-color: var(--one-use-color);
-    }
-    .box:nth-child(4) {
-    background-color: var(--two-use-color);
-    }
-    
-    .box img {
-    height: 50px;
-    }
-    .box .text {
-    color: white;
-    }
-    .topic {
-    font-size: 13px;
-    font-weight: 400;
-    letter-spacing: 1px;
-    }
-    
-    .topic-heading {
-    font-size: 30px;
-    letter-spacing: 3px;
-    }
     
     
+    .report-container {
+    margin-left: 260px; /* Adjust this value based on the width of your navigation container */
+    min-height: 300px;
+    max-width: 1200px;
+    margin: 70px auto 0px auto;
+    background-color: #ffffff;
+    border-radius: 30px;
+    box-shadow: 3px 3px 10px rgb(188, 188, 188);
+    padding: 0px 20px 20px 20px;
+}
     .report-header {
-    height: 30px;
+    height: 80px;
     width: 100%;
     display: flex;
     align-items: center;
@@ -358,86 +315,43 @@ body {
 }
 
 table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 10px;
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(168, 236, 226, 0.1);
-}
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(168, 236, 226, 0.1);
+    }
 
-/* Style the table header */
-th {
-    background-color: #a5c4bd;
-    color: #fff;
-    font-weight: bold;
-    padding: 10px;
-    text-align: left;
-}
+    /* Style the table header */
+    th {
+        background-color: #a5c4bd;
+        color: #fff;
+        font-weight: bold;
+        padding: 10px;
+        text-align: left;
+    }
 
-/* Style the table rows */
-tr {
-    transition: background-color 0.3s;
-}
+    /* Style the table rows */
+    tr {
+        transition: background-color 0.3s;
+    }
 
-tr:nth-child(even) {
-    background-color: #f2f2f2;
-}
+    tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
 
-/* Style the table cells (columns) */
-th, td {
-    padding: 10px;
-    border-bottom: 1px solid #ddd;
-    text-align: left; /* Align text to the left */
-}
+    /* Style the table cells (columns) */
+    th, td {
+        padding: 10px;
+        border-bottom: 1px solid #ddd;
+        text-align: left;
+    }
 
-/* Style the table header */
-th {
-    background-color: #a5c4bd;
-    color: #fff;
-    font-weight: bold;
-    padding: 10px;
-    text-align: center; 
-}
-
-/* Style the table rows */
-tr {
-    transition: background-color 0.3s;
-    text-align: justify; 
-}
-
-/* Extend the Action header cell */
-th.action-header {
-    width: 50px;
-}
-
-/* Style the action buttons in the table */
-.btn-edit, .btn-delete {
-    padding: 5px 9px;
-    margin-right: 5px;
-    border: none;
-    border-radius: 3px;
-    cursor: pointer;
-    font-size: 12px;
-    color: #fff;
-    transition: background-color 0.3s;
-}
-
-.btn-edit {
-    background-color: #76c676;
-}
-
-.btn-delete {
-    background-color: #f44336;
-}
-
-.btn-edit:hover {
-    background-color: #5aaf5a;
-}
-
-.btn-delete:hover {
-    background-color: #d63737;
-}
+    /* Extend the Action header cell */
+    th.action-header {
+        width: 100px;
+    }
 .dropdown .btn-secondary {
     background-color: #09ae96;
     color: #fff;
@@ -477,9 +391,8 @@ th.action-header {
 
 .dropdown-item:hover {
     background-color: #042f2d; /* Change background color on hover */
-    color: #fff; /* Change text color on hover */
-}
-.button-link {
+    color: #fff; 
+    .button-link {
     display: inline-block;
     padding: 10px 10px;
     background-color: rgb(4, 48, 48);
@@ -488,55 +401,30 @@ th.action-header {
     border: none;
     border-radius: 6px;
 }
+}
+.button-link {
+    display: inline-block;
+    padding: 10px 10px;
+    background-color: rgb(9, 131, 133);
+    color: white;
+    text-decoration: none;
+    border: none;
+    border-radius: 6px;
+}
 
 .button-link:hover {
-    background-color: #072f2c; /* Darken the color on hover */
+    background-color: #0a6d66; /* Darken the color on hover */
 }
-
-.message-toaster {
-            position: fixed;
-            top: 0;
-            left: 50%;
-            text-align: center;
-            z-index: 9999;
-            transform: translateX(-50%);
-            padding: 30px 0;
-        }
-        /* Add this CSS code to center the welcome message */
-.main {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.welcome-message {
-    margin-top: 50px; /* Adjust the margin as needed */
-}
-.main-container {
-    display: flex;
-    justify-content: center; /* Center the content horizontally */
-    align-items: flex-start; /* Align the content at the top */
-}
-
-.main {
-    width: 80%; /* Adjust the width of the main container */
-}
-
-.report-container {
-    width: 100%; /* Occupy the full width of the main container */
-    max-width: 1200px; /* Limit the maximum width if needed */
-    background-color: #ffffff;
-    border-radius: 30px;
-    box-shadow: 3px 3px 10px rgb(188, 188, 188);
+.table-container {
+    max-width: 1000px;
+    margin: 20px auto;
     padding: 20px;
-    margin-top: 70px; /* Adjust the margin from the top */
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(65, 117, 109, 0.1);
+    margin-left: 0; /* Remove the margin-left to avoid extra space on the left */
+    overflow: auto;
 }
-
-
-.report-body {
-    max-width: 100%; /* Ensure the table does not exceed the width of the container */
-}
-
     </style>
     </head>
     
@@ -551,10 +439,13 @@ th.action-header {
                    
             </div>
     
-           
-            
-            
-           
+            <div class="searchbar">
+                <input type="text" id="searchInput" placeholder="Search" oninput="searchTable()">
+                <div class="searchbtn" onclick="performSearch()">
+                    <img src="{% static '/C:/Project/PROJECT/static/assets/img/search.png' %}" class="icn srchicn" alt="search-icon">
+                </div>
+            </div>
+    
             <div class="message">
                 <div class="circle"></div>
                 <img src=
@@ -576,89 +467,54 @@ th.action-header {
             </div>
     
         </header>
-        {% include "layout/messages.html" %}
+    
         <div class="main-container">
             <div class="navcontainer">
                 <nav class="nav">
                     <div class="nav-upper-options">
                         <a href="deliveryboy_dashboard.html">
-                        <div class="nav-option option1">
-                            
-                            <h3 style="font-size: 17px;"> Dashboard</h3>
-                        </div>
-                        </a>
-                    
-                    <a href="">
-                        <div class="nav-option option3">
-                            <img src=
-    "https://media.geeksforgeeks.org/wp-content/uploads/20221210183320/5.png"
-                                class="nav-img"
-                                alt="report">
-                            <h3 style="font-size: 17px;"> Orders</h3>
-                        </div>
-                    </a>
+                            <div class="nav-option option1">
+                                
+                                <h3 style="font-size: 17px;"> Dashboard</h3>
+                            </div>
+                            </a>
+                        
+                        
+                       
                     </div>
                 </nav>
             </div>
-
             <div class="main">
                 <div class="report-container">
-                    <div class="report-header">
-                        <h2 class="recent-Articles">Orders</h2>
-                    </div>
-                    <div class="report-body">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Order ID</th>
-                                    <th>User</th>
-                                    <th>Phone Number</th>
-                                    <th>Address</th>
-                                    <th>Total Amount</th>
-                                    <th>Products</th>
-                                    <th>Edit more</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for order in orders %}
-                                    <tr>
-                                        <td>{{ order.id }}</td>
-                                        <td>{{ order.user }}</td>
-                                        <td>{{ order.user.phone_number }}</td>
-                                        <td>{{ order.location.address }}</td> <!-- Display the address from the Location model -->
-                                        <td>
-                                            <!-- Apply badge style based on the paid status -->
-                                            {% if order.payment_set.exists %}
-                                                {% if order.payment_set.first.status %}
-                                                    <span class="badge badge-success">Paid</span>
-                                                {% else %}
-                                                    <span class="badge badge-danger">Unpaid</span>
-                                                {% endif %}
-                                            {% else %}
-                                                <span class="badge badge-secondary">No Payment</span>
-                                            {% endif %}
-                                            {{ order.total_amount }}
-                                        </td>
-                                        <td>
-                                            <ul>
-                                                {% for item in order.cartitem_set.all %}
-                                                    <li>{{ item.product.product_name }}- Quantity: {{ item.quantity }} </li>
-                                                {% endfor %}
-                                            </ul>
-                                        </td>
-                                        <td>
-                                            <button onclick="editMoreDetails('{{ order.id }}')"> Edit More</button>
-                                        </td>
-
-                                    </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
+                    <!-- Existing report content here -->
+    
+                    <!-- Form for updating appointment details -->
+                    <form action="" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        
+                        <!-- Appointment Status -->
+                        <div class="form-group">
+                            <label for="Delivery_status">Delivery Status:</label>
+                            <select class="form-control" name="delivery_status" id="delivery-status">
+                                <option value="Pending" {% if order.delivery_status == 'Pending' %}selected{% endif %}>Pending</option>
+                                <option value="Out for delivery" {% if order.delivery_status  == 'Out for delivery' %}selected{% endif %}>Out for delivery</option>
+                                <option value="Delivered" {% if order.delivery_status  == 'Delivered' %}selected{% endif %}>Delivered</option>
+                                
+                            </select>
+                        </div>
+                        
+                       
+                        <!-- Hidden field for appointment ID -->
+                        <input type="hidden" name="order_id" value="{{ order.id }}">
+                
+                        <!-- Submit Button -->
+                        <br>
+                        <button type="submit" class="btn btn-primary">Update Delivery status</button>
+                    </form>
                 </div>
             </div>
-           
-                
+
+        </div>
         <script src="{% static '/assets/js/jquery-3.5.1.min.js'%}"></script>
 
         <script src="{% static '/assets/js/bootstrap.bundle.min.js'%}"></script>
@@ -668,52 +524,31 @@ th.action-header {
         <script src="{% static '/assets/vendor/wow/wow.min.js'%}"></script>
     
         <script src="{% static '/assets/js/theme.js'%}"></script>
-      
         <script>
             function searchTable() {
-                var input, filter, table, tr, td, i, j, txtValue;
+                var input, filter, table, tr, td, i, txtValue;
                 input = document.getElementById("searchInput");
                 filter = input.value.toUpperCase();
                 table = document.querySelector("table"); // Replace with the actual table ID or class
                 tr = table.getElementsByTagName("tr");
         
                 for (i = 0; i < tr.length; i++) {
-                    // Skip the first row (heading row)
-                    if (i === 0) {
-                        continue;
-                    }
-        
-                    var found = false;
-                    for (j = 0; j < tr[i].cells.length; j++) {
-                        td = tr[i].cells[j];
-                        if (td) {
-                            txtValue = td.textContent || td.innerText;
-                            if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                                found = true;
-                                break;  // Break the inner loop if a match is found in any column
-                            }
+                    td = tr[i].getElementsByTagName("td")[0]; // Change index to match the column you want to search
+                    if (td) {
+                        txtValue = td.textContent || td.innerText;
+                        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                            tr[i].style.display = "";
+                        } else {
+                            tr[i].style.display = "none";
                         }
-                    }
-                    if (found) {
-                        tr[i].style.display = "";
-                    } else {
-                        tr[i].style.display = "none";
                     }
                 }
             }
-        
-            function editMoreDetails(orderId) {
-        // Construct the URL for appdetaillist.html with the appointment ID as a parameter
-        var url = "deliveryboy_edit.html?orderId=" + orderId;
-
-        // Navigate to the new URL
-        window.location.href = url;
-    }
+           
             function performSearch() {
                 searchTable(); // Call the searchTable function when the search icon is clicked
             }
         </script>
-        
         
     </body>
     </html>

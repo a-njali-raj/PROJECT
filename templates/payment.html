@@ -5,7 +5,6 @@
     <h4>Payment Confirmation</h4>
     {% if order_type == "appoinment" %}
     <p>Thank you for booking your appointment! Please choose your method of payment and enter the required details:</p>
-
     <!-- Display appointment details here -->
     <div class="row">
         <div class="col-sm-6">
@@ -21,11 +20,7 @@
         </div>
     </div>
     {% else %}
-    
-    
-    
     <!-- Display ordered product details in a responsive table -->
-    
     <div class="table-responsive">
         <table class="table">
             <thead>
@@ -46,7 +41,6 @@
                     <td>{{ cart_item.quantity }}</td>
                     <td>₹{{ cart_item.total_price }}</td>
                 </tr>
-                
                 {% endfor %}
             </tbody>
         </table>
@@ -54,12 +48,10 @@
     </div>
     
     {% endif %}
-
     <!-- Payment Method Form -->
     <button type="submit" class="btn btn-primary my-3" @click="proceedToPayment">Proceed to Payment</button>
 </div>
 {% endblock %}
-
 
 {% block extra_js %}
 <!-- Add JavaScript to show/hide payment details -->
