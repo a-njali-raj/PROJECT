@@ -351,6 +351,7 @@ def addproduct(request):
             description=description,  
         )
         product.save()
+    
 
         messages.success(request, 'Health product added successfully.')
         return redirect('adminproduct.html')  # Adjust the URL as needed
