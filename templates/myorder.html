@@ -3,6 +3,33 @@
 {% block extra_css %}
 
 <style>
+ .product-list-container {
+    overflow-x: auto; /* Enable horizontal scrolling */
+    white-space: nowrap; /* Prevent items from wrapping to the next line */
+}
+
+.flex-container {
+    display: flex;
+    gap: 10px; /* Adjust the gap between items as needed */
+    padding-bottom: 10px; /* Add some bottom padding for better spacing */
+}
+
+.flex-item {
+    flex: 0 0 auto; /* Prevent items from growing and shrinking */
+    display: flex;
+    align-items: center; /* Align items vertically */
+    padding: 10px; /* Add padding to each item */
+    border: 1px solid #ccc; /* Add border for better visibility */
+    border-radius: 5px; /* Add border radius for better appearance */
+    background-color: #f9f9f9; /* Add background color for better visibility */
+    min-width: 200px; /* Set minimum width for each item */
+    max-width: 300px; /* Set maximum width for each item */
+    overflow: hidden; /* Hide overflow content */
+    text-overflow: ellipsis; /* Add ellipsis for overflow text */
+    white-space: nowrap; /* Prevent text wrapping */
+}
+
+
       .delivery-status {
         display: flex;
         justify-content: space-between;
@@ -101,20 +128,20 @@
                             <p class="mb-2">Total Amount: ₹{{ order.total_amount }}</p>
                             <p class="mb-2">Order Date: {{ order.created_at }}</p>
                             <h6 class="mb-3">Products:</h6>
-                            <ul class="list-group">
-                                {% for item in order.cartitem_set.all reversed %} {# Iterate through items in reverse order #}
-                                    <li class="list-group-item border-0">
+                            <div class="product-list-container flex-container">
+                                {% for item in order.cartitem_set.all reversed %}
+                                    <div class="flex-item">
                                         {% if item.product.product_image %}
-                                            <img src="{{ item.product.product_image.url }}" alt="{{ item.product.product_name }}" class="img-thumbnail float-left mr-3" style="max-width: 100px;">
+                                            <img src="{{ item.product.product_image.url }}" alt="{{ item.product.product_name }}" class="img-thumbnail mr-2" style="max-width: 100px;">
                                         {% endif %}
                                         <div class="product-details">
                                             <h6 class="mb-1">{{ item.product.product_name }}</h6>
                                             <p class="mb-1">Quantity: {{ item.quantity }}</p>
                                         </div>
-                                        <!-- Add more product details as needed -->
-                                    </li>
+                                    </div>
                                 {% endfor %}
-                            </ul>
+                                
+                            </div>
                             <div class="delivery-status mt-3">
                                 <div class="status-mark-container">
                                     <div class="status-mark pending {% if order.delivery_status == 'pending' %}pulse{% endif %}"></div>

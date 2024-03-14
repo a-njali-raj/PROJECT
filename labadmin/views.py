@@ -473,6 +473,11 @@ def admindeliveryboy(request):
     context = {'staff_users': staff_users}
     return render(request, 'admindeliveryboy.html', context)
 
+@never_cache
+@login_required(login_url='login')
+def adminorder(request):
+    orders = Order.objects.filter(payment__status=True).order_by('-id')[:5]
+    return render(request, 'adminorder.html', {'orders': orders})
 
 @never_cache
 @login_required(login_url='login')
@@ -499,17 +504,29 @@ def deliveryboy_edit(request, order_id):
 @never_cache
 @login_required(login_url='login')
 def update_delivery_status(request):
-    if request.method == 'POST':
+     if request.method == 'POST':
         order_id = request.POST.get('order_id')
         delivery_status = request.POST.get('delivery_status')
+        
         try:
             order = get_object_or_404(Order, pk=order_id)
-            order.delivery_status = delivery_status
-            order.save()
-            messages.success(request, 'Delivery status updated successfully.')
-            # Redirect to order_deliverboy.html after updating
-            return redirect('order_deliverboy')
+            
+            # Fetch the delivery boy user based on the condition is_deliveryboy=True
+            delivery_boy_user = User.objects.filter(is_deliveryboy=True).first()
+            
+            if delivery_boy_user:
+                order.updated_by_delivery_boy = delivery_boy_user
+                order.delivery_status = delivery_status
+                
+                order.save()
+                messages.success(request, 'Delivery status updated successfully.')
+                # Redirect to order_deliverboy.html after updating
+                return redirect('order_deliverboy')
+            else:
+                messages.error(request, 'No delivery boy found.')
+                return redirect('deliveryboy_edit', order_id=order_id)
+                
         except Exception as e:
             messages.error(request, f'An error occurred: {e}')
             return redirect('deliveryboy_edit', order_id=order_id)  # Redirect to the same page after form submission
-    return render(request, "deliveryboy_edit.html")
+     return render(request, "deliveryboy_edit.html")

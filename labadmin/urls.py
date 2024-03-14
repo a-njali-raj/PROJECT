@@ -33,5 +33,6 @@ urlpatterns = [
     path('delete_deliveryboy/<int:user_id>/', views.delete_deliveryboy, name='delete_deliveryboy'),
     path('deliveryboy_edit/<int:order_id>/', views.deliveryboy_edit, name='deliveryboy_edit'),
     path('update_delivery_status/', views.update_delivery_status, name='update_delivery_status'),
+    path('adminorder.html',views.adminorder,name='adminorder'),
 ]
 

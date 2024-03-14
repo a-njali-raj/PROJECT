@@ -136,7 +136,7 @@ body {
     display: flex;
     width: 100vw;
     position: relative;
-    top: 70px;
+    top: 40px;
     z-index: 1;
     }
     .dpicn {
@@ -282,17 +282,9 @@ body {
     letter-spacing: 3px;
     }
     
-    .report-container {
-    min-height: 300px;
-    max-width: 1200px;
-    margin: 70px auto 0px auto;
-    background-color: #ffffff;
-    border-radius: 30px;
-    box-shadow: 3px 3px 10px rgb(188, 188, 188);
-    padding: 0px 20px 20px 20px;
-    }
+    
     .report-header {
-    height: 80px;
+    height: 30px;
     width: 100%;
     display: flex;
     align-items: center;
@@ -369,68 +361,55 @@ table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 20px;
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(168, 236, 226, 0.1);
 }
 
-/* Style the table header */
-th {
-    background-color: #a5c4bd;
-    color: #fff;
-    font-weight: bold;
-    padding: 10px;
-    text-align: left;
-}
-
-/* Style the table rows */
-tr {
-    transition: background-color 0.3s;
-}
-
-tr:nth-child(even) {
-    background-color: #f2f2f2;
-}
-
-/* Style the table cells (columns) */
 th, td {
-    padding: 10px;
+    padding: 12px 15px;
     border-bottom: 1px solid #ddd;
     text-align: left;
 }
 
-/* Extend the Action header cell */
-th.action-header {
-    width: 100px;
+th {
+    background-color: #f2f2f2;
 }
 
-/* Style the action buttons in the table */
-.btn-edit, .btn-delete {
-    padding: 5px 9px;
+tr:hover {
+    background-color: #f5f5f5;
+}
+
+/* Style for the action buttons */
+.action-buttons {
+    display: flex;
+    align-items: center;
+}
+
+.action-buttons button {
     margin-right: 5px;
+    padding: 5px 10px;
     border: none;
     border-radius: 3px;
     cursor: pointer;
     font-size: 12px;
-    color: #fff;
-    transition: background-color 0.3s;
 }
 
 .btn-edit {
-    background-color: #76c676;
+    background-color: #4caf50;
+    color: white;
 }
 
 .btn-delete {
     background-color: #f44336;
+    color: white;
 }
 
 .btn-edit:hover {
-    background-color: #5aaf5a;
+    background-color: #45a049;
 }
 
 .btn-delete:hover {
-    background-color: #d63737;
+    background-color: #f44336;
 }
+
 .dropdown .btn-secondary {
     background-color: #09ae96;
     color: #fff;
@@ -469,13 +448,13 @@ th.action-header {
 }
 
 .dropdown-item:hover {
-    background-color: #214644; /* Change background color on hover */
+    background-color: #042f2d; /* Change background color on hover */
     color: #fff; /* Change text color on hover */
 }
 .button-link {
     display: inline-block;
     padding: 10px 10px;
-    background-color: rgb(32, 77, 77);
+    background-color: rgb(4, 48, 48);
     color: white;
     text-decoration: none;
     border: none;
@@ -495,6 +474,44 @@ th.action-header {
             transform: translateX(-50%);
             padding: 30px 0;
         }
+        /* Add this CSS code to center the welcome message */
+.main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.welcome-message {
+    margin-top: 50px; /* Adjust the margin as needed */
+}
+.main-container {
+    display: flex;
+    justify-content: center; /* Center the content horizontally */
+    align-items: flex-start; /* Align the content at the top */
+}
+
+.main {
+    width: 80%; /* Adjust the width of the main container */
+}
+
+.report-container {
+    width: 100%; /* Occupy the full width of the main container */
+    max-width: 2500px; /* Limit the maximum width if needed */
+    background-color: #ffffff;
+    border-radius: 30px;
+    box-shadow: 3px 3px 10px rgb(188, 188, 188);
+    padding: 20px;
+    margin-top: 20px; /* Adjust the margin from the top */
+}
+
+.report-header {
+    margin-bottom: 10px; /* Reduce the bottom margin */
+}
+.report-body {
+    max-width: 100%; 
+    padding: 10px;/* Ensure the table does not exceed the width of the container */
+}
+
     </style>
     </head>
     
@@ -509,21 +526,16 @@ th.action-header {
                    
             </div>
     
-            <div class="searchbar">
-                <input type="text" id="searchInput" placeholder="Search" oninput="searchTable()">
-                <div class="searchbtn" onclick="performSearch()">
-                    <img src="{% static '/C:/Project/PROJECT/static/assets/img/search.png' %}" class="icn srchicn" alt="search-icon">
-                </div>
-            </div>
+           
             
             
-            <div class="button-row">
-                <b><a href="{% url 'addtest' %}" id="addTestLink"class="button-link">Add a Test</a></b>
-                <b><a href="{% url 'addstaff' %}"id="addStaffLink" class="button-link">Add Staff</a></b>
-                <b><a href="{% url 'addproduct' %}"id="addproductLink" class="button-link">Add product</a></b>
-                <b><a href="{% url 'adddeliveryboy' %}"id="adddeliveryboyLink" class="button-link">Add Delivery boy</a></b>
-            </div>
-            
+           
+            <div class="message">
+                <div class="circle"></div>
+                <img src=
+    "https://media.geeksforgeeks.org/wp-content/uploads/20221210183322/8.png"
+                    class="icn"
+                    alt="">
                    <div class="dropdown">
                         <button class="btn btn-secondary dropdown-toggle" type="button" id="userProfileDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <div class="user-profile">
@@ -532,7 +544,7 @@ th.action-header {
                     </div>
                         </button>
             <div class="dropdown-menu" aria-labelledby="userProfileDropdown">
-                
+                <a class="dropdown-item" href="userprofile.html">My Profile</a>
                 <a class="dropdown-item" href="logout">Logout</a>
             </div>
         </div>
@@ -623,96 +635,81 @@ th.action-header {
                             </div>
                             </a>
                         {% endif %}
-    
-
-    
-    
-    
-                      
-    
+      
                     </div>
                 </nav>
             </div>
+
             <div class="main">
-                
-                
-                <div class="box-container">
-    
-                    <div class="box box1">
-    <div class="text">
-        <h2 class="topic-heading">{{ users.count }}</h2>
-        <h2 class="topic">Registered Users</h2>
-    </div>
-</div>
-
-    
-                    <div class="box box2">
-                        <div class="text">
-                            <h2 class="topic-heading">{{ review_count }}</h2>
-                            <h2 class="topic">Reviews</h2>
-                        </div>
-    
-                       
-                    </div>
-    
-                    <div class="box box3">
-                        <div class="text">
-                            <h2 class="topic-heading">{{ average_rating|default:0|floatformat:1 }}</h2>
-                            <h2 class="topic">Ratings</h2>
-                        </div>
-    
-                    </div>
-    
-                   
-                </div>  
-    
-                <div class="container">
+                <div class="report-container">
                     <div class="report-header">
-
-                    <h3>Recent Users</h3>
-                    
-             
-                </div>
-
-
-                    <table>
-                        <thead>
-                            <tr>
-                                
-                                <th>Email Address</th>
-                                
-                                <th>Username</th>
-                                <!-- Extend the Action header cell -->
-                                <th class="action-header" colspan="2">Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <!-- Replace the following rows with actual user data from your database -->
-                            {% for user in users %}
-                            <tr>
-                                
-                                <td>{{ user.email }}</td>
-                               
-                                <td>{{ user.username }}</td>
-                                
-                                <td>
-                                    {% if user.is_active %}
-                                        <button class="btn-edit">Active</button>
-                                    {% else %}
-                                        <button class="btn-delete">Inactive</button>
-                                    {% endif %}
-                                </td>
-                               
-                            </tr>
-                            {% endfor %}
-                            <!-- Add more rows for other users as needed -->
-                        </tbody>
-                    </table>
-                </div>
+                        <h2 class="recent-Articles">Orders</h2>
                     </div>
+                    <div class="report-body">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Order ID</th>
+                                    <th>User</th>
+                                    <th>Phone Number</th>
+                                    <th>Address</th>
+                                    <th>Total Amount</th>
+                                    <th>Products</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                    <th>Assigned Delivery boy</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for order in orders %}
+                                <tr>
+                                    <td>{{ order.id }}</td>
+                                    <td>{{ order.user }}</td>
+                                    <td>{{ order.user.phone_number }}</td>
+                                    <td>{{ order.location.address }}</td> <!-- Display the address from the Location model -->
+                                    <td>
+                                        <!-- Apply badge style based on the paid status -->
+                                        {% if order.payment_set.exists %}
+                                        {% if order.payment_set.first.status %}
+                                        <span class="badge badge-success">Paid</span>
+                                        {% else %}
+                                        <span class="badge badge-danger">Unpaid</span>
+                                        {% endif %}
+                                        {% else %}
+                                        <span class="badge badge-secondary">No Payment</span>
+                                        {% endif %}
+                                        {{ order.total_amount }}
+                                    </td>
+                                    <td>
+                                        <ul>
+                                            {% for item in order.cartitem_set.all %}
+                                            <li>{{ item.product.product_name }}- Quantity: {{ item.quantity }} </li>
+                                            {% endfor %}
+                                        </ul>
+                                    </td>
+                                    <td>{{ order.delivery_status }}</td>
+                                    {% if order.delivery_status == 'Delivered' %}
+                                    <td>
+                                        <!-- Delivery status is 'delivered', hide the edit button -->
+                                        <span>&#10003;</span>
+                                    </td>
+                                {% else %}
+                                    <td>
+                                        <!-- Delivery status is not 'delivered', show the edit button -->
+                                        <button onclick="editMoreDetails('{{ order.id }}')">Edit More</button>
+                                    </td>
+                                {% endif %}
+                                <td>{{ order.updated_by_delivery_boy.first_name }} {{ order.updated_by_delivery_boy.last_name }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    
                 </div>
             </div>
-        </div>
+           
+                
         <script src="{% static '/assets/js/jquery-3.5.1.min.js'%}"></script>
 
         <script src="{% static '/assets/js/bootstrap.bundle.min.js'%}"></script>
@@ -725,29 +722,49 @@ th.action-header {
       
         <script>
             function searchTable() {
-                var input, filter, table, tr, td, i, txtValue;
+                var input, filter, table, tr, td, i, j, txtValue;
                 input = document.getElementById("searchInput");
                 filter = input.value.toUpperCase();
                 table = document.querySelector("table"); // Replace with the actual table ID or class
                 tr = table.getElementsByTagName("tr");
         
                 for (i = 0; i < tr.length; i++) {
-                    td = tr[i].getElementsByTagName("td")[0]; // Change index to match the column you want to search
-                    if (td) {
-                        txtValue = td.textContent || td.innerText;
-                        if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                            tr[i].style.display = "";
-                        } else {
-                            tr[i].style.display = "none";
+                    // Skip the first row (heading row)
+                    if (i === 0) {
+                        continue;
+                    }
+        
+                    var found = false;
+                    for (j = 0; j < tr[i].cells.length; j++) {
+                        td = tr[i].cells[j];
+                        if (td) {
+                            txtValue = td.textContent || td.innerText;
+                            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                                found = true;
+                                break;  // Break the inner loop if a match is found in any column
+                            }
                         }
+                    }
+                    if (found) {
+                        tr[i].style.display = "";
+                    } else {
+                        tr[i].style.display = "none";
                     }
                 }
             }
         
+            function editMoreDetails(orderId) {
+        // Construct the URL for appdetaillist.html with the appointment ID as a parameter
+        var url = "/deliveryboy_edit/" + orderId + "/";
+
+        // Navigate to the new URL
+        window.location.href = url;
+    }
             function performSearch() {
                 searchTable(); // Call the searchTable function when the search icon is clicked
             }
         </script>
+        
         
         
     </body>
