@@ -1,5 +1,91 @@
 {% extends "layout/base.html" %}
 {% block content %}
+{% block extra_css %}
+
+<style>
+      .delivery-status {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 20px;
+        position: relative; /* Added position relative to container */
+    }
+
+    .status-mark-container {
+        text-align: center;
+    }
+
+    .line {
+    height: 2px;
+    background-color: #666; /* Darker color for line */
+    position: absolute; /* Changed position to absolute */
+    top: calc(50% - 1px); /* Positioned at the center of the container */
+    left: 5px; /* Aligned with the start of the container */
+    width: calc(100% - 10px); /* Set to full width of container */
+    transform-origin: left; /* Set transform origin to left */
+    transform: scaleX(0); /* Initially set to 0 width */
+    z-index: 0; /* Set z-index behind marks */
+}
+
+/* Adjusted CSS for status marks */
+.status-mark {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: #ddd; /* Default color for marks */
+    margin-bottom: 5px;
+    position: relative;
+    z-index: 1; /* Set z-index above line */
+}
+
+    .pending {
+        background-color: yellow; /* Color for pending state */
+    }
+
+    .in-progress {
+        background-color: orange; /* Color for in-progress state */
+    }
+
+    .delivered {
+        background-color: green; /* Color for delivered state */
+    }
+
+    .status-label {
+        font-size: 12px;
+        margin-top: 5px;
+    }
+
+    /* Animation */
+    @keyframes pulse {
+        0% {
+            opacity: 0.2;
+        }
+        50% {
+            opacity: 0.8;
+        }
+        100% {
+            opacity: 0.2;
+        }
+    }
+
+    .pulse {
+        animation: pulse 2s infinite;
+    }
+
+    /* Animation for line */
+    @keyframes progress {
+        from {
+            transform: scaleX(0); /* Start with no width */
+        }
+        to {
+            transform: scaleX(1); /* End with full width */
+        }
+    }
+
+    .progress-animation {
+        animation: progress 2s ease forwards; /* Apply animation to line */
+    }
+</style>
+{% endblock %}
 <div class="container mt-5">
     <div class="row">
         <div class="col-md-8 offset-md-2">
@@ -29,6 +115,28 @@
                                     </li>
                                 {% endfor %}
                             </ul>
+                            <div class="delivery-status mt-3">
+                                <div class="status-mark-container">
+                                    <div class="status-mark pending {% if order.delivery_status == 'pending' %}pulse{% endif %}"></div>
+                                    <div class="status-label">Pending</div>
+                                </div>
+                                {% if order.delivery_status != 'pending' %}
+                                    <div class="line {% if order.delivery_status == 'Delivered' %}progress-animation{% endif %}"></div>
+                                {% endif %}
+                                <div class="status-mark-container">
+                                    <div class="status-mark in-progress {% if order.delivery_status == 'Out for delivery' %}pulse{% endif %}"></div>
+                                    {% if order.delivery_status == 'Out for delivery' %}
+                                        <div class="status-label">Out for delivery</div>
+                                    {% endif %}
+                                </div>
+                                {% if order.delivery_status == 'Delivered' %}
+                                    <div class="line progress-animation"></div>
+                                {% endif %}
+                                <div class="status-mark-container">
+                                    <div class="status-mark delivered {% if order.delivery_status == 'Delivered' %}pulse{% endif %}"></div>
+                                    <div class="status-label">Delivered</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 {% endfor %}

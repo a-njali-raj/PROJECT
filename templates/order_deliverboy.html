@@ -360,84 +360,56 @@ body {
 table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 10px;
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(168, 236, 226, 0.1);
+    margin-top: 20px;
 }
 
-/* Style the table header */
-th {
-    background-color: #a5c4bd;
-    color: #fff;
-    font-weight: bold;
-    padding: 10px;
+th, td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #ddd;
     text-align: left;
 }
 
-/* Style the table rows */
-tr {
-    transition: background-color 0.3s;
-}
-
-tr:nth-child(even) {
+th {
     background-color: #f2f2f2;
 }
 
-/* Style the table cells (columns) */
-th, td {
-    padding: 10px;
-    border-bottom: 1px solid #ddd;
-    text-align: left; /* Align text to the left */
+tr:hover {
+    background-color: #f5f5f5;
 }
 
-/* Style the table header */
-th {
-    background-color: #a5c4bd;
-    color: #fff;
-    font-weight: bold;
-    padding: 10px;
-    text-align: center; 
+/* Style for the action buttons */
+.action-buttons {
+    display: flex;
+    align-items: center;
 }
 
-/* Style the table rows */
-tr {
-    transition: background-color 0.3s;
-    text-align: justify; 
-}
-
-/* Extend the Action header cell */
-th.action-header {
-    width: 50px;
-}
-
-/* Style the action buttons in the table */
-.btn-edit, .btn-delete {
-    padding: 5px 9px;
+.action-buttons button {
     margin-right: 5px;
+    padding: 5px 10px;
     border: none;
     border-radius: 3px;
     cursor: pointer;
     font-size: 12px;
-    color: #fff;
-    transition: background-color 0.3s;
 }
 
 .btn-edit {
-    background-color: #76c676;
+    background-color: #4caf50;
+    color: white;
 }
 
 .btn-delete {
     background-color: #f44336;
+    color: white;
 }
 
 .btn-edit:hover {
-    background-color: #5aaf5a;
+    background-color: #45a049;
 }
 
 .btn-delete:hover {
-    background-color: #d63737;
+    background-color: #f44336;
 }
+
 .dropdown .btn-secondary {
     background-color: #09ae96;
     color: #fff;
@@ -529,12 +501,15 @@ th.action-header {
     border-radius: 30px;
     box-shadow: 3px 3px 10px rgb(188, 188, 188);
     padding: 20px;
-    margin-top: 70px; /* Adjust the margin from the top */
+    margin-top: 20px; /* Adjust the margin from the top */
 }
 
-
+.report-header {
+    margin-bottom: 10px; /* Reduce the bottom margin */
+}
 .report-body {
-    max-width: 100%; /* Ensure the table does not exceed the width of the container */
+    max-width: 100%; 
+    padding: 10px;/* Ensure the table does not exceed the width of the container */
 }
 
     </style>
@@ -616,45 +591,55 @@ th.action-header {
                                     <th>Address</th>
                                     <th>Total Amount</th>
                                     <th>Products</th>
-                                    <th>Edit more</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {% for order in orders %}
-                                    <tr>
-                                        <td>{{ order.id }}</td>
-                                        <td>{{ order.user }}</td>
-                                        <td>{{ order.user.phone_number }}</td>
-                                        <td>{{ order.location.address }}</td> <!-- Display the address from the Location model -->
-                                        <td>
-                                            <!-- Apply badge style based on the paid status -->
-                                            {% if order.payment_set.exists %}
-                                                {% if order.payment_set.first.status %}
-                                                    <span class="badge badge-success">Paid</span>
-                                                {% else %}
-                                                    <span class="badge badge-danger">Unpaid</span>
-                                                {% endif %}
-                                            {% else %}
-                                                <span class="badge badge-secondary">No Payment</span>
-                                            {% endif %}
-                                            {{ order.total_amount }}
-                                        </td>
-                                        <td>
-                                            <ul>
-                                                {% for item in order.cartitem_set.all %}
-                                                    <li>{{ item.product.product_name }}- Quantity: {{ item.quantity }} </li>
-                                                {% endfor %}
-                                            </ul>
-                                        </td>
-                                        <td>
-                                            <button onclick="editMoreDetails('{{ order.id }}')"> Edit More</button>
-                                        </td>
-
-                                    </tr>
+                                <tr>
+                                    <td>{{ order.id }}</td>
+                                    <td>{{ order.user }}</td>
+                                    <td>{{ order.user.phone_number }}</td>
+                                    <td>{{ order.location.address }}</td> <!-- Display the address from the Location model -->
+                                    <td>
+                                        <!-- Apply badge style based on the paid status -->
+                                        {% if order.payment_set.exists %}
+                                        {% if order.payment_set.first.status %}
+                                        <span class="badge badge-success">Paid</span>
+                                        {% else %}
+                                        <span class="badge badge-danger">Unpaid</span>
+                                        {% endif %}
+                                        {% else %}
+                                        <span class="badge badge-secondary">No Payment</span>
+                                        {% endif %}
+                                        {{ order.total_amount }}
+                                    </td>
+                                    <td>
+                                        <ul>
+                                            {% for item in order.cartitem_set.all %}
+                                            <li>{{ item.product.product_name }}- Quantity: {{ item.quantity }} </li>
+                                            {% endfor %}
+                                        </ul>
+                                    </td>
+                                    <td>{{ order.delivery_status }}</td>
+                                    {% if order.delivery_status == 'Delivered' %}
+                                    <td>
+                                        <!-- Delivery status is 'delivered', hide the edit button -->
+                                        <span>&#10003;</span>
+                                    </td>
+                                {% else %}
+                                    <td>
+                                        <!-- Delivery status is not 'delivered', show the edit button -->
+                                        <button onclick="editMoreDetails('{{ order.id }}')">Edit More</button>
+                                    </td>
+                                {% endif %}
+                                </tr>
                                 {% endfor %}
                             </tbody>
                         </table>
                     </div>
+                    
                 </div>
             </div>
            
@@ -704,7 +689,7 @@ th.action-header {
         
             function editMoreDetails(orderId) {
         // Construct the URL for appdetaillist.html with the appointment ID as a parameter
-        var url = "deliveryboy_edit.html?orderId=" + orderId;
+        var url = "/deliveryboy_edit/" + orderId + "/";
 
         // Navigate to the new URL
         window.location.href = url;
@@ -713,6 +698,7 @@ th.action-header {
                 searchTable(); // Call the searchTable function when the search icon is clicked
             }
         </script>
+        
         
         
     </body>
