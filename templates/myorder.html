@@ -121,9 +121,7 @@
             {% if orders %}
                 {% for order in orders reversed %} {# Iterate through orders in reverse order #}
                     <div class="card mb-4">
-                        <div class="card-header custom-header">
-                            <h6 class="m-0">Order ID: {{ order.id }}</h6>
-                        </div>
+                       
                         <div class="card-body">
                             <p class="mb-2">Total Amount: ₹{{ order.total_amount }}</p>
                             <p class="mb-2">Order Date: {{ order.created_at }}</p>

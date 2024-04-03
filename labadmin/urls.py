@@ -34,5 +34,7 @@ urlpatterns = [
     path('deliveryboy_edit/<int:order_id>/', views.deliveryboy_edit, name='deliveryboy_edit'),
     path('update_delivery_status/', views.update_delivery_status, name='update_delivery_status'),
     path('adminorder.html',views.adminorder,name='adminorder'),
+    path('otp-verification/<int:order_id>/', views.otp_verification, name='otp_verification'),
+    
 ]
 

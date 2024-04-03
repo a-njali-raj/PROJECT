@@ -1,0 +1,269 @@
+
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BeauteBot</title>
+    <style>
+        /* General Styles */
+        * {
+            font-size: 16px;
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        }
+      
+        /* Sidebar */
+        .sidebar {
+            height: 100%;
+            width: 0;
+            position: fixed;
+            z-index: 1;
+            top: 0;
+            left: 0;
+            background-color: #111;
+            overflow-x: hidden;
+            transition: 0.5s;
+            padding-top: 60px;
+            background-image: url('path-to-your-background-image.jpg');
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+
+        /* Sidebar links */
+        .sidebar a {
+            padding: 8px 8px 8px 32px;
+            text-decoration: none;
+            font-size: 25px;
+            color: #818181;
+            display: block;
+            transition: 0.3s;
+        }
+
+        /* Header */
+        .header {
+            padding: 5px;
+            text-align: center;
+            background: #1abc9c;
+            color: white;
+        }
+
+        /* Header button */
+        .header button {
+            padding: 10px 24px;
+            font-size: 20px;
+            border: none;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            outline: none;
+            color: #fff;
+            background-color: #4CAF50;
+            border-radius: 15px;
+        }
+
+        /* Main content */
+        .main {
+            margin-left: 160px; /* Same as the width of the sidebar */
+            padding: 0px 10px;
+        }
+        
+        /* Container */
+        .chat-container {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            background-color: #ffffff;
+            padding: 10px;
+        }
+
+        /* Header */
+        .chat-header img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+        }
+
+        /* Messages Section */
+        .chat-messages {
+            height: calc(100vh - 150px); /* Adjust based on your header and footer sizes */
+            overflow-y: auto;
+            padding: 10px;
+        }
+
+        /* Input Area */
+        .chat-input {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border-top: 1px solid #ddd;
+        }
+
+        /* Input Field */
+        #user-input {
+            flex-grow: 1;
+            border: none;
+            border-radius: 20px;
+            padding: 10px;
+            resize: none;
+        }
+
+        /* Send Button */
+        #send-btn {
+            background-color: #075e54;
+            color: #fff;
+            border: none;
+            border-radius: 20px;
+            padding: 10px 20px;
+            margin-left: 10px;
+            cursor: pointer;
+        }
+
+        /* Speech Bubble */
+        .message {
+            position: relative;
+            margin: 1em 0;
+        }
+
+        /* User's Message Bubble */
+        .message.user .msg-text {
+            background-color: #e6e6e6; /* Light grey */
+            color: #333; /* Dark grey */
+            padding: 10px;
+            border-radius: 15px;
+            display: inline-block;
+            line-height: 1.5;
+        }
+
+        /* User's Message Tail */
+        .message.user::after {
+            content: "";
+            position: absolute;
+            bottom: -10px;
+            left: 20px;
+            border-width: 10px 10px 0;
+            border-style: solid;
+            border-color: #e6e6e6 transparent;
+            display: block;
+            width: 0;
+        }
+
+        /* Chatbot's Message Bubble */
+        .message.chatbot .msg-text {
+            background-color: #0084ff; /* Blue */
+            color: #fff; /* White */
+            padding: 10px;
+            border-radius: 15px;
+            display: inline-block;
+            line-height: 1.5;
+        }
+
+        /* Chatbot's Message Tail */
+        .message.chatbot::after {
+            content: "";
+            position: absolute;
+            bottom: -10px;
+            right: 20px;
+            border-width: 10px 10px 0;
+            border-style: solid;
+            border-color: #0084ff transparent;
+            display: block;
+            width: 0;
+        }
+
+        body {
+            background-image: url('{% static "images/nrsbackground.png" %}');
+            background-repeat: no-repeat;
+            background-size: cover;
+            margin: 0; /* Remove default margin */
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div id="mySidebar" class="sidebar">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+        <!-- <a href="#">About</a> -->
+    </div>
+
+    <!-- Header -->
+    <div class="header">
+        <h1>Welcome,I'm your assistant</h1>
+        <button onclick="openNav()" class="openbtn">☰</button>
+    </div>
+
+    <div class="chat-container">
+        <div class="chat-header">
+            <img src="{% static '/C:/Project/PROJECT/static/assets/img/bot.jpeg' %}" alt="Chatbot Logo"> <!-- Replace with your logo path -->
+        </div>
+        <div class="chat-messages" id="message-section">
+            <div class="message chatbot">
+                <span class="msg-text">Hello,{{user.username}}</span>
+            </div>
+        </div>
+        <div class="chat-input">
+            <textarea id="user-input" placeholder="Type your message here..."></textarea>
+            <button id="send-btn">Send</button>
+        </div>
+    </div>
+
+    <script>
+        function generateGPT2Response(userInput) {
+            // Create a user message bubble
+            const userMsgDiv = document.createElement('div');
+            userMsgDiv.className = 'message user';
+            userMsgDiv.innerHTML = `<span class="msg-text">${userInput}</span>`;
+            document.getElementById('message-section').appendChild(userMsgDiv);
+
+            // Fetch the chatbot's response
+            fetch('/generate-response/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'X-CSRFToken': '{{ csrf_token }}',
+                },
+                body: new URLSearchParams({
+                    'user_input': userInput,
+                }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                const chatbotMsgDiv = document.createElement('div');
+                chatbotMsgDiv.className = 'message chatbot';
+                chatbotMsgDiv.innerHTML = `<span class="msg-text">${data.response}</span>`;
+                document.getElementById('message-section').appendChild(chatbotMsgDiv);
+            })
+            .catch(error => console.error('Error:', error));
+        }
+
+        document.getElementById('send-btn').addEventListener('click', function() {
+            const userInput = document.getElementById('user-input').value;
+            generateGPT2Response(userInput);
+            document.getElementById('user-input').value = '';
+        });
+
+        document.getElementById('user-input').addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                const userInput = this.value;
+                generateGPT2Response(userInput);
+                this.value = '';
+            }
+        });
+
+        function openNav() {
+            document.getElementById("mySidebar").style.width = "250px";
+            document.getElementById("main").style.marginLeft = "250px";
+        }
+
+        function closeNav() {
+            document.getElementById("mySidebar").style.width = "0";
+            document.getElementById("main").style.marginLeft= "0";
+        }
+    </script>
+</body>
+</html>

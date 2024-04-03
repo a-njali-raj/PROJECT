@@ -155,3 +155,7 @@ LOGIN_URL = 'login'
 
 RAZORPAY_KEY_ID = "rzp_test_YXwrVeiAI8OSFX"
 RAZORPAY_KEY_SECRET = "U8IPfzX4Q1H00RGSM6qfd4Pf"
+
+DIALOGFLOW_PROJECT_ID = 'beautebot-pomb'
+DIALOGFLOW_LANGUAGE_CODE = 'en'  # Update with your language code
+DIALOGFLOW_CREDENTIALS_PATH = 'C:\\Users\\91730\\Downloads\\beautebot-pomb-e99bf2952742.json'

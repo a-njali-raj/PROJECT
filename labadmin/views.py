@@ -13,6 +13,9 @@ from django.db.models import Q
 from decimal import Decimal
 from django.http import HttpResponseRedirect
 from django.urls import reverse
+from django.core.mail import send_mail
+from django.conf import settings
+import random
 #superuser accessed condition
 def is_superuser(user):
     return user.is_superuser
@@ -504,29 +507,70 @@ def deliveryboy_edit(request, order_id):
 @never_cache
 @login_required(login_url='login')
 def update_delivery_status(request):
-     if request.method == 'POST':
+    if request.method == 'POST':
         order_id = request.POST.get('order_id')
         delivery_status = request.POST.get('delivery_status')
         
         try:
             order = get_object_or_404(Order, pk=order_id)
             
-            # Fetch the delivery boy user based on the condition is_deliveryboy=True
-            delivery_boy_user = User.objects.filter(is_deliveryboy=True).first()
-            
-            if delivery_boy_user:
-                order.updated_by_delivery_boy = delivery_boy_user
-                order.delivery_status = delivery_status
+            if delivery_status == 'Delivered':
+                otp = ''.join([str(random.randint(0, 9)) for _ in range(6)])
+                # Assume `order.user.email` exists and is correct
+                send_mail(
+                    'Delivery Confirmation OTP',
+                    f'Your OTP for order {order_id} is: {otp}',
+                    settings.EMAIL_HOST_USER,
+                    [order.user.email],
+                    fail_silently=False,
+                )
                 
+                # Store OTP and order_id in session for later verification
+                request.session['delivery_status_otp'] = otp
+                request.session['otp_order_id'] = order_id
+                
+                messages.info(request, 'OTP has been sent to the customer for delivery confirmation.')
+                return redirect('otp_verification', order_id=order_id)
+            
+            else:
+                order.delivery_status = delivery_status
                 order.save()
                 messages.success(request, 'Delivery status updated successfully.')
-                # Redirect to order_deliverboy.html after updating
-                return redirect('order_deliverboy')
-            else:
-                messages.error(request, 'No delivery boy found.')
-                return redirect('deliveryboy_edit', order_id=order_id)
-                
+                return redirect('order_deliverboy')  # Adjust the redirect as needed
+            
         except Exception as e:
-            messages.error(request, f'An error occurred: {e}')
-            return redirect('deliveryboy_edit', order_id=order_id)  # Redirect to the same page after form submission
-     return render(request, "deliveryboy_edit.html")
+            messages.error(request, f'Error updating delivery status: {e}')
+            return redirect('deliveryboy_edit', order_id=order_id)  # Adjust the redirect as needed
+
+    return render(request, "deliveryboy_edit.html")
+
+def otp_verification(request, order_id):
+    order = get_object_or_404(Order, pk=order_id)
+
+    if request.method == 'POST':
+        submitted_otp = request.POST.get('otp')
+        session_order_id = request.session.get('otp_order_id')
+
+        if str(order_id) == session_order_id and submitted_otp == request.session.get('delivery_status_otp'):
+            # OTP is correct, update the delivery status
+            order.delivery_status = 'Delivered'
+            delivery_boy_user = request.user  # Assuming the delivery boy is the logged-in user
+            
+            # Save the delivery boy ID in the order
+            order.updated_by_delivery_boy = delivery_boy_user
+            order.save()
+
+            # Clear OTP and order ID from session
+            del request.session['delivery_status_otp']
+            del request.session['otp_order_id']
+
+            # Redirect to a success page or the delivery details page
+            messages.success(request, 'Order marked as delivered successfully.')
+            return redirect('order_deliverboy')
+        else:
+            # OTP is incorrect, render the OTP verification page with error message
+            messages.error(request, 'Incorrect OTP. Please try again.')
+            return render(request, 'otp_verification.html', {'order': order, 'error_message': 'Incorrect OTP. Please try again.'})
+
+    else:
+        return render(request, 'otp_verification.html', {'order': order})

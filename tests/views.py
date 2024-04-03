@@ -581,7 +581,8 @@ def order(request):
 
     # Redirect to payment page
     return redirect(f"{reverse('payment', kwargs={'order_id': order.id})}?order_type=ecommerce")
-
+@never_cache
+@login_required
 def remove_from_cart(request):
     if request.method == 'POST':
         item_id = request.POST.get('item_id')
@@ -590,7 +591,8 @@ def remove_from_cart(request):
         messages.success(request, f"{cart_item.product.product_name} removed from cart.")
     return redirect('cart')
 
-
+@never_cache
+@login_required
 def product_search(request):
     query = request.GET.get('query')
     products = Product.objects.filter(
@@ -601,7 +603,8 @@ def product_search(request):
     return render(request, 'product.html', {'products': products})
 
 
-
+@never_cache
+@login_required
 def myorder(request):
     # Fetch orders for the current user along with related cart items and products
     orders = Order.objects.filter(user=request.user,  payment__status=True).prefetch_related('cartitem_set__product')
@@ -610,3 +613,65 @@ def myorder(request):
         'orders': orders
     }
     return render(request, 'myorder.html', context)
+
+
+    #chatgpt nrs
+    # chatapp/views.py
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.shortcuts import render
+from transformers import GPT2LMHeadModel, GPT2Tokenizer
+
+model_name = "gpt2"
+tokenizer = GPT2Tokenizer.from_pretrained(model_name)
+model = GPT2LMHeadModel.from_pretrained(model_name)
+
+@csrf_exempt
+def chatgpt(request):
+    return render(request, 'chatgpt.html')
+
+# @csrf_exempt
+# def generate_response(request):
+#     if request.method == 'POST':
+#         user_input = request.POST.get('user_input')
+#         response = generate_gpt2_response(user_input)
+#         return JsonResponse({'response': response})
+#     else:
+#         return JsonResponse({'error': 'Invalid request method'})
+
+def generate_response(request):
+    if request.method == 'POST':
+        user_input = request.POST.get('user_input').lower()
+        if 'lab management system' in user_input:
+            response_data = {'response': "Our lab management system offers comprehensive features to streamline laboratory processes. How can I help you further?"}
+        elif 'inventory management' in user_input:
+            response_data = {'response': "Our lab management system includes robust inventory management capabilities to track supplies, reagents, and equipment. Do you need assistance with inventory tasks?"}
+        elif 'sample' in user_input or 'specimen tracking' in user_input:
+            response_data = {'response': "With our lab management system, you can easily track samples and specimens throughout the testing process. How can I assist you with sample tracking?"}
+        elif 'test' in user_input or 'appointment' in user_input:
+            response_data = {'response': "Our system allows for easy test scheduling and appointment management, ensuring efficient use of lab resources. How can I help you schedule tests?"}
+        elif 'report generation' in user_input or 'result reporting' in user_input:
+            response_data = {'response': "Generate comprehensive reports and share test results seamlessly with our lab management system. Do you need assistance with report generation?"}
+        elif 'quality control' in user_input:
+            response_data = {'response': "Ensure high-quality results and compliance with regulatory standards through our lab management system's built-in quality control features. How can I assist you with quality control?"}
+        elif 'user management' in user_input or 'access control' in user_input:
+            response_data = {'response': "Manage user access and permissions efficiently with our lab management system's user management capabilities. Do you have any questions about user management?"}
+        elif 'instrument calibration' in user_input or 'maintenance scheduling' in user_input:
+            response_data = {'response': "Stay on top of instrument calibration and maintenance schedules with our lab management system, ensuring accurate test results. How can I assist you with instrument maintenance?"}
+        elif 'data analysis' in user_input or 'analytics' in user_input:
+            response_data = {'response': "Leverage powerful data analysis tools in our lab management system to gain insights from test results and optimize lab operations. How can I help you with data analysis?"}
+        elif 'hi' in user_input:
+            response_data = {'response': "hellooo"}
+        else:
+            response_data = {'response': "Sorry, I couldn't understand your query. How can I assist you today?"}
+
+        return JsonResponse(response_data)
+    else:
+        return JsonResponse({'error': 'Invalid request method'})
+
+
+def generate_gpt2_response(user_input, max_length=100):
+    input_ids = tokenizer.encode(user_input, return_tensors="pt")
+    output = model.generate(input_ids, max_length=max_length, num_beams=5, no_repeat_ngram_size=2, top_k=50, top_p=0.95)
+    response = tokenizer.decode(output[0], skip_special_tokens=True)
+    return response
