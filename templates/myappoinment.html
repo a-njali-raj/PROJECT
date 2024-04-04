@@ -18,8 +18,12 @@
             <p><strong>Result uploaded by:</strong> {{ appointment.report.uploaded_by.username|default:"N/A" }}</p>
             <p><strong>Amount:</strong> {{ appointment.amount }}</p>
             {% if appointment.report.result_file %}
-              <a href="{{ appointment.report.result_file.url }}" target="_blank">View Result</a>
-            {% else %}
+            <div>
+              
+
+              <a href="{{ appointment.report.result_file.url }}" target="_blank" download>Download Result</a>
+            </div>
+          {% else %}
               <p>No Result File</p>
             {% endif %}
           </div>

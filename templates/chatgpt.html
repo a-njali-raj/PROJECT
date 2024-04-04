@@ -1,6 +1,6 @@
-
+{% extends "layout/base.html" %}
 {% load static %}
-
+{% block content %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -192,8 +192,8 @@
 
     <!-- Header -->
     <div class="header">
-        <h1>Welcome,I'm your assistant</h1>
-        <button onclick="openNav()" class="openbtn">☰</button>
+        <h4>Welcome,I'm your assistant</h4>
+        
     </div>
 
     <div class="chat-container">
@@ -267,3 +267,4 @@
     </script>
 </body>
 </html>
+{% endblock %}

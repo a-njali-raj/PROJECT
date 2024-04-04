@@ -458,7 +458,7 @@ def add_to_cart(request):
         return redirect("product")
     cart_item.save()
     messages.success(request, f"{product.product_name} added to cart.")
-    return redirect("cart")
+    return redirect("product")
 
 
 @never_cache
@@ -638,40 +638,58 @@ def chatgpt(request):
 #         return JsonResponse({'response': response})
 #     else:
 #         return JsonResponse({'error': 'Invalid request method'})
-
 def generate_response(request):
     if request.method == 'POST':
         user_input = request.POST.get('user_input').lower()
-        if 'lab management system' in user_input:
-            response_data = {'response': "Our lab management system offers comprehensive features to streamline laboratory processes. How can I help you further?"}
-        elif 'inventory management' in user_input:
-            response_data = {'response': "Our lab management system includes robust inventory management capabilities to track supplies, reagents, and equipment. Do you need assistance with inventory tasks?"}
-        elif 'sample' in user_input or 'specimen tracking' in user_input:
-            response_data = {'response': "With our lab management system, you can easily track samples and specimens throughout the testing process. How can I assist you with sample tracking?"}
-        elif 'test' in user_input or 'appointment' in user_input:
-            response_data = {'response': "Our system allows for easy test scheduling and appointment management, ensuring efficient use of lab resources. How can I help you schedule tests?"}
-        elif 'report generation' in user_input or 'result reporting' in user_input:
-            response_data = {'response': "Generate comprehensive reports and share test results seamlessly with our lab management system. Do you need assistance with report generation?"}
+
+        # Inventory and Product Queries
+        if 'inventory' in user_input or 'stock' in user_input:
+            response_data = {'response': "Check real-time inventory levels for all lab products."}
+        
+        # Sample Tracking
+        elif 'sample' in user_input:
+            response_data = {'response': "Efficiently track samples through the entire testing process."}
+        
+        # Test Scheduling
+        elif 'schedule test' in user_input or 'book test' in user_input:
+            response_data = {'response': "Schedule your lab tests easily."}
+        
+        # Order and Delivery Queries
+        elif 'order status' in user_input or 'track order' in user_input:
+            response_data = {'response': "Stay updated on your order status and track deliveries in real-time."}
+        elif 'delivery time' in user_input:
+            response_data = {'response': "Delivery times vary by product and location. Can you specify the product for a more accurate estimate?"}
+        
+        # Exchange and Returns
+        elif 'return policy' in user_input or 'exchange product' in user_input:
+            response_data = {'response': "We didn't offer any return and exchanging policy as the products are health monitoring devices.Need to conform the quality of product at the time of delivery itself"}
+        
+        # Special Offers and Discounts
+        elif 'special offer' in user_input or 'discount' in user_input:
+            response_data = {'response': "Don't miss our special offers and discounts on a wide range of lab products."}
+        
+        # New Products and Recommendations
+        elif 'product' in user_input or 'new product' in user_input:
+            response_data = {'response': "We offer wide range of health monitoring devices like oximeter,thermometer etc and products like Water bed,hand glouses etc.Discover the health monitoring devices which is efficient for tracking your health"}
+        
+        # Payment and Billing
+        elif 'payment' in user_input or 'billing issue' in user_input:
+            response_data = {'response': "We manage your payments and resolve billing issues smoothly.You can direct contact with as for any severe issues.After succesful payment you should get the reciept."}
+        
+        # General Product Inquiry
+        elif 'reagent' in user_input or 'consumable' in user_input or 'equipment' in user_input:
+            response_data = {'response': "Find the best lab products for your needs. Can you specify the type of product you're interested in?"}
+        elif 'report' in user_input or 'result' in user_input:
+            response_data = {'response': "Generate comprehensive reports and share test results seamlessly with our lab management system."}
         elif 'quality control' in user_input:
             response_data = {'response': "Ensure high-quality results and compliance with regulatory standards through our lab management system's built-in quality control features. How can I assist you with quality control?"}
-        elif 'user management' in user_input or 'access control' in user_input:
-            response_data = {'response': "Manage user access and permissions efficiently with our lab management system's user management capabilities. Do you have any questions about user management?"}
-        elif 'instrument calibration' in user_input or 'maintenance scheduling' in user_input:
-            response_data = {'response': "Stay on top of instrument calibration and maintenance schedules with our lab management system, ensuring accurate test results. How can I assist you with instrument maintenance?"}
-        elif 'data analysis' in user_input or 'analytics' in user_input:
-            response_data = {'response': "Leverage powerful data analysis tools in our lab management system to gain insights from test results and optimize lab operations. How can I help you with data analysis?"}
+        # General Inquiry
         elif 'hi' in user_input:
             response_data = {'response': "hellooo"}
         else:
-            response_data = {'response': "Sorry, I couldn't understand your query. How can I assist you today?"}
+            response_data = {'response': "Sorry, I Don't know"}
 
         return JsonResponse(response_data)
     else:
         return JsonResponse({'error': 'Invalid request method'})
 
-
-def generate_gpt2_response(user_input, max_length=100):
-    input_ids = tokenizer.encode(user_input, return_tensors="pt")
-    output = model.generate(input_ids, max_length=max_length, num_beams=5, no_repeat_ngram_size=2, top_k=50, top_p=0.95)
-    response = tokenizer.decode(output[0], skip_special_tokens=True)
-    return response
