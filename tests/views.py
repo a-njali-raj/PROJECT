@@ -615,73 +615,73 @@ def myorder(request):
     return render(request, 'myorder.html', context)
 
 
-from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
-from django.shortcuts import render
-from transformers import GPT2LMHeadModel, GPT2Tokenizer
+# from django.http import JsonResponse
+# from django.views.decorators.csrf import csrf_exempt
+# from django.shortcuts import render
+# from transformers import GPT2LMHeadModel, GPT2Tokenizer
 
-model_name = "gpt2"
-tokenizer = GPT2Tokenizer.from_pretrained(model_name)
-model = GPT2LMHeadModel.from_pretrained(model_name)
+# model_name = "gpt2"
+# tokenizer = GPT2Tokenizer.from_pretrained(model_name)
+# model = GPT2LMHeadModel.from_pretrained(model_name)
 
-@never_cache
-@login_required
-@csrf_exempt
-def chatgpt(request):
-    return render(request, 'chatgpt.html')
+# @never_cache
+# @login_required
+# @csrf_exempt
+# def chatgpt(request):
+#     return render(request, 'chatgpt.html')
 
-def generate_response(request):
-    if request.method == 'POST':
-        user_input = request.POST.get('user_input').lower()
+# def generate_response(request):
+#     if request.method == 'POST':
+#         user_input = request.POST.get('user_input').lower()
 
-        # Inventory and Product Queries
-        if 'inventory' in user_input or 'stock' in user_input:
-            response_data = {'response': "Check real-time inventory levels for all lab products."}
+#         # Inventory and Product Queries
+#         if 'inventory' in user_input or 'stock' in user_input:
+#             response_data = {'response': "Check real-time inventory levels for all lab products."}
         
-        # Sample Tracking
-        elif 'sample' in user_input:
-            response_data = {'response': "Efficiently track samples through the entire testing process."}
+#         # Sample Tracking
+#         elif 'sample' in user_input:
+#             response_data = {'response': "Efficiently track samples through the entire testing process."}
         
-        # Test Scheduling
-        elif 'test' in user_input or 'book test' in user_input:
-            response_data = {'response': "Schedule your lab tests easily.The list of the diagnosing test are provided in the website"}
+#         # Test Scheduling
+#         elif 'test' in user_input or 'book test' in user_input:
+#             response_data = {'response': "Schedule your lab tests easily.The list of the diagnosing test are provided in the website"}
         
-        # Order and Delivery Queries
-        elif 'order status' in user_input or 'track order' in user_input:
-            response_data = {'response': "Stay updated on your order status and track deliveries in real-time."}
-        elif 'delivery time' in user_input or 'delivery' in user_input:
-            response_data = {'response': "Delivery times vary by product and location. Can you specify the product for a more accurate estimate?"}
+#         # Order and Delivery Queries
+#         elif 'order status' in user_input or 'track order' in user_input:
+#             response_data = {'response': "Stay updated on your order status and track deliveries in real-time."}
+#         elif 'delivery time' in user_input or 'delivery' in user_input:
+#             response_data = {'response': "Delivery times vary by product and location. Can you specify the product for a more accurate estimate?"}
         
-        # Exchange and Returns
-        elif 'return policy' in user_input or 'exchange product' in user_input:
-            response_data = {'response': "We didn't offer any return and exchanging policy as the products are health monitoring devices.Need to conform the quality of product at the time of delivery itself"}
+#         # Exchange and Returns
+#         elif 'return policy' in user_input or 'exchange product' in user_input:
+#             response_data = {'response': "We didn't offer any return and exchanging policy as the products are health monitoring devices.Need to conform the quality of product at the time of delivery itself"}
         
-        # Special Offers and Discounts
-        elif 'special offer' in user_input or 'discount' in user_input:
-            response_data = {'response': "Don't miss our special offers and discounts on a wide range of lab products."}
+#         # Special Offers and Discounts
+#         elif 'special offer' in user_input or 'discount' in user_input:
+#             response_data = {'response': "Don't miss our special offers and discounts on a wide range of lab products."}
         
-        # New Products and Recommendations
-        elif 'product' in user_input or 'new product' in user_input:
-            response_data = {'response': "We offer wide range of health monitoring devices like oximeter,thermometer etc and products like Water bed,hand glouses etc.Discover the health monitoring devices which is efficient for tracking your health"}
+#         # New Products and Recommendations
+#         elif 'product' in user_input or 'new product' in user_input:
+#             response_data = {'response': "We offer wide range of health monitoring devices like oximeter,thermometer etc and products like Water bed,hand glouses etc.Discover the health monitoring devices which is efficient for tracking your health"}
         
-        # Payment and Billing
-        elif 'payment' in user_input or 'billing issue' in user_input:
-            response_data = {'response': "We manage your payments and resolve billing issues smoothly.You can direct contact with as for any severe issues.After succesful payment you should get the reciept."}
+#         # Payment and Billing
+#         elif 'payment' in user_input or 'billing issue' in user_input:
+#             response_data = {'response': "We manage your payments and resolve billing issues smoothly.You can direct contact with as for any severe issues.After succesful payment you should get the reciept."}
         
-        # General Product Inquiry
-        elif 'reagent' in user_input or 'consumable' in user_input or 'equipment' in user_input:
-            response_data = {'response': "Find the best lab products for your needs. Can you specify the type of product you're interested in?"}
-        elif 'report' in user_input or 'result' in user_input:
-            response_data = {'response': "Generate comprehensive reports and share test results seamlessly with our lab management system."}
-        elif 'quality control' in user_input:
-            response_data = {'response': "Ensure high-quality results and compliance with regulatory standards through our lab management system's built-in quality control features. How can I assist you with quality control?"}
-        # General Inquiry
-        elif 'hi' in user_input:
-            response_data = {'response': "hellooo"}
-        else:
-            response_data = {'response': "Sorry, I Don't know"}
+#         # General Product Inquiry
+#         elif 'reagent' in user_input or 'consumable' in user_input or 'equipment' in user_input:
+#             response_data = {'response': "Find the best lab products for your needs. Can you specify the type of product you're interested in?"}
+#         elif 'report' in user_input or 'result' in user_input:
+#             response_data = {'response': "Generate comprehensive reports and share test results seamlessly with our lab management system."}
+#         elif 'quality control' in user_input:
+#             response_data = {'response': "Ensure high-quality results and compliance with regulatory standards through our lab management system's built-in quality control features. How can I assist you with quality control?"}
+#         # General Inquiry
+#         elif 'hi' in user_input:
+#             response_data = {'response': "hellooo"}
+#         else:
+#             response_data = {'response': "Sorry, I Don't know"}
 
-        return JsonResponse(response_data)
-    else:
-        return JsonResponse({'error': 'Invalid request method'})
+#         return JsonResponse(response_data)
+#     else:
+#         return JsonResponse({'error': 'Invalid request method'})
 
