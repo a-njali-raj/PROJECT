@@ -615,8 +615,6 @@ def myorder(request):
     return render(request, 'myorder.html', context)
 
 
-    #chatgpt nrs
-    # chatapp/views.py
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render
@@ -626,18 +624,12 @@ model_name = "gpt2"
 tokenizer = GPT2Tokenizer.from_pretrained(model_name)
 model = GPT2LMHeadModel.from_pretrained(model_name)
 
+@never_cache
+@login_required
 @csrf_exempt
 def chatgpt(request):
     return render(request, 'chatgpt.html')
 
-# @csrf_exempt
-# def generate_response(request):
-#     if request.method == 'POST':
-#         user_input = request.POST.get('user_input')
-#         response = generate_gpt2_response(user_input)
-#         return JsonResponse({'response': response})
-#     else:
-#         return JsonResponse({'error': 'Invalid request method'})
 def generate_response(request):
     if request.method == 'POST':
         user_input = request.POST.get('user_input').lower()
@@ -651,13 +643,13 @@ def generate_response(request):
             response_data = {'response': "Efficiently track samples through the entire testing process."}
         
         # Test Scheduling
-        elif 'schedule test' in user_input or 'book test' in user_input:
-            response_data = {'response': "Schedule your lab tests easily."}
+        elif 'test' in user_input or 'book test' in user_input:
+            response_data = {'response': "Schedule your lab tests easily.The list of the diagnosing test are provided in the website"}
         
         # Order and Delivery Queries
         elif 'order status' in user_input or 'track order' in user_input:
             response_data = {'response': "Stay updated on your order status and track deliveries in real-time."}
-        elif 'delivery time' in user_input:
+        elif 'delivery time' in user_input or 'delivery' in user_input:
             response_data = {'response': "Delivery times vary by product and location. Can you specify the product for a more accurate estimate?"}
         
         # Exchange and Returns
